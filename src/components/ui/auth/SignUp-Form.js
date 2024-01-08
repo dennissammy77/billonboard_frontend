@@ -14,6 +14,7 @@ import { MdVisibility,MdVisibilityOff } from "react-icons/md";
 import { FormStatus } from './FormStatus';
 import { IoWarningOutline } from "react-icons/io5";
 import { useTransition } from 'react';
+import SignUp from '@/api/auth/signup.api';
 
 const SignUpForm=()=>{
   const [first_name, set_first_name]=useState('');
@@ -44,15 +45,40 @@ const SignUpForm=()=>{
     company_mobile,
     company_name
   }
+  const Verify_Inputs=()=>{
+		const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		if (password && first_name && last_name && email){
+			if (!email.match(validRegex)){
+        set_form_status_message('Use a valid email format e.g example@company.com')
+        set_form_status_status('warning');
+				return;
+			}else{
+				handle_Sign_Up()
+			}
+		}else if(!password || !first_name || !last_name || !email){
+			set_input_error(true);
+      set_form_status_message('required fields need to be filled')
+      set_form_status_status('warning');
+			return ;
+		}
+	}
+	const handle_Sign_Up=async()=>{
+		await SignUp(payload).then((response)=>{
+        set_form_status_message('Account created successfully')
+        set_form_status_status('success');
+        return ;
+    }).catch((err)=>{
+        set_form_status_message('Error in creating your account')
+        set_form_status_status('error');
+        return ;
+    }).finally(()=>{
+      
+    })
+	}
 
   const handleSubmit=()=>{
     startTransition(()=>{
-      console.log(payload)
-      // login(payload).then((res)=>{
-      //   console.log(res)
-      //   set_form_status_message(res?.message)
-      //   set_form_status_status(res?.status)
-      // })
+      Verify_Inputs()
     })
   }
   return (
@@ -74,10 +100,10 @@ const SignUpForm=()=>{
           {input_error && last_name == '' ?  <FormErrorMessage>name is required.</FormErrorMessage> : ( null )}
         </FormControl> 
       </Flex>
-      <FormControl mt='1' isRequired isInvalid={input_error && email_of_company == '' ? true : false}>
+      <FormControl mt='1' isRequired isInvalid={input_error && email == '' ? true : false}>
         <FormLabel>Email</FormLabel>
         <Input disabled={isPending} type='email' placeholder='johndoe@email.com ' variant='filled' required onChange={((e)=>{set_email(e.target.value)})}/>
-        {input_error && email_of_company == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
+        {input_error && email == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormControl mt='1' isRequired isInvalid={input_error && password == '' ? true : false}>
         <FormLabel>Password</FormLabel>
