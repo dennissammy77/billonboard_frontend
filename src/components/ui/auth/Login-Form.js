@@ -1,25 +1,25 @@
 'use client'
 
 import { Box, Button, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { use, useState } from 'react'
 import CardWrapper from './CardWrapper'
 import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  FormHelperText,
 } from '@chakra-ui/react';
 
 import { MdVisibility,MdVisibilityOff } from "react-icons/md";
 import { FormStatus } from './FormStatus';
-import { IoWarningOutline } from "react-icons/io5";
 import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import SignIn from '@/api/auth/signin/route';
 
 const LoginForm=()=>{
+  const router = useRouter()
   const [email, set_email]=useState('');
   const [password, set_password]=useState('');
   const [input_error, set_input_error]=useState(false);
-  const [is_submitting, set_is_submitting] =useState(false);
   const [isPending, startTransition] = useTransition();
 
   const [show, setShow] = useState(false); //handle state to toggle password
@@ -31,14 +31,43 @@ const LoginForm=()=>{
     email,
     password,
   }
+  const Verify_Inputs=()=>{
+		const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+		if (password && email){
+			if (!email.match(validRegex)){
+        set_form_status_message('Use a valid email format e.g example@company.com')
+        set_form_status_status('warning');
+				return;
+			}else{
+				handle_Sign_In()
+			}
+		}else{
+			set_input_error(true);
+      set_form_status_message('required fields need to be filled')
+      set_form_status_status('warning');
+			return ;
+		}
+	}
+	const handle_Sign_In=async()=>{
+		await SignIn(payload).then((response)=>{
+        set_form_status_message('SignIn successfull')
+        set_form_status_status('success');
+        setTimeout(()=>{
+          router.push('/')
+        },2000)
+        return ;
+    }).catch((err)=>{
+        set_form_status_message('Error while signing into your account')
+        set_form_status_status('error');
+        return ;
+    }).finally(()=>{
+      set_input_error(false)
+    })
+	}
 
   const handleSubmit=()=>{
     startTransition(()=>{
-      login(payload).then((res)=>{
-        console.log(res)
-        set_form_status_message(res?.message)
-        set_form_status_status(res?.status)
-      })
+      Verify_Inputs()
     })
   }
   return (
@@ -48,10 +77,10 @@ const LoginForm=()=>{
       backButtonHref={'/auth/register'}
       showSocial
     >
-      <FormControl mt='1' isRequired isInvalid={input_error && email_of_company == '' ? true : false}>
+      <FormControl mt='1' isRequired isInvalid={input_error && email == '' ? true : false}>
         <FormLabel>Email</FormLabel>
         <Input disabled={isPending} type='email' placeholder='johndoe@email.com ' variant='filled' required onChange={((e)=>{set_email(e.target.value)})}/>
-        {input_error && email_of_company == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
+        {input_error && email == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormControl mt='1' isRequired isInvalid={input_error && password == '' ? true : false}>
         <FormLabel>Password</FormLabel>

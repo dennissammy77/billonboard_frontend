@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'universal-cookie';
 
-export default async function SignUp(payload) {
+export default async function SignIn(payload) {
 	const cookies = new Cookies();
 	const env = process.env.NODE_ENV;
 
@@ -14,7 +14,7 @@ export default async function SignUp(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.post(`${base_url}/api/auth/signup/${payload?.account_type}`,payload)
+	const result = await axios.post(`${base_url}/api/auth/signin`,payload)
 	if(result?.status === 201){
         return result;
     }else{

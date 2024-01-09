@@ -4,12 +4,13 @@ import {useRouter} from 'next/navigation';
 import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image} from '@chakra-ui/react'
 import { ProfileTag } from './profile_tag';
 import { MenuComponent } from './menu';
+import { UserContext } from '@/components/providers/user';
 
 
 function Header(){
     const router = useRouter();
-    // const user = useUserContext();
-    let user = null;
+    let user = useContext(UserContext);
+    console.log(user)
 	return(
 		<Flex boxShadow='sm' position='sticky' top='0' left='0' zIndex='2000' bg='#fff' px={{base:'4',md:'8'}} py='4' align={'center'} justify={'space-between'} gap='2' fontWeight={'bold'}>
             <Flex align={'center'} gap='4'>

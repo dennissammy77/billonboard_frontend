@@ -14,14 +14,15 @@ import { MdVisibility,MdVisibilityOff } from "react-icons/md";
 import { FormStatus } from './FormStatus';
 import { IoWarningOutline } from "react-icons/io5";
 import { useTransition } from 'react';
-import SignUp from '@/api/auth/signup.api';
+import SignUp from '@/api/auth/signup/route';
 
 const SignUpForm=()=>{
   const [first_name, set_first_name]=useState('');
   const [last_name, set_last_name]=useState('');
   const [email, set_email]=useState('');
   const [password, set_password]=useState('');
-  const [account_type, set_account_type]=useState('');
+  const [confirm_password, set_confirm_password]=useState('');
+  const [account_type, set_account_type]=useState('client');
   const [company_email, set_company_email]=useState('');
   const [company_mobile, set_company_mobile]=useState('');
   const [company_name, set_company_name]=useState('');
@@ -47,15 +48,19 @@ const SignUpForm=()=>{
   }
   const Verify_Inputs=()=>{
 		const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-		if (password && first_name && last_name && email){
+		if (password && first_name && last_name && email && confirm_password){
 			if (!email.match(validRegex)){
         set_form_status_message('Use a valid email format e.g example@company.com')
         set_form_status_status('warning');
 				return;
-			}else{
+			}else if(password !== confirm_password){
+        set_form_status_message('You need to provide passwords that match.')
+        set_form_status_status('warning');
+        return ;
+      }else{
 				handle_Sign_Up()
 			}
-		}else if(!password || !first_name || !last_name || !email){
+		}else{
 			set_input_error(true);
       set_form_status_message('required fields need to be filled')
       set_form_status_status('warning');
@@ -72,7 +77,7 @@ const SignUpForm=()=>{
         set_form_status_status('error');
         return ;
     }).finally(()=>{
-      
+      set_input_error(false)
     })
 	}
 
@@ -114,6 +119,16 @@ const SignUpForm=()=>{
           </InputRightElement>
         </InputGroup>
         {input_error && password == '' ?  <FormErrorMessage>password is required.</FormErrorMessage> : ( null )}
+      </FormControl>
+      <FormControl mt='1' isRequired isInvalid={input_error && password == '' ? true : false}>
+        <FormLabel>Confirm Password</FormLabel>
+        <InputGroup size='md'>
+          <Input disabled={isPending} pr='4.5rem' type={show ? 'text' : 'password'} placeholder='Confirm password' variant='filled' required onChange={((e)=>{set_confirm_password(e.target.value)})} />
+          <InputRightElement width='4.5rem'>
+            <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'> {show ? <MdVisibilityOff/> : <MdVisibility/>} </Button>
+          </InputRightElement>
+        </InputGroup>
+        {input_error && confirm_password == '' ?  <FormErrorMessage>you need to confirm your password.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormStatus message={form_status_message} status={form_status_status}/>
       {isPending?
