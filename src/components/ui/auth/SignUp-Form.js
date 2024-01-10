@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import CardWrapper from './CardWrapper'
 import {
   FormControl,
@@ -15,6 +15,8 @@ import { FormStatus } from './FormStatus';
 import { IoWarningOutline } from "react-icons/io5";
 import { useTransition } from 'react';
 import SignUp from '@/api/auth/signup/route';
+import { UserContext } from '@/components/providers/user.context';
+import { useRouter } from 'next/navigation';
 
 const SignUpForm=()=>{
   const [first_name, set_first_name]=useState('');
@@ -29,6 +31,8 @@ const SignUpForm=()=>{
   
   const [input_error, set_input_error]=useState(false);
   const [isPending, startTransition] = useTransition();
+  const {set_user_handler} = useContext(UserContext);
+  const router = useRouter()
 
   const [show, setShow] = useState(false); //handle state to toggle password
 	const handleClick = () => setShow(!show); //handle state to toggle view of password
@@ -71,6 +75,10 @@ const SignUpForm=()=>{
 		await SignUp(payload).then((response)=>{
         set_form_status_message('Account created successfully')
         set_form_status_status('success');
+        setTimeout(()=>{
+          router.push('/')
+        },2000)
+        set_user_handler(response)
         return ;
     }).catch((err)=>{
         set_form_status_message('Error in creating your account')

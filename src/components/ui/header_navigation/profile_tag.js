@@ -1,21 +1,22 @@
 'use client'
+import { UserContext } from "@/components/providers/user.context";
 import { Avatar, Button, Divider, Flex, HStack, Icon, Menu, MenuButton, MenuItem, MenuList, Text } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { useContext } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { VscAccount } from "react-icons/vsc";
-//import { useUserContext } from "../../Providers/userContext";
-// import useLogOut from "../../../hooks/useLogOut.hook";
-//import { useUserDashboardroute } from "../../../hooks/useUserDashboardroute.hook";
+import useLogOut from "@/components/hooks/useLogOut.hook";
+import { useUserDashboardroute } from "@/components/hooks/useUserDashboardroute.hook";
 
 export const ProfileTag = ()=>{
     const router = useRouter();
-    const user = null;
+    const {user,set_user_handler} = useContext(UserContext);
+    const dashboard_route = useUserDashboardroute(user?.account_type,user?._id);
     const handleClick = ()=>{
-        //useLogOut();
+        useLogOut();
         router.push('/');
-        router.reload()
+        set_user_handler(`${user?._id} logged out`);
     }
-    //const dashboard_route = useUserDashboardroute(user?.account_type,user?._id);
     return(
         <Menu>
             <MenuButton borderRadius={'full'} cursor={'pointer'} bg='#f5f7fa' p='1' px='2' _hover={{boxShadow:'lg',transition:'ease-in-out .3s',outline:'1px solid #3874ff'}}>
@@ -31,7 +32,7 @@ export const ProfileTag = ()=>{
                     <Text>{user?.first_name || user?.company_name}</Text>
                 </Flex>
                 <Divider/>
-                <MenuItem py='3' gap='2' onClick={(()=>{router.push('dashboard_route')})}>
+                <MenuItem py='3' gap='2' onClick={(()=>{router.push(dashboard_route)})}>
                     <Icon as={VscAccount} />
                     Go to dashboard
                 </MenuItem>

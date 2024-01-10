@@ -1,7 +1,6 @@
 import './globals.css';
-import { ChakraProvider } from '@chakra-ui/react';
 import Header from '@/components/ui/header_navigation';
-import { UserProvider } from '@/components/providers/user';
+import { Providers } from '@/components/providers/providers';
 
 export const metadata = {
   title: 'BillonBoard',
@@ -21,12 +20,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ChakraProvider>
-          <UserProvider>
+        <Providers>
             <Header />
             {children}
-		      </UserProvider>
-        </ChakraProvider>
+        </Providers>
       </body>
     </html>
   )

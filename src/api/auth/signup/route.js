@@ -18,7 +18,7 @@ export default async function SignUp(payload) {
 	if(result?.status === 201){
         return result;
     }else{
-        cookies.set('user_token', result?.data, { path: '/' });
+        cookies.set('user_token1', result?.data, { path: '/' });
         return result;
     }
 }

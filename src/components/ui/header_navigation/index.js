@@ -4,16 +4,15 @@ import {useRouter} from 'next/navigation';
 import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image} from '@chakra-ui/react'
 import { ProfileTag } from './profile_tag';
 import { MenuComponent } from './menu';
-import { UserContext } from '@/components/providers/user';
+import { UserContext } from '@/components/providers/user.context';
 
 
 function Header(){
     const router = useRouter();
-    let user = useContext(UserContext);
-    console.log(user)
+    const {user} = useContext(UserContext);
 	return(
 		<Flex boxShadow='sm' position='sticky' top='0' left='0' zIndex='2000' bg='#fff' px={{base:'4',md:'8'}} py='4' align={'center'} justify={'space-between'} gap='2' fontWeight={'bold'}>
-            <Flex align={'center'} gap='4'>
+            <Flex align={'center'} gap='4' onClick={(()=>{router.push('/')})}>
                 <Image src='../boblogo.png' alt='logo' boxSize={6}/>
                 <Text cursor={'pointer'} fontSize='20px' color='#6e7891'>BillonBoard</Text>
             </Flex>

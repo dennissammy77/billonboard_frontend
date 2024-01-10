@@ -15,10 +15,10 @@ export default async function SignIn(payload) {
 		base_url = prodbaseurl;
 	}
 	const result = await axios.post(`${base_url}/api/auth/signin`,payload)
-	if(result?.status === 201){
+	if(result?.status === 301){
         return result;
     }else{
-        cookies.set('user_token', result?.data, { path: '/' });
+        cookies.set('user_token1', result?.data, { path: '/' });
         return result;
     }
 }

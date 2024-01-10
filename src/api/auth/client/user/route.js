@@ -12,6 +12,6 @@ export default async function FetchUser(email) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/api/clients/user?query=${email}`)
+	const result = await axios.get(`${base_url}/api/clients/user?query=${email}`);
 	return result
 }

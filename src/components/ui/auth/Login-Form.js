@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Button, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
-import React, { use, useState } from 'react'
+import React, { use, useContext, useState } from 'react'
 import CardWrapper from './CardWrapper'
 import {
   FormControl,
@@ -14,6 +14,7 @@ import { FormStatus } from './FormStatus';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import SignIn from '@/api/auth/signin/route';
+import { UserContext } from '@/components/providers/user.context';
 
 const LoginForm=()=>{
   const router = useRouter()
@@ -21,6 +22,7 @@ const LoginForm=()=>{
   const [password, set_password]=useState('');
   const [input_error, set_input_error]=useState(false);
   const [isPending, startTransition] = useTransition();
+  const {set_user_handler} = useContext(UserContext)
 
   const [show, setShow] = useState(false); //handle state to toggle password
 	const handleClick = () => setShow(!show); //handle state to toggle view of password
@@ -55,9 +57,10 @@ const LoginForm=()=>{
         setTimeout(()=>{
           router.push('/')
         },2000)
+        set_user_handler(response)
         return ;
     }).catch((err)=>{
-        set_form_status_message('Error while signing into your account')
+        set_form_status_message(`Error while signing into your account: ${err?.response?.data}`)
         set_form_status_status('error');
         return ;
     }).finally(()=>{
