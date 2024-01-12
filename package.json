@@ -24,6 +24,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.23.3",
     "eslint": "^8",
     "eslint-config-next": "14.0.4"
   }

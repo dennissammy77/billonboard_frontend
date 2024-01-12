@@ -77,7 +77,7 @@ const LoginForm=()=>{
     <CardWrapper
       headerLabel='Welcome back'
       backButtonLabel='Dont have an account?'
-      backButtonHref={'/auth/register'}
+      backButtonHref={'/auth/signup'}
       showSocial
     >
       <FormControl mt='1' isRequired isInvalid={input_error && email == '' ? true : false}>

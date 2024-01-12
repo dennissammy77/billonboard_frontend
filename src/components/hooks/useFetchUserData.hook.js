@@ -7,11 +7,8 @@ const useFetchUserData = async() =>{
     if (retrived_token === null || !retrived_token){
         return null;
     }
-    
-    if(retrived_token?.account_type === 'client'){
-        const email = retrived_token?.email;
-        const result = await FetchUser(email);
-        return result.data;
-    }
+    const email = retrived_token?.email;
+    const result = await FetchUser(email);
+    return result.data;
 }
 export default useFetchUserData;

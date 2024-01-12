@@ -43,7 +43,7 @@ export const Manage=({set_profile_edit})=>{
     }
     const handle_Edit=async()=>{
         set_saving(true)
-        if (!first_name || !last_name || !mobile || !company_name){
+        if (!first_name || !last_name || !mobile ){
             toast({ title: '!Important', description: 'required fields need to be filled', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, });
             set_saving(false)
         }else{
@@ -95,34 +95,6 @@ export const Manage=({set_profile_edit})=>{
                         <option value='Female'>Female</option>
                         <option value='I would rather not say'>I would rather not say</option>
                     </Select>
-                </FormControl>
-            </Box>
-            <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Company details</Text>
-                <Divider/>
-                <FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>
-                    <FormLabel>Name of the company</FormLabel>
-                    <Input placeholder={company_name? company_name : '-'} type='text' onChange={((e)=>{set_company_name(e.target.value)})}/>
-                    {input_error && company_name.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}
-                </FormControl>
-                <FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>
-                    <FormLabel>Email of the company</FormLabel>
-                    <Input placeholder={company_email? company_email : '-'} type='text' onChange={((e)=>{set_company_email(e.target.value)})}/>
-                    {input_error && company_email.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}
-                </FormControl>
-                <FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>
-                    <FormLabel>Mobile of the company</FormLabel>
-                    <Input placeholder={company_mobile? company_mobile : '-'} type='text' onChange={((e)=>{set_company_mobile(e.target.value)})}/>
-                    {input_error && company_mobile.trim().length == 0 ?  <FormErrorMessage>Mobile of the company is required.</FormErrorMessage> : ( null )}
-                </FormControl>
-                <FormControl mt='2' isRequired isInvalid={input_error && company_address.trim().length == 0 ? true : false}>
-                    <FormLabel>Address of the company</FormLabel>
-                    <Input placeholder={company_address? company_address : '-'} type='text' onChange={((e)=>{set_company_address(e.target.value)})}/>
-                    {input_error && company_address.trim().length == 0 ?  <FormErrorMessage>Address of the company is required.</FormErrorMessage> : ( null )}
-                </FormControl>
-                <FormControl mt='2'>
-                    <FormLabel>Position held in company</FormLabel>
-                    <Input type='tel' placeholder={position? position : '-'} onChange={((e)=>{set_position(e.target.value)})}/>
                 </FormControl>
             </Box>
             <Box mt='2' align='end' gap='2'>

@@ -10,6 +10,7 @@ export const dashboardContext = createContext(null);
 export function DashboardProvider({children}) {
     const [signed_in,set_signed]=useState(useFetchToken())
     const [page,set_page]=useState('Home');
+    const [board_data,set_board_data]=useState(null);
     const [active_page,set_active_page]=useState(page);
     const router = useRouter();
     const toast = useToast();
@@ -24,7 +25,7 @@ export function DashboardProvider({children}) {
     },[page]);
 
     return (
-      <dashboardContext.Provider value={{active_page,page,set_page}}>
+      <dashboardContext.Provider value={{active_page,page,set_page,set_board_data,board_data}}>
         {children}
       </dashboardContext.Provider>
     );

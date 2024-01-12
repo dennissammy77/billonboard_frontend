@@ -24,7 +24,7 @@ const SignUpForm=()=>{
   const [email, set_email]=useState('');
   const [password, set_password]=useState('');
   const [confirm_password, set_confirm_password]=useState('');
-  const [account_type, set_account_type]=useState('client');
+  const [account_type, set_account_type]=useState('footsoldier');
   const [company_email, set_company_email]=useState('');
   const [company_mobile, set_company_mobile]=useState('');
   const [company_name, set_company_name]=useState('');
@@ -81,7 +81,7 @@ const SignUpForm=()=>{
         set_user_handler(response)
         return ;
     }).catch((err)=>{
-        set_form_status_message('Error in creating your account')
+        set_form_status_message(`Error in creating your account: ${err?.response?.data}`)
         set_form_status_status('error');
         return ;
     }).finally(()=>{

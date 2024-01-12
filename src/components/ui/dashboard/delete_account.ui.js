@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 // import DeleteAccount from '../../../pages/api/auth/delete_account';
 import { UserContext } from '@/components/providers/user.context';
 import useLogOut from '@/components/hooks/useLogOut.hook';
+import DeleteUser from '@/api/auth/client/delete/route';
 
 export default function DeleteUserAccount({delete_account_disclosure}) {
     const toast = useToast();
@@ -14,21 +15,21 @@ export default function DeleteUserAccount({delete_account_disclosure}) {
     const {user,set_user_handler} = useContext(UserContext);
     const payload = {
       account_type: user?.account_type,
-      email_of_company: user?.email_of_company
+      email: user?.email
     }
     const handleDelete=async()=>{
-      // await DeleteAccount(payload).then((response)=>{
-      //   toast({ title: 'Account deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
-      //   set_user_handler(response)
-      //   setTimeout(()=>{
-      //     useLogOut();
-      //     router.push('/');
-      //   },2000)
-      // }).catch((err)=>{
-      //   onClose();
-      //   console.log(err)
-      //   toast({ title: 'Error in deleting your account', description: '', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
-      // })
+      await DeleteUser(payload).then((response)=>{
+        toast({ title: 'Account deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
+        setTimeout(()=>{
+          useLogOut();
+          router.push('/');
+        },2000)
+        set_user_handler(`${user?.first_name} deleted`)
+      }).catch((err)=>{
+        onClose();
+        console.log(err)
+        toast({ title: 'Error in deleting your account', description: '', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
+      })
     }
     return (
       <>

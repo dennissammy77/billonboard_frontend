@@ -4,8 +4,8 @@ import React from 'react'
 function Home() {
   return (
     <Banner 
-      msg={'We are here to help you advertise your business or your content.'} 
-      msg2={'Talk to our qualified experts.'} 
+      msg={'Earn extra cash by listing boards around the country. Need more information?'} 
+      msg2={'contact us'} 
       img={'../../boardad.jpg'}
     />
   )
