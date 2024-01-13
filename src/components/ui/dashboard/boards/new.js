@@ -36,6 +36,7 @@ const Body=()=>{
     const [ad_agency_email,set_ad_agency_email]=useState('');
     const [ad_agency_mobile,set_ad_agency_mobile]=useState('');
     const [ad_agency_address,set_ad_agency_address]=useState('');
+    const [ad_agency_website, set_ad_agency_website]=useState('');
     // lister details
     const [listed_by,set_listed_by]=useState({ Name: user?.first_name, lister_id: user?._id, account_type: user?.account_type })
     const [currently_owned_by,set_currently_owned_by]=useState({ Name: user?.first_name, owner_id: user?._id, account_type: user?.account_type })
@@ -65,6 +66,7 @@ const Body=()=>{
         ad_agency_email,
         ad_agency_mobile,
         ad_agency_address,
+        ad_agency_website,
         listed_by,
         currently_owned_by,
         bob_rating,
@@ -103,6 +105,7 @@ const Body=()=>{
         set_ad_agency_email('')
         set_ad_agency_mobile('')
         set_ad_agency_address('')
+        set_ad_agency_website('')
         set_listed_by({ Name: user?.first_name, lister_id: user?._id, account_type: user?.account_type })
         set_currently_owned_by({ Name: user?.first_name, owner_id: user?._id, account_type: user?.account_type })
         set_bob_rating(0)
@@ -221,6 +224,10 @@ const Body=()=>{
                         <FormControl mt='2'>
                             <FormLabel>Address</FormLabel>
                             <Input value={ad_agency_address} placeholder='e.g Nairobi,kenya' type='text' onChange={((e)=>{set_ad_agency_address(e.target.value)})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Website</FormLabel>
+                            <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
                         </FormControl>
                     </Box>
                     {user?.account_type === 'admin'?

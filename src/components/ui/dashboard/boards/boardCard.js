@@ -15,7 +15,7 @@ export const BoardCard=({board})=>{
   return (
     <Box w='100%' h='250px' borderRadius={'md'} boxShadow={'md'} position={'relative'}>
         <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'}/>
-        <Stack position={'absolute'} bottom={'0'} left={'0'} p='2' color="white" bgGradient="linear(to-t,rgba(0,0,0,1), rgba(0,0,0,0.9), rgba(0,0,0,0.8), rgba(0,0,0,0.7))" w='full' borderRadius={'md'} cursor={'pointer'} fontSize='xs' transition={'.3s ease-in-out'} _hover={{fontSize:'sm'}}>
+        <Stack position={'absolute'} bottom={'0'} left={'0'} p='2' color="white" bgGradient="linear(to-t,rgba(0,0,0,1), rgba(0,0,0,0.7), rgba(0,0,0,0.6), rgba(0,0,0,0.5))" w='full' borderRadius={'md'} cursor={'pointer'} fontSize='xs' transition={'.3s ease-in-out'} _hover={{fontSize:'sm'}}>
             <Text>{name_of_billboard}</Text>
             <HStack>
                 <Icon boxSize={4} as={FaChalkboardUser}/>
@@ -41,7 +41,7 @@ export const BoardCard=({board})=>{
                 <IconButton aria-label='Like board' icon={<IoMdAdd />} size='xs' transition={'.3s ease-in-out'} bgColor='#3874ff' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('New_Side');set_board_data(board)})}/>
             </Tooltip>
             <Tooltip label='view' placement='auto'>
-                <IconButton aria-label='Like board' icon={<TbExternalLink />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}}/>
+                <IconButton aria-label='Like board' icon={<TbExternalLink />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('View_Side');set_board_data(board)})}/>
             </Tooltip>
             <Tooltip label='edit' placement='auto'>
                 <IconButton aria-label='View board' icon={<FiEdit />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}}/>

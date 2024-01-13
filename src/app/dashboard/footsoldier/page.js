@@ -6,6 +6,7 @@ import {Settings} from "./Settings.js";
 import Boards from "@/components/ui/dashboard/boards/all.js";
 import { New_Board } from "@/components/ui/dashboard/boards/new.js";
 import { Addside } from "@/components/ui/dashboard/boards/add_side.js";
+import { ViewBoard } from "@/components/ui/dashboard/boards/view.js";
 
 export default function Content(){
     const {active_page} = useContext(dashboardContext)
@@ -17,6 +18,8 @@ export default function Content(){
         return( <Boards/> ) 
     }else if (active_page == 'New_Side'){ 
         return( <Addside/> ) 
+    }else if (active_page == 'View_Side'){ 
+        return( <ViewBoard/> ) 
     }else if (active_page == 'New_Board'){ 
         return( <New_Board/> ) 
     }else{
