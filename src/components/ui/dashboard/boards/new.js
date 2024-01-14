@@ -267,10 +267,6 @@ const Body=()=>{
     )
 }
 
-{/* <Box p='2'>
-{(!user?.account_suspension_status === true) || (!user?.verification_status === false) || (user?.verified_email_status === false) ? <Notification /> : <Text>Body</Text>}
-</Box> */}
-
 const AlertUserDialog=(props)=>{
     const {DiscardDialog} = {...props}
     const {set_page} = useContext(dashboardContext)

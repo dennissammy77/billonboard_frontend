@@ -44,7 +44,7 @@ export const BoardCard=({board})=>{
                 <IconButton aria-label='Like board' icon={<TbExternalLink />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('View_Side');set_board_data(board)})}/>
             </Tooltip>
             <Tooltip label='edit' placement='auto'>
-                <IconButton aria-label='View board' icon={<FiEdit />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}}/>
+                <IconButton aria-label='View board' icon={<FiEdit />} size='xs' transition={'.3s ease-in-out'} bg='#7183ad' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('Edit_Board');set_board_data(board)})}/>
             </Tooltip>
         </VStack>
     </Box>
