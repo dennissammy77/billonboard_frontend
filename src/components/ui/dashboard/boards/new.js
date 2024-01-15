@@ -253,9 +253,6 @@ const Body=()=>{
                         <Text cursor={'pointer'} onClick={(()=>{DiscardDialog.onToggle()})}>Discard</Text>
                         <AlertUserDialog DiscardDialog={DiscardDialog} Clean_input_data={Clean_input_data}/>
                         <Box mt='2' align='end' gap='2'>
-                            <Tooltip hasArrow label='proceed to add side boards' placement='auto' >
-                                {is_saving? <Button variant='ghost' isLoading loadingText={publish_status? 'Publishing' : "Saving draft..."}/> : <Button bg='gray.400' color='#fff' onClick={(()=>{set_is_side_upload(true)})}>Add side</Button>}
-                            </Tooltip>
                             <Tooltip hasArrow label='Save baord details and add boards later' placement='auto'>
                                 {is_saving? <Button variant='ghost' isLoading loadingText={publish_status? 'Publishing' : "Saving draft..."}/> : <Button ml={'2'} bg='#3874ff' color='#fff' onClick={Handle_Submit} >Save BillBoard</Button> }
                             </Tooltip>

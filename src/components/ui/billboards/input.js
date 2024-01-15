@@ -4,8 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { IoMdSearch } from "react-icons/io";
 import { useState } from "react";
 
-export const Search_Input = ()=>{
-    const [query, set_query]=useState('');
+export const Search_Input = ({query,set_query})=>{
     const [icon, set_icon]=useState(<IoMdSearch/>)
     function handleInput(e){
         if (e.target.value.length > 0 && e.target.value !== ''){

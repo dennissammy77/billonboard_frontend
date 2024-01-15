@@ -17,7 +17,8 @@ const Body=()=>{
     const toast = useToast();
     const {board_data,set_page} = useContext(dashboardContext);
     const {user} = useContext(UserContext);
-    const DiscardDialog = useDisclosure()
+    
+    const DiscardDialog = useDisclosure();
 
     // billboard details 
     const [name_of_billboard,set_name_of_billboard]=useState(board_data?.name_of_billboard);
@@ -73,10 +74,9 @@ const Body=()=>{
         if(!name_of_billboard || !description || !location || !ad_agency_name){
             set_input_error(true);
             set_is_saving(false)
-            return toast({title:'Error!',description:'Ensure all inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+            return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         await EditBoard(payload).then(()=>{
-            Clean_input_data();
             set_page('Boards');
             return toast({title:'Success!',description:'Billboard saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
         }).catch((err)=>{
@@ -85,24 +85,6 @@ const Body=()=>{
         }).finally(()=>{
             set_is_saving(false)
         })
-    }
-    const Clean_input_data=()=>{
-        set_name_of_billboard('')
-        set_description('')
-        set_location('')
-        set_location_cord({Latitude:'',Longitude:''})
-        set_number_of_sides('')
-        set_availability_status(false)
-        set_ad_agency_name('')
-        set_ad_agency_email('')
-        set_ad_agency_mobile('')
-        set_ad_agency_address('')
-        set_ad_agency_website('')
-        set_bob_rating(0)
-        set_bob_remark('')
-        set_verification_status(false)
-        set_suspension_status(false)
-        set_publish_status(false)
     }
     return(
         <Box>

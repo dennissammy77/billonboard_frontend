@@ -5,15 +5,16 @@ import { UserContext } from '@/components/providers/user.context';
 import { GoBrowser } from "react-icons/go";
 import BoardsByOwner from '@/api/billboards/owner/route';
 
-function BoardSection() {
+function BoardSection({query}) {
   const {user} = useContext(UserContext);
   const [data, set_data] = useState([]);
   useEffect(()=>{
     fetch()
-  },[])
+  },[query])
   async function fetch(){
     await BoardsByOwner(user?._id).then((response)=>{
-      set_data(response?.data)
+      const arr = response?.data
+      set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
     }).catch((err)=>{
       console.log(err)
     })
