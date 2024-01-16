@@ -19,22 +19,7 @@ a {
   box-sizing: border-box;
 }
 @font-face {
-  font-family: "Poppins-Bold";
-  src: local("Poppins-Bold"), url(../../utils/Poppins-Bold.ttf) format(
-    "opentype");
-}
-@font-face {
-  font-family: "Poppins-Semibold";
-  src: local("Poppins-Semibold"), url(../../utils/Poppins-Semibold.ttf) format(
-    "opentype");
-}
-@font-face {
   font-family: "Poppins-Regular";
   src: local("Poppins-Regular"), url(../../utils/Poppins-Regular.ttf) format(
-    "opentype");
-}
-@font-face {
-  font-family: "Poppins-Thin";
-  src: local("Poppins-Thin"), url(../../utils/Poppins-Thin.ttf) format(
     "opentype");
 }
