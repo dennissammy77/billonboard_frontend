@@ -19,8 +19,8 @@ export const MenuComponent = ()=>{
     }
     return(
         <Menu display={{md:'none',base:'flex'}}>
-            <MenuButton title='menu' as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0} pt='1' color='#000'>
-                <Icon as={IoMenu} boxSize={8} display={{base:'inline-block',md:'none'}} cursor={'pointer'}/>
+            <MenuButton title='menu' as={Button} rounded={'full'} variant={'link'} cursor={'pointer'} minW={0} mt='2' color='#000'>
+                <Icon as={IoMenu} boxSize={8} display={{base:'inline-block',md:'none'}} cursor={'pointer'} />
             </MenuButton>
             <MenuList alignItems={'center'} p='2' boxShadow='md'>
                 {user !== null?
@@ -34,12 +34,6 @@ export const MenuComponent = ()=>{
                             <Icon as={VscAccount} />
                             Go to dashboard
                         </MenuItem>
-                        <Divider/>
-                        {user?.account_type === 'client' || user?.account_type === 'salesperson'?
-                        null
-                        :
-                        <MenuItem py='3'>Add product</MenuItem>
-                        }
                         <Divider/>
                     </>
                     : 

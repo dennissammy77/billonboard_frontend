@@ -18,10 +18,12 @@ export default function Layout(){
 
 const navigation = [
     {
+        id: '1',
         title:  'Home',
         icon:   MdSpaceDashboard
     },
     {
+        id: '2',
         title:  'Settings',
         icon:   MdManageAccounts
     }

@@ -1,8 +1,9 @@
-import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, Image, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from "@chakra-ui/react"
+'use client'
+import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text, useDisclosure } from "@chakra-ui/react"
 import { dashboardContext } from "@/components/providers/dashboard.context"
 import { use, useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
-import { BsFillPinMapFill } from "react-icons/bs";
+import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
 import { MdDelete, MdEmail } from "react-icons/md";
 import { IoCalendarNumberOutline } from "react-icons/io5";
@@ -10,9 +11,10 @@ import { RiUserLocationFill } from "react-icons/ri";
 import { IoIosArrowDown, IoIosArrowUp, IoMdAdd } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
 import { GoCommentDiscussion } from "react-icons/go";
-import BoardDataByOwner from "@/api/billboards/billboardDataByOwner/route";
 import { UserContext } from "@/components/providers/user.context";
 import DeleteBillboard from "./delete_billboard.ui";
+import { View_side_Board } from "./view_side";
+import BoardDataByUser from "@/api/billboards/billboardbyuser/route";
 
 export const ViewBoard=()=>{
     const {board_data,set_page} = useContext(dashboardContext);
@@ -26,9 +28,9 @@ export const ViewBoard=()=>{
 
     useEffect(()=>{
         fetch()
-    },[user?._id]);
+    },[board_data?._id]);
     const fetch=async()=>{
-        await BoardDataByOwner(user?._id).then((response)=>{
+        await BoardDataByUser(board_data?._id).then((response)=>{
             set_data(response.data)
         }).catch((err)=>{
             console.log(err)
@@ -101,21 +103,7 @@ export const ViewBoard=()=>{
                     <Text>{data?.ad_agency_address}</Text>
                 </HStack>
             </Box>
-            <Box bg='#fff' w='full' p='4' borderRadius={5} my='2'>
-                <Box mt='3'>
-                    <Divider/>
-                    <Text fontSize={'xs'} color='#3874ff'>see all advertisements made on this board</Text>
-                    <Flex gap='2' mb='2'>
-                        {data?.advertisement_data.map((data, data_id)=>{
-                            return(
-                                <Image src={data.image_url} alt="board image" boxSize={50} backgroundSize="cover" objectFit={'cover'} borderRadius={5} boxShadow={'md'}/>
-                            )
-                        })}
-                    </Flex>
-                    <Divider/>
-                </Box>
-            </Box>
-            <Flex flexDirection={'column'} gap='2' >
+            <Flex flexDirection={'column'} gap='2' mt='2'>
                 {data?.advertisement_data.map((data, data_id)=>{
                     return(
                         <Card data={data}/>
@@ -127,17 +115,18 @@ export const ViewBoard=()=>{
 }
 
 const Card=(props)=>{
-    const {side_ref_id, brand, message, from_date, to_date, image_url} = props.data;
+    const {side_ref_Id, brand, message, from_date, to_date, image_url} = props.data;
     const [show, setShow] = useState(false)
 
-    const handleToggle = () => setShow(!show)
+    const handleToggle = () => setShow(!show);
+    const view_side_disclosure = useDisclosure();
     return(
-        <Flex gap='2' p='2' fontSize={'xs'} bg='#fff' boxShadow={'sm'} >
+        <Flex gap='2' p='2' fontSize={'xs'} bg='#fff' boxShadow={'sm'} position={'relative'}>
             <Image src={image_url} alt="board image" boxSize={100} backgroundSize="cover" objectFit={'cover'} borderRadius={5}/>
             <Box>
                 <HStack my='1'>
                     <Text fontWeight={'bold'}>Side:</Text>
-                    <Text fontWeight={'bold'}>{side_ref_id}</Text>
+                    <Text fontWeight={'bold'}>{side_ref_Id}</Text>
                 </HStack>
                 <HStack my='1'>
                     <Text fontWeight={'bold'}>Brand:</Text>
@@ -151,6 +140,8 @@ const Card=(props)=>{
                     Show {show ? 'Less' : 'More'} {show ? <Icon as={IoIosArrowUp} boxSize={3}/> : <Icon as={IoIosArrowDown} boxSize={3}/>}
                 </Text>
             </Box>
+            <IconButton icon={<BsThreeDotsVertical/>} position='absolute' top='5' right='5' size={'sm'} onClick={view_side_disclosure?.onToggle}/>
+            <View_side_Board data={props?.data} view_side_disclosure={view_side_disclosure}/>
         </Flex>
     )
 }

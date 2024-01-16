@@ -24,7 +24,7 @@ const SignUpForm=()=>{
   const [email, set_email]=useState('');
   const [password, set_password]=useState('');
   const [confirm_password, set_confirm_password]=useState('');
-  const [account_type, set_account_type]=useState('footsoldier');
+  const [account_type, set_account_type]=useState('agency');
   const [company_email, set_company_email]=useState('');
   const [company_mobile, set_company_mobile]=useState('');
   const [company_name, set_company_name]=useState('');

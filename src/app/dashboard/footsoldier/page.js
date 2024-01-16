@@ -8,6 +8,7 @@ import { New_Board } from "@/components/ui/dashboard/boards/new.js";
 import { Addside } from "@/components/ui/dashboard/boards/add_side.js";
 import { ViewBoard } from "@/components/ui/dashboard/boards/view.js";
 import { Edit_Board } from "@/components/ui/dashboard/boards/edit.js";
+import { Editside } from "@/components/ui/dashboard/boards/edit_side.js";
 
 export default function Content(){
     const {active_page} = useContext(dashboardContext)
@@ -19,6 +20,8 @@ export default function Content(){
         return( <Boards/> ) 
     }else if (active_page == 'New_Side'){ 
         return( <Addside/> ) 
+    }else if (active_page == 'Edit_Side'){ 
+        return( <Editside/> ) 
     }else if (active_page == 'View_Side'){ 
         return( <ViewBoard/> ) 
     }else if (active_page == 'New_Board'){ 

@@ -6,5 +6,8 @@ export const useUserDashboardroute=(account_type,_id)=>{
     if(account_type === 'footsoldier'){
         route = `/dashboard/footsoldier?uid=${_id}`
     }
+    if(account_type === 'agency'){
+        route = `/dashboard/agency?uid=${_id}`
+    }
     return route;
 }

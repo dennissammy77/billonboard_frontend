@@ -12,6 +12,6 @@ export default async function DeleteUser(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.delete(`${base_url}/api/clients/client/delete?query=${payload?.email}`);
+	const result = await axios.delete(`${base_url}/api/clients/client/delete?query=${payload?.id}`);
 	return result
 }

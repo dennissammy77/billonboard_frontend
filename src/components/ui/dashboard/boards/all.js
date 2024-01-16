@@ -18,8 +18,7 @@ function Boards() {
             <Button leftIcon={<IoMdAdd/>} bg={'#3874ff'} color='#fff' onClick={(()=>{set_page('New_Board')})}>New billboard</Button>
         </Flex>
         <HStack my='2'>
-            <Filter/>
-            <Search_Input query={query} set_query={set_query}/>
+            <Search_Input query={query} set_query={set_query} placeholder='search for boards'/>
         </HStack>
         <BoardSection query={query} set_query={set_query}/>
     </Box>

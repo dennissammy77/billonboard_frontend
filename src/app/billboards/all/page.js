@@ -12,8 +12,7 @@ function Page() {
     <Box p={{base:'2',md:'6'}}>
         <Text>Billboards</Text>
         <HStack my='2'>
-            <Filter/>
-            <Search_Input query={query} set_query={set_query}/>
+            <Search_Input query={query} set_query={set_query} placeholder='search for boards'/>
         </HStack>
         <BoardSection query={query} set_query={set_query}/>
     </Box>

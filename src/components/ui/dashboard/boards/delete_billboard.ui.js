@@ -16,7 +16,7 @@ export default function DeleteBillboardUi({delete_billboard_disclosure}) {
         if(user?.suspension_status){
             toast({ title: 'Error!', description: 'Your account is currently suspended', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
             return ;
-        }else if(!user?.verification_status){
+        }else if(!user?.verified_email_status){
             toast({ title: 'Error!', description: 'Your account has not been approved', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
             return ;
         }else {

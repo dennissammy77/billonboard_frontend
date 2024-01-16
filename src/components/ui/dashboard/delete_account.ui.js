@@ -15,7 +15,7 @@ export default function DeleteUserAccount({delete_account_disclosure}) {
     const {user,set_user_handler} = useContext(UserContext);
     const payload = {
       account_type: user?.account_type,
-      email: user?.email
+      id: user?._id
     }
     const handleDelete=async()=>{
       await DeleteUser(payload).then((response)=>{

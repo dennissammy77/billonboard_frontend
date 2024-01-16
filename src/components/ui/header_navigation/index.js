@@ -1,10 +1,11 @@
 'use client'
 import React, { useContext, useState } from 'react'
 import {useRouter} from 'next/navigation';
-import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image} from '@chakra-ui/react'
+import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image, Icon} from '@chakra-ui/react'
 import { ProfileTag } from './profile_tag';
 import { MenuComponent } from './menu';
 import { UserContext } from '@/components/providers/user.context';
+import { MdExplore } from 'react-icons/md';
 
 
 function Header(){
@@ -18,9 +19,19 @@ function Header(){
             </Flex>
             <Flex display={{base:'none',md:'flex'}} align={'center'} gap='3' fontSize={'sm'}>
                 {user !== null?
-                    <ProfileTag/>
+                    <Flex gap='2' align='center'>
+                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
+                            <Icon as={MdExplore} boxSize='4'/>
+                            <Text>Explore boards</Text>
+                        </HStack>
+                        <ProfileTag/>
+                    </Flex>
                     :
                     <Flex align={'center'} gap='4'>
+                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
+                            <Icon as={MdExplore} boxSize='4'/>
+                            <Text>Explore boards</Text>
+                        </HStack>
                         {links?.map((i, index)=>{
                             return(
                                 <Text onClick={(()=>{router.push(`${i.link}`)})} _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} key={index}>{i.name}</Text>
@@ -30,9 +41,10 @@ function Header(){
                     </Flex>
                 }
             </Flex>
-            <Box display={{base:'flex',md:'none'}}>
+            <Flex display={{base:'flex',md:'none'}} gap='2' align={'center'}>
+                <Icon as={MdExplore} boxSize='6' onClick={(()=>{router.push(`/billboards/all`)})} />
                 <MenuComponent/>
-            </Box>
+            </Flex>
         </Flex>
 	)
 }
