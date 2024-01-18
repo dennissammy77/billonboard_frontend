@@ -9,7 +9,7 @@ export default function Home() {
       <Box position={'relative'}>
         <Box display={{base:'none',lg:'block'}}>
           <Image src="../bg/bg-1-2.png" alt='hero-header' w='full' position={'relative'}/>
-          <Image src="../bg/herosec.jpg" alt='hero-header' w='full' position={'absolute'} top='100px' right={'100px'} boxSize={500} borderRadius={10}/>
+          <Image src="../bg/IMG_0873.JPG" alt='hero-header' w='full' position={'absolute'} top='100px' right={'100px'} boxSize={500} borderRadius={10}/>
         </Box>
         <Box position={{base:'inherit',lg:'absolute'}} top={{base:'0px',lg:'100px'}} left={{base:'',lg:'100px'}} align='center'>
           <Heading as='h2' fontSize={'60px'} p={{base:'8',lg:'0'}}>
@@ -19,13 +19,7 @@ export default function Home() {
           <Button borderRadius={'full'} fontSize={'md'} bg='#3874FF' color='#fff' my='4' onClick={(()=>{router.push('/auth/signup')})}>Register</Button>
         </Box>
       </Box>
-      <Grid
-        templateRows={{base:'repeat(4, 1fr)',lg:'repeat(2, 1fr)'}}
-        templateColumns={{base:'repeat(2, 1fr)',lg:'repeat(4, 1fr)'}}
-        gap={2}
-        mt='6'
-        px='6'
-      >
+      <Grid templateRows={{base:'repeat(4, 1fr)',lg:'repeat(2, 1fr)'}} templateColumns={{base:'repeat(2, 1fr)',lg:'repeat(4, 1fr)'}} gap={2} mt='6' px='6' >
         {partners?.map((item)=>{
           return(
             <Image boxSize={'full'} src={item?.imagepath} key={item?.id} objectFit={'contain'} border={'2px dotted #eee'} p='2'/>
