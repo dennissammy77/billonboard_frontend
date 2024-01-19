@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function GetAgencies(id) {
+export default async function GetAgencies() {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;

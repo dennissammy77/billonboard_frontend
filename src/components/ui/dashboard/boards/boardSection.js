@@ -4,20 +4,36 @@ import { BoardCard } from './boardCard';
 import { UserContext } from '@/components/providers/user.context';
 import { GoBrowser } from "react-icons/go";
 import BoardsByOwner from '@/api/billboards/owner/route';
+import { usePathname } from 'next/navigation';
+import GetBillBoards from '@/api/billboards/all/route';
 
 function BoardSection({query}) {
   const {user} = useContext(UserContext);
   const [data, set_data] = useState([]);
+
+  const pathname = usePathname();
+  const pathArr = pathname?.split('/');
+  console.log(pathArr[2])
+
   useEffect(()=>{
     fetch()
   },[query])
   async function fetch(){
-    await BoardsByOwner(user?._id).then((response)=>{
-      const arr = response?.data
-      set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
-    }).catch((err)=>{
-      console.log(err)
-    })
+    if (pathArr[2] === 'admin'){
+      await GetBillBoards().then((response)=>{
+        const arr = response?.data
+        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }else{
+      await BoardsByOwner(user?._id).then((response)=>{
+        const arr = response?.data
+        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
   }
   return (
     <>

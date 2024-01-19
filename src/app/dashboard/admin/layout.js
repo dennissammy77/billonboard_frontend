@@ -45,11 +45,6 @@ const navigation = [
     },
     {
         id: '6',
-        title:  'Analytics',
-        icon:   FaChalkboardUser
-    },
-    {
-        id: '7',
         title:  'Settings',
         icon:   MdManageAccounts
     }

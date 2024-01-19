@@ -6,21 +6,24 @@ import { FaFolderOpen, FaStore } from "react-icons/fa";
 import { RiExternalLinkLine } from "react-icons/ri";
 import { MdDeleteOutline } from "react-icons/md";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import GetFootsolidier from "@/api/auth/client/footsoldier/all/route";
 
 export const TopFootSoldiers=()=>{
     const [data, set_data]=useState([])
-    // useEffect(()=>{
-    //     fetchdata()
-    // },[])
-    // async function fetchdata(){
-    //     const data= await useGetLocalStorage('products');
-    //     set_data(data)
-    // }
+
+    useEffect(()=>{
+        get_FootSoldiers_Data()
+    },[])
+    async function get_FootSoldiers_Data(){
+		let data = await GetFootsolidier();
+        console.log(data)
+		set_data(data.data)
+	}
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
             <Text p='4' fontSize={'md'} fontWeight={'bold'}> Best FootSoldiers</Text>
-            {!data?.length == 0? 
+            {data?.length == 0? 
                 <Center display={'flex'} flexDirection={'column'} py='10' >
                     <Icon as={FaFolderOpen} boxSize={20} color={'gray.200'}/>
                     <Text color={'gray.300'} textAlign={'center'}>Seems there are no FootSoldiers currently active.</Text>
@@ -37,8 +40,11 @@ export const TopFootSoldiers=()=>{
                         </Tr>
                     </Thead>
                     <Tbody>
-                        <User_Card />
-                        <User_Card />
+                        {data?.map((user)=>{
+                            return(
+                                <User_Card key={user?._id} user={user}/>
+                            )
+                        })}
                     </Tbody>
                 </Table>
             }
@@ -47,13 +53,14 @@ export const TopFootSoldiers=()=>{
 }
 
 const User_Card=(props)=>{
-    const { item} = {...props};
-    const toast = useToast();
+    const { user} = {...props};
     return(
         <Tr>
-            <Td> <Avatar size={'sm'}/></Td>
-            <Td> Dennis Sammy </Td>
-            <Td> M</Td>
+            <Td>
+                <Avatar src={user?.profile_photo_url} borderRadius={10} name={user?.first_name} alt='profile_image' boxSize={50}/>
+            </Td>
+            <Td> {user?.first_name} {user?.last_name} </Td>
+            <Td> {user?.gender}</Td>
             <Td> 20</Td>
             <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'}/> </Td>
         </Tr>
