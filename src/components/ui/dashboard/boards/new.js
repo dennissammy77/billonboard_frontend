@@ -83,15 +83,31 @@ const Body=()=>{
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
-        await CreateNewBoard(payload).then(()=>{
-            Clean_input_data();
-            set_page('Boards');
-            return toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
-        }).catch((err)=>{
-            return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
-        }).finally(()=>{
+        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
+            await CreateNewBoard(payload).then(()=>{
+                Clean_input_data();
+                set_page('Boards');
+                return toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+            }).catch((err)=>{
+                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
+            }).finally(()=>{
+                set_is_saving(false)
+            })
+        }else{
             set_is_saving(false)
-        })
+            return toast({title:'Error!',description:'You are not authorized to create billboards',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
+        }
+        if(user?.account_type !== 'admin'){
+            await CreateNewBoard(payload).then(()=>{
+                Clean_input_data();
+                set_page('Boards');
+                return toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+            }).catch((err)=>{
+                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
+            }).finally(()=>{
+                set_is_saving(false)
+            })
+        }
     }
     const Clean_input_data=()=>{
         set_name_of_billboard('')

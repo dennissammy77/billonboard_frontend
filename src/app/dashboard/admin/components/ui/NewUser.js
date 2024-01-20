@@ -1,17 +1,16 @@
 'use client'
 
-import NewUserApi from '@/api/auth/client/admin/new_user/route';
+import NewUserApi from '@/api/auth/client/admin/user/route';
 import { dashboardContext } from '@/components/providers/dashboard.context';
 import { UserContext } from '@/components/providers/user.context';
 import { FormStatus } from '@/components/ui/auth/FormStatus';
-import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, Image, Text, Flex, Box, Icon, HStack, useDisclosure, FormControl, FormLabel, Input, FormErrorMessage, InputRightElement,} from '@chakra-ui/react';
+import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, Image, Text, Flex, Box, Icon, HStack, useDisclosure, FormControl, FormLabel, Input, FormErrorMessage, InputRightElement, Select, useFormControlStyles,} from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useTransition } from 'react';
 
 export const NewUser=({view_drawer_disclosure})=>{
     const {set_page} = useContext(dashboardContext);
-    const {user} = useContext(UserContext)
-
+    const {user} = useContext(UserContext);
     const [first_name, set_first_name]=useState('');
     const [last_name, set_last_name]=useState('');
     const [email, set_email]=useState('');
@@ -42,8 +41,13 @@ export const NewUser=({view_drawer_disclosure})=>{
                 set_form_status_message('Use a valid email format e.g example@company.com')
                 set_form_status_status('warning');
                 return;
-            }else{
+            }
+            if(user?.position == 'MANAGER' || user?.position == 'SUPER ADMIN'){
                 handle_Create_New_User()
+            }else{
+                set_form_status_message('You are not authorized to created a new user. Contact support incase of any issues.')
+                set_form_status_status('warning');
+                return;
             }
         }else{
             set_input_error(true);
@@ -56,6 +60,7 @@ export const NewUser=({view_drawer_disclosure})=>{
         await NewUserApi(payload).then((response)=>{
             set_form_status_message('Account created successfully')
             set_form_status_status('success');
+            view_drawer_disclosure?.onClose()
             return ;
         }).catch((err)=>{
             set_form_status_message(`Error in creating account: ${err?.response?.data}`)
@@ -64,12 +69,19 @@ export const NewUser=({view_drawer_disclosure})=>{
         }).finally(()=>{
             set_input_error(false)
         })
-        }
+    }
 
     const handleSubmit=()=>{
         startTransition(()=>{
             Verify_Inputs()
         })
+    }
+    const clean_Inputs=()=>{
+        set_first_name('')
+        set_last_name('')
+        set_position('')
+        set_email('')
+        set_input_error(false)
     }
     return(
         <Drawer
@@ -102,8 +114,13 @@ export const NewUser=({view_drawer_disclosure})=>{
                     {input_error && email == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
                 </FormControl>
                 <FormControl mt='1' isRequired isInvalid={input_error && position == '' ? true : false}>
-                    <FormLabel>Role</FormLabel>
-                    <Input disabled={isPending} type='text' placeholder='e.g developer' variant='filled' required onChange={((e)=>{set_position(e.target.value)})}/>
+                    <Select placeholder='Select the role for the user' onChange={((e)=>{set_position(e.target.value)})} my='4'>
+                        <option value='MANAGER'>Manager</option>
+                        <option value='DEVELOPER'>Developer</option>
+                        <option value='SALES'>Sales</option>
+                        <option value='MARKETING'>Marketing</option>
+                        <option value='SUPER ADMIN'>Super Admin</option>
+                    </Select>
                     {input_error && position == '' ?  <FormErrorMessage>The Role is required.</FormErrorMessage> : ( null )}
                 </FormControl>
                 <FormStatus message={form_status_message} status={form_status_status}/>

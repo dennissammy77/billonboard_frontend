@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import GetAgencies from "@/api/auth/client/agency/all/route";
 import GetClients from "@/api/auth/client/client/all/route";
 import GetFootsolidier from "@/api/auth/client/footsoldier/all/route";
-import GetBillBoards from "@/api/billboards/all/route";
+import { GetBillBoardsAdmin } from "@/api/billboards/all/route";
 
 export const Stat_Section=()=>{
     const [agencies,set_agencies]=useState([]);
@@ -38,7 +38,7 @@ export const Stat_Section=()=>{
 		set_footsoldiers(data.data)
 	}
     async function get_BillBoards(){
-		let data = await GetBillBoards();
+		let data = await GetBillBoardsAdmin();
         console.log(data)
 		set_billboards(data.data)
 	}

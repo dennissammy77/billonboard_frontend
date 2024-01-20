@@ -9,6 +9,8 @@ import { IoIosAdd } from "react-icons/io"
 import { TiUserDelete } from "react-icons/ti";
 import { NewUser } from "./components/ui/NewUser"
 import DeleteUserAccount from "./components/ui/deleteAccountAdmin.ui"
+import { FiEdit } from "react-icons/fi"
+import { EditUser } from "./components/ui/EditUser"
 
 export const Admin_Panel=()=>{
     const [users,set_users]=useState([]);
@@ -20,6 +22,7 @@ export const Admin_Panel=()=>{
     },[])
     const FetchUsers=async()=>{
         await GetAdmin().then((response)=>{
+            console.log(response.data)
             set_users(response.data);
         }).catch((err)=>{
             console.log(err)
@@ -54,6 +57,7 @@ export const Admin_Panel=()=>{
 const UserCard=({user})=>{
     const {first_name, last_name, email, position, profile_photo_url} = user;
     const delete_account_disclosure = useDisclosure();
+    const view_drawer_disclosure = useDisclosure();
     return(
         <Flex align='center' w='full' gap='2' my='2' p='2'>
             <Flex align='center' flex='1' gap='2'>
@@ -69,6 +73,10 @@ const UserCard=({user})=>{
                     <Icon as={BsThreeDotsVertical} />
                 </MenuButton>
                 <MenuList>
+                    <MenuItem icon={<FiEdit />} onClick={(()=>{view_drawer_disclosure.onToggle()})}>
+                        Edit User
+                    </MenuItem>
+                    <EditUser view_drawer_disclosure={view_drawer_disclosure} data={user}/>
                     <MenuItem icon={<TiUserDelete />} onClick={(()=>{delete_account_disclosure.onToggle()})}>
                         Delete User
                     </MenuItem>

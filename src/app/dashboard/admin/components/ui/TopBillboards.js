@@ -1,13 +1,10 @@
 'use client'
 
-import { Avatar, Box, Center, Flex, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaFolderOpen, FaStore } from "react-icons/fa";
-import { RiExternalLinkLine } from "react-icons/ri";
-import { MdDeleteOutline } from "react-icons/md";
-import { HiOutlineExternalLink } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import GetBillBoards from "@/api/billboards/all/route";
+import { GetBillBoardsAdmin } from "@/api/billboards/all/route";
+import { Box, Center, Flex, Icon, Image, Text } from "@chakra-ui/react";
+import { FaFolderOpen } from "react-icons/fa";
+import { SiGoogleanalytics } from "react-icons/si";
 
 export const TopBillboards=()=>{
     const [billboards,set_billboards]=useState([]);
@@ -16,18 +13,27 @@ export const TopBillboards=()=>{
         get_BillBoards()
     },[])
     async function get_BillBoards(){
-		let data = await GetBillBoards();
+		let data = await GetBillBoardsAdmin();
         console.log(data)
-		set_billboards(data.data)
+		set_billboards(data?.data?.filter((item)=>{item?.views > 0}))
 	}
     return(
         <Flex flexDirection={'column'} borderRadius={10} boxShadow='md' p='2' mt='2' bg='#fff' w={{base:'full',md:'30%'}}>
             <Text p='4' fontSize={'md'} fontWeight={'bold'}> Top Billboards</Text>
-            {billboards?.map((board)=>{
-                return(
-                    <Board_Card key={board?._id} board={board}/>
-                )
-            })}
+            {billboards?.length > 0 ?
+                <>
+                    {billboards?.map((board)=>{
+                        return(
+                            <Board_Card key={board?._id} board={board}/>
+                        )
+                    })}
+                </>
+            :
+                <Center display={'flex'} flexDirection={'column'} py='10' >
+                    <Icon as={SiGoogleanalytics} boxSize={10} color={'gray.200'}/>
+                    <Text color={'gray.300'} textAlign={'center'} >Seems there are no billboards Topping the charts.</Text>
+                </Center>
+            }
         </Flex>
     )
 }
@@ -35,7 +41,7 @@ export const TopBillboards=()=>{
 const Board_Card=({board})=>{
     return(
         <Flex gap='2' my='2' align='center'>
-            <Image src={board?.advertisement_data[0]?.image_url} borderRadius={10} alt='bord_image' boxSize={50}/>
+            <Image src={board?.advertisement_data[0]?.image_url || board?.img_placeholder} borderRadius={10} alt='bord_image' boxSize={50}/>
             <Box>
                 <Text fontSize={'sm'} fontWeight={'bold'}>{board?.name_of_billboard}</Text>
                 <Text fontSize={'xs'}>{board?.views}</Text>
