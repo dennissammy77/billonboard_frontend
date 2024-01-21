@@ -119,7 +119,7 @@ const Body=()=>{
                     </FormControl>
                     <FormControl mt='2'>
                         <FormLabel>Number of sides</FormLabel>
-                        <NumberInput defaultValue={1} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
+                        <NumberInput defaultValue={number_of_sides} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
                             <NumberInputField />
                             <NumberInputStepper>
                                 <NumberIncrementStepper />
@@ -135,7 +135,7 @@ const Body=()=>{
                         <>
                             <FormControl mt='2'>
                                 <FormLabel>Bob Rating</FormLabel>
-                                <NumberInput defaultValue={1} min={1} max={5} onChange={((e)=>{set_bob_rating(e)})}>
+                                <NumberInput defaultValue={bob_rating} min={1} max={5} onChange={((e)=>{set_bob_rating(e)})}>
                                     <NumberInputField />
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
