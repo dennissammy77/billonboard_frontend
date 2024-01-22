@@ -76,15 +76,31 @@ const Body=()=>{
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
-        await EditBoard(payload).then(()=>{
-            set_page('Boards');
-            return toast({title:'Success!',description:'Billboard saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
-        }).catch((err)=>{
-            console.log(err)
-            return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
-        }).finally(()=>{
+        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
+            await EditBoard(payload).then(()=>{
+                set_page('Boards');
+                return toast({title:'Success!',description:'Billboard saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+            }).catch((err)=>{
+                console.log(err)
+                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
+            }).finally(()=>{
+                set_is_saving(false)
+            })
+        }else{
             set_is_saving(false)
-        })
+            return toast({title:'Error!',description:'You are not authorized to update billboards',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
+        }
+        if(user?.account_type !== 'admin'){
+            await EditBoard(payload).then(()=>{
+                set_page('Boards');
+                return toast({title:'Success!',description:'Billboard saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+            }).catch((err)=>{
+                console.log(err)
+                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
+            }).finally(()=>{
+                set_is_saving(false)
+            })
+        }
     }
     return(
         <Box>

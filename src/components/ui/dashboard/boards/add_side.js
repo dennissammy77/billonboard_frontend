@@ -6,9 +6,11 @@ import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import CreateBoard from '@/api/billboards/board/new/route.js';
 import EditBoard from '@/api/billboards/board/edit/route.js';
+import { UserContext } from '@/components/providers/user.context.js';
 
 export const Addside=()=>{
     const {board_data,set_page} = useContext(dashboardContext)
+    const {user} = useContext(UserContext);
     const DiscardDialog = useDisclosure();
     const toast = useToast() 
 
@@ -27,7 +29,7 @@ export const Addside=()=>{
     const [from_date,set_from_date]=useState('')
     const [to_date,set_to_date]=useState('')
     const [image_file,set_image_file]=useState('');
-    const [image_url,set_image_url]=useState('');
+    const [image_url,set_image_url]=useState('https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5');
 
     const [input_error,set_input_error]=useState(false);
     const [is_saving,set_is_saving]=useState(false);
@@ -61,14 +63,42 @@ export const Addside=()=>{
             set_is_saving(false)
             return ;
         }
-        const board_id = await HandleCreateBoard()
-        await HandleImageUpload(board_id).then(()=>{
-            return ;
-        }).finally(()=>{
-            Clean_input_data();
-            set_page('Boards');
-            set_is_saving(false);
-        })
+
+        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
+            const board_id = await HandleCreateBoard()
+            if(image_file == ''){
+                Clean_input_data();
+                set_page('Boards');
+                set_is_saving(false);
+                return ;
+            }
+            await HandleImageUpload(board_id).then(()=>{
+                return ;
+            }).finally(()=>{
+                Clean_input_data();
+                set_page('Boards');
+                set_is_saving(false);
+            })
+        }else{
+            set_is_saving(false)
+            return toast({title:'Error!',description:'You are not authorized to add side board',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
+        }
+        if(user?.account_type !== 'admin'){
+            const board_id = await HandleCreateBoard()
+            if(image_file == ''){
+                Clean_input_data();
+                set_page('Boards');
+                set_is_saving(false);
+                return ;
+            }
+            await HandleImageUpload(board_id).then(()=>{
+                return ;
+            }).finally(()=>{
+                Clean_input_data();
+                set_page('Boards');
+                set_is_saving(false);
+            })
+        }
     }
 
     const HandleCreateBoard=async()=>{

@@ -13,24 +13,41 @@ export default function DeleteSideBoardUi({delete_sideboard_disclosure}) {
     const cancelRef = useRef();
 
     const handleDelete=async()=>{
-        if(user?.suspension_status){
-            toast({ title: 'Error!', description: 'Your account is currently suspended', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
-            return ;
-        }else if(!user?.verified_email_status){
-            toast({ title: 'Error!', description: 'Your account has not been approved', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
-            return ;
-        }else {
-            await DeleteSideBoard(side_board_data?._id).then((response)=>{
-                toast({ title: 'Side board deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
-            }).catch((err)=>{
-                console.log(err)
-                toast({ title: 'Error in deleting your Side board', description: err?.response?.data, status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
-                return ;
-            }).finally(()=>{
-                onClose();
-                set_page('Boards');
-                set_side_board_data(null)
-            })
+        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
+          await DeleteSideBoard(side_board_data?._id).then((response)=>{
+              toast({ title: 'Side board deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
+          }).catch((err)=>{
+              console.log(err)
+              toast({ title: 'Error in deleting your Side board', description: err?.response?.data, status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
+              return ;
+          }).finally(()=>{
+              onClose();
+              set_page('Boards');
+              set_side_board_data(null)
+          })
+        }else{
+            return toast({title:'Error!',description:'You are not authorized to delete side boards',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
+        }
+        if(user?.account_type !== 'admin'){
+          if(user?.suspension_status){
+              toast({ title: 'Error!', description: 'Your account is currently suspended', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
+              return ;
+          }else if(!user?.verified_email_status){
+              toast({ title: 'Error!', description: 'Your account has not been approved', status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
+              return ;
+          }else {
+              await DeleteSideBoard(side_board_data?._id).then((response)=>{
+                  toast({ title: 'Side board deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
+              }).catch((err)=>{
+                  console.log(err)
+                  toast({ title: 'Error in deleting your Side board', description: err?.response?.data, status: 'error', variant:'left-accent', position:'top-left', isClosable: true, });
+                  return ;
+              }).finally(()=>{
+                  onClose();
+                  set_page('Boards');
+                  set_side_board_data(null)
+              })
+          }
         }
     }
     return (

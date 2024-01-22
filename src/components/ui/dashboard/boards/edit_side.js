@@ -5,9 +5,11 @@ import {storage} from '../../../lib/firebase.js';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
 import EditBoard from '@/api/billboards/board/edit/route.js';
+import { UserContext } from '@/components/providers/user.context.js';
 
 export const Editside=()=>{
-    const {side_board_data,board_data,set_page} = useContext(dashboardContext)
+    const {side_board_data,board_data,set_page} = useContext(dashboardContext);
+    const {user} = useContext(UserContext)
     const DiscardDialog = useDisclosure();
     const toast = useToast() 
 
@@ -60,6 +62,67 @@ export const Editside=()=>{
             set_is_saving(false)
             return ;
         }
+
+        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
+            if(image_file !== ''){
+                await EditBoard(payload).then((res)=>{
+                    toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+                    return ;
+                }).catch((err)=>{
+                    toast({ title: 'Error!', description: 'Board could not be updated successfully', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, })
+                    return ;
+                })
+                await HandleImageUpload(side_board_data?._id).then(()=>{
+                    return ;
+                }).finally(()=>{
+                    set_page('Boards');
+                    set_is_saving(false);
+                })
+            }else{
+                await EditBoard(payload).then((res)=>{
+                    toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+                    return ;
+                }).catch((err)=>{
+                    toast({ title: 'Error!', description: 'Board could not be saved successfully', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, })
+                    return ;
+                }).finally(()=>{
+                    set_page('Boards');
+                    set_is_saving(false);
+                })
+            }
+        }else{
+            set_is_saving(false)
+            return toast({title:'Error!',description:'You are not authorized to update board',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
+        }
+        if(user?.account_type !== 'admin'){
+            if(image_file !== ''){
+                await EditBoard(payload).then((res)=>{
+                    toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+                    return ;
+                }).catch((err)=>{
+                    toast({ title: 'Error!', description: 'Board could not be updated successfully', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, })
+                    return ;
+                })
+                await HandleImageUpload(side_board_data?._id).then(()=>{
+                    return ;
+                }).finally(()=>{
+                    set_page('Boards');
+                    set_is_saving(false);
+                })
+            }else{
+                await EditBoard(payload).then((res)=>{
+                    toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
+                    return ;
+                }).catch((err)=>{
+                    toast({ title: 'Error!', description: 'Board could not be saved successfully', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, })
+                    return ;
+                }).finally(()=>{
+                    set_page('Boards');
+                    set_is_saving(false);
+                })
+            }
+        }
+
         if(image_file !== ''){
             await EditBoard(payload).then((res)=>{
                 toast({title:'Success!',description:'Board saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});

@@ -58,6 +58,8 @@ export const ViewBoard=()=>{
                 </Menu>
             </Flex>
             <Box bg='#fff' p='4' flex='1'>
+                {data?.availability_status? <Badge bgColor='green' color='#fff'>Available</Badge> : null }
+                <Divider />
                 <Text fontSize={'lg'}>{data?.name_of_billboard}</Text>
                 <HStack my='2' fontSize={'xs'}>
                     <Text fontWeight={'bold'}>Sides: </Text>
@@ -103,6 +105,28 @@ export const ViewBoard=()=>{
                     <Text>{data?.ad_agency_address}</Text>
                 </HStack>
             </Box>
+            {user?.account_type === 'admin'?
+                <Box bg='#fff' p='4' flex='1' mt='2'>
+                    <Text fontWeight={'bold'}>Lister details</Text>
+                    <HStack my='2' fontSize={'xs'}>
+                        <Text fontWeight={'bold'}>Name</Text>
+                        <Text>{data?.listed_by?.Name}</Text>
+                    </HStack>
+                    <Badge>{data?.listed_by?.account_type}</Badge>
+                </Box>: 
+                null 
+            }
+            {user?.account_type === 'admin'?
+                <Box bg='#fff' p='4' flex='1' mt='2'>
+                    <Text fontWeight={'bold'}>Owner details</Text>
+                    <HStack my='2' fontSize={'xs'}>
+                        <Text fontWeight={'bold'}>Name</Text>
+                        <Text>{data?.currently_owned_by?.Name}</Text>
+                    </HStack>
+                    <Badge>{data?.currently_owned_by?.account_type}</Badge>
+                </Box>: 
+                null 
+            }
             <Flex flexDirection={'column'} gap='2' mt='2'>
                 {data?.advertisement_data.map((data, data_id)=>{
                     return(
