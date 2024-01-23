@@ -39,7 +39,7 @@ export const Admin_Panel=()=>{
                         <BreadcrumbLink>admin panel</BreadcrumbLink>
                     </BreadcrumbItem>
                 </Breadcrumb>
-                <NewUser view_drawer_disclosure={view_drawer_disclosure}/>
+                <NewUser view_drawer_disclosure={view_drawer_disclosure} account_type={'admin'} def_password={'admin.password.co.ke'}/>
                 <Button bg="#3874ff" color='#fff' leftIcon={<IoIosAdd />} onClick={(()=>{view_drawer_disclosure.onToggle()})}>New Administrator</Button>
             </HStack>
             <Box bg='#fff' borderTopEndRadius={10} borderTopStartRadius={10} borderBottomEndRadius={10} borderBottomStartRadius={10} my='4' boxShadow={'sm'} p='4'>

@@ -10,6 +10,7 @@ import { Addside } from "@/components/ui/dashboard/boards/add_side.js";
 import { ViewBoard } from "@/components/ui/dashboard/boards/view.js";
 import { Edit_Board } from "@/components/ui/dashboard/boards/edit.js";
 import { Editside } from "@/components/ui/dashboard/boards/edit_side.js";
+import { Agencies } from "./Agencies.js";
 
 export default function Content(){
     const {active_page} = useContext(dashboardContext)
@@ -31,6 +32,8 @@ export default function Content(){
         return( <Edit_Board/> ) 
     }else if (active_page == 'Admin_Panel'){ 
         return( <Admin_Panel/> ) 
+    }else if (active_page == 'Agencies'){ 
+        return( <Agencies/> ) 
     }else{
         return( <Home/>)
     }

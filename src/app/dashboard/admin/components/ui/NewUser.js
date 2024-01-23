@@ -8,15 +8,18 @@ import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerCo
 import { useRouter } from 'next/navigation';
 import { useContext, useState, useTransition } from 'react';
 
-export const NewUser=({view_drawer_disclosure})=>{
+export const NewUser=({view_drawer_disclosure,account_type,def_password})=>{
     const {set_page} = useContext(dashboardContext);
     const {user} = useContext(UserContext);
     const [first_name, set_first_name]=useState('');
     const [last_name, set_last_name]=useState('');
     const [email, set_email]=useState('');
     const [position, set_position]=useState('');
-    const [password, set_password]=useState('admin.password.co.ke');
-    const [account_type, set_account_type]=useState('admin');
+    const [password, set_password]=useState(def_password);
+    //const [account_type, set_account_type]=useState('admin');
+    const [company_name,set_company_name]=useState(user?.company_name);
+    const [company_email,set_company_email]=useState(user?.company_email);
+    const [company_mobile,set_company_mobile]=useState(user?.company_mobile);
     
     const [input_error, set_input_error]=useState(false);
     const [isPending, startTransition] = useTransition();
@@ -32,6 +35,9 @@ export const NewUser=({view_drawer_disclosure})=>{
         password,
         account_type,
         position,
+        company_name,
+        company_email,
+        company_mobile,
     }
 
     const Verify_Inputs=()=>{
@@ -42,10 +48,10 @@ export const NewUser=({view_drawer_disclosure})=>{
                 set_form_status_status('warning');
                 return;
             }
-            if(user?.position == 'MANAGER' || user?.position == 'SUPER ADMIN'){
+            if(user?.position == 'MsANAGER' || user?.position == 'SUPER ADMIN'){
                 handle_Create_New_User()
             }else{
-                set_form_status_message('You are not authorized to created a new user. Contact support incase of any issues.')
+                set_form_status_message('You are not authorized to create a new user. Contact support incase of any issues.')
                 set_form_status_status('warning');
                 return;
             }
@@ -113,6 +119,27 @@ export const NewUser=({view_drawer_disclosure})=>{
                     <Input disabled={isPending} type='email' placeholder='johndoe@email.com ' variant='filled' required onChange={((e)=>{set_email(e.target.value)})}/>
                     {input_error && email == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
                 </FormControl>
+                {account_type === 'agency'?
+                    <Box >
+                        <FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>
+                            <FormLabel>Name of the agency</FormLabel>
+                            <Input placeholder={company_name? company_name : '-'} type='text' onChange={((e)=>{set_company_name(e.target.value)})}/>
+                            {input_error && company_name.trim().length == 0 ? <FormErrorMessage>The name of your agency is required.</FormErrorMessage> : ( null )}
+                        </FormControl>
+                        <FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>
+                            <FormLabel>Agency Email</FormLabel>
+                            <Input placeholder={company_email? company_email : '-'} type='email' onChange={((e)=>{set_company_email(e.target.value)})}/>
+                            {input_error && company_email.trim().length == 0 ? <FormErrorMessage>Email for the agency is required.</FormErrorMessage> : ( null )}
+                        </FormControl>
+                        <FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>
+                            <FormLabel>Agency Mobile</FormLabel>
+                            <Input type='tel' placeholder={company_mobile} onChange={((e)=>{set_company_mobile(e.target.value)})}/>
+                            {input_error && company_mobile.trim().length == 0 ? <FormErrorMessage>mobile of the company is required.</FormErrorMessage> : ( null )}
+                        </FormControl>
+                    </Box>
+                : null
+                }
+               {account_type === 'admin'?
                 <FormControl mt='1' isRequired isInvalid={input_error && position == '' ? true : false}>
                     <Select placeholder='Select the role for the user' onChange={((e)=>{set_position(e.target.value)})} my='4'>
                         <option value='MANAGER'>Manager</option>
@@ -123,6 +150,8 @@ export const NewUser=({view_drawer_disclosure})=>{
                     </Select>
                     {input_error && position == '' ?  <FormErrorMessage>The Role is required.</FormErrorMessage> : ( null )}
                 </FormControl>
+                : null 
+                }
                 <FormStatus message={form_status_message} status={form_status_status}/>
             </DrawerBody>
             <DrawerFooter>
