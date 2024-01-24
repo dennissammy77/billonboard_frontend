@@ -48,7 +48,7 @@ export const NewUser=({view_drawer_disclosure,account_type,def_password})=>{
                 set_form_status_status('warning');
                 return;
             }
-            if(user?.position == 'MsANAGER' || user?.position == 'SUPER ADMIN'){
+            if(user?.position == 'MANAGER' || user?.position == 'SUPER ADMIN'){
                 handle_Create_New_User()
             }else{
                 set_form_status_message('You are not authorized to create a new user. Contact support incase of any issues.')
