@@ -12,11 +12,13 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
     const {user} = useContext(UserContext);
     const [boards_data, set_boards_data]=useState([]);
     useEffect(()=>{
+        console.log(data)
         fetch()
     },[data?._id]);
     const fetch=async()=>{
         await BoardsByOwner(data?._id).then((response)=>{
-            const arr = response?.data
+            const arr = response?.data;
+            console.log(arr)
             set_boards_data(arr)
         }).catch((err)=>{
             console.log(err)
@@ -57,7 +59,7 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
                     <Text>Address: {data?.address}</Text>
                     <Text>Gender: {data?.gender}</Text>
                     <Text>Position: {data?.position}</Text>
-                    <Text>Account type: {data?.account_type}</Text>
+                    <Text>Account type: <Badge bgColor='orange'>{data?.account_type}</Badge></Text>
                 </Box>
                 <Box bg='#e5e5e5' borderRadius={10} boxShadow={'sm'} p='4' mt='2' fontSize={'sm'}>
                     <Text fontWeight={'bold'}>Company Details</Text>
@@ -67,16 +69,17 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
                     <Text>address: {data?.company_address}</Text>
                 </Box>
                 {data?.account_type === 'agency' || data?.account_type === 'footsoldier'? 
-                <Box>
-                    <Text fontWeight={'bold'}>Boards</Text>
-                    <Wrap>
-                        {boards_data?.advertisement_data?.map((data, data_id)=>{
-                            return(
-                                <Image key={data?._if} src={data?.image_url} boxSize={50} fallbackSrc={'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'} alt='board_image'/>
-                            )
-                        })}
-                    </Wrap>
-                </Box> : null }
+                    <Box>
+                        <Text fontWeight={'bold'}>Boards</Text>
+                        <Wrap>
+                            {boards_data?.map((data, data_id)=>{
+                                return(
+                                    <Image key={data?._id} cursor='pointer' borderRadius='md' boxShadow={'md'} objectFit='cover' src={data?.advertisement_data[0]?.image_url} boxSize={50} fallbackSrc={'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'} alt='board_image'/>
+                                )
+                            })}
+                        </Wrap>
+                    </Box> : null 
+                }
             </DrawerBody>
 
             <DrawerFooter>
