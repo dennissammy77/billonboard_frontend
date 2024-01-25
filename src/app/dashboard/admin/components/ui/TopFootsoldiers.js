@@ -1,19 +1,20 @@
 'use client'
 
-import { Avatar, Center, Icon, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react";
-import { BsThreeDotsVertical } from "react-icons/bs";
-import { FaFolderOpen, FaStore } from "react-icons/fa";
-import { RiExternalLinkLine } from "react-icons/ri";
-import { MdDeleteOutline } from "react-icons/md";
+import { Avatar, Center, Icon, IconButton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
+import { FaFolderOpen } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import GetFootsolidier from "@/api/auth/client/footsoldier/all/route";
+import { ViewUser } from "./ViewUser";
+import { dashboardContext } from "@/components/providers/dashboard.context";
+import BoardsByOwner from "@/api/billboards/owner/route";
 
 export const TopFootSoldiers=()=>{
-    const [data, set_data]=useState([])
+    const [data, set_data]=useState([]);
+    const {page} = useContext(dashboardContext);
 
     useEffect(()=>{
-        get_FootSoldiers_Data()
+        get_FootSoldiers_Data();
     },[])
     async function get_FootSoldiers_Data(){
 		let data = await GetFootsolidier();
@@ -22,7 +23,7 @@ export const TopFootSoldiers=()=>{
 	}
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
-            <Text p='4' fontSize={'md'} fontWeight={'bold'}> Best FootSoldiers</Text>
+            {page === 'FootSoldiers' ? null : <Text p='4' fontSize={'md'} fontWeight={'bold'}> Best FootSoldiers</Text> }
             {data?.length == 0? 
                 <Center display={'flex'} flexDirection={'column'} py='10' >
                     <Icon as={FaFolderOpen} boxSize={20} color={'gray.200'}/>
@@ -54,6 +55,20 @@ export const TopFootSoldiers=()=>{
 
 const User_Card=(props)=>{
     const { user} = {...props};
+    const view_drawer_disclosure = useDisclosure();
+
+    const [boards_data, set_boards_data]=useState([]);
+    useEffect(()=>{
+        fetch()
+    },[user?._id]);
+    const fetch=async()=>{
+        await BoardsByOwner(user?._id).then((response)=>{
+            const arr = response?.data;
+            set_boards_data(arr)
+        }).catch((err)=>{
+            console.log(err)
+        })
+    }
     return(
         <Tr>
             <Td>
@@ -61,8 +76,9 @@ const User_Card=(props)=>{
             </Td>
             <Td> {user?.first_name} {user?.last_name} </Td>
             <Td> {user?.gender}</Td>
-            <Td> 20</Td>
-            <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'}/> </Td>
+            <Td> {boards_data?.length}</Td>
+            <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'} onClick={(()=>{view_drawer_disclosure.onToggle()})}/> </Td>
+            <ViewUser view_drawer_disclosure={view_drawer_disclosure} data={user}/>
         </Tr>
     )
 }
