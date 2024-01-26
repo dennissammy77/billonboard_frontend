@@ -14,7 +14,6 @@ export const TopBillboards=()=>{
     },[])
     async function get_BillBoards(){
 		let data = await GetBillBoardsAdmin();
-        console.log(data)
 		set_billboards(data?.data?.filter((item)=>{item?.views > 0}))
 	}
     return(

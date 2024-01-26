@@ -8,20 +8,17 @@ import { useContext, useEffect, useState, useTransition } from 'react';
 import { MdMarkEmailRead, MdOutlineMailOutline } from 'react-icons/md';
 
 export const ViewUser=({view_drawer_disclosure,data})=>{
-    const {set_page} = useContext(dashboardContext);
+    const {set_page,set_board_data} = useContext(dashboardContext);
     const {user} = useContext(UserContext);
-    const [boards_data, set_boards_data]=useState([]);
+    const [billboards_data, set_billboards_data]=useState([]);
     useEffect(()=>{
-        console.log(data)
         fetch()
     },[data?._id]);
     const fetch=async()=>{
         await BoardsByOwner(data?._id).then((response)=>{
             const arr = response?.data;
-            console.log(arr)
-            set_boards_data(arr)
+            set_billboards_data(arr)
         }).catch((err)=>{
-            console.log(err)
         })
     }
     return(
@@ -72,9 +69,20 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
                     <Box>
                         <Text fontWeight={'bold'}>Boards</Text>
                         <Wrap>
-                            {boards_data?.map((data, data_id)=>{
+                            {billboards_data?.map((data, data_id)=>{
                                 return(
-                                    <Image key={data?._id} cursor='pointer' borderRadius='md' boxShadow={'md'} objectFit='cover' src={data?.advertisement_data[0]?.image_url} boxSize={50} fallbackSrc={'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'} alt='board_image'/>
+                                    <Image 
+                                        key={data?._id} 
+                                        cursor='pointer' 
+                                        borderRadius='md' 
+                                        boxShadow={'md'} 
+                                        objectFit='cover' 
+                                        src={data?.advertisement_data[0]?.image_url} 
+                                        boxSize={75} 
+                                        fallbackSrc={'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'} 
+                                        alt='board_image'
+                                        onClick={(()=>{set_page('View_Side');set_board_data(data)})}
+                                    />
                                 )
                             })}
                         </Wrap>
