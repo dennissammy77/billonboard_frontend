@@ -39,7 +39,6 @@ export const Stat_Section=()=>{
 	}
     async function get_BillBoards(){
 		let data = await GetBillBoardsAdmin();
-        console.log(data)
 		set_billboards(data.data)
 	}
     return(

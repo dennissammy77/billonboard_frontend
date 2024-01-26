@@ -9,17 +9,20 @@ import { ViewUser } from "./ViewUser";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import BoardsByOwner from "@/api/billboards/owner/route";
 
-export const TopFootSoldiers=()=>{
+export const TopFootSoldiers=({query})=>{
     const [data, set_data]=useState([]);
     const {page} = useContext(dashboardContext);
 
     useEffect(()=>{
         get_FootSoldiers_Data();
-    },[])
+    },[query])
     async function get_FootSoldiers_Data(){
 		let data = await GetFootsolidier();
-        console.log(data)
-		set_data(data.data)
+        if (page === 'FootSoldiers'){
+            set_data(data?.data?.filter((item) => item?.first_name?.toLowerCase().includes(query?.toLowerCase())))
+        }else{
+            set_data(data?.data)
+        }
 	}
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
@@ -27,7 +30,7 @@ export const TopFootSoldiers=()=>{
             {data?.length == 0? 
                 <Center display={'flex'} flexDirection={'column'} py='10' >
                     <Icon as={FaFolderOpen} boxSize={20} color={'gray.200'}/>
-                    <Text color={'gray.300'} textAlign={'center'}>Seems there are no FootSoldiers currently active.</Text>
+                    <Text color={'gray.300'} textAlign={'center'}>Seems there are no FootSoldiers {page === 'FootSoldiers'? 'that meet your search' : 'currently active'}.</Text>
                 </Center>
             :
                 <Table variant='simple'>
@@ -70,14 +73,14 @@ const User_Card=(props)=>{
         })
     }
     return(
-        <Tr>
+        <Tr onClick={(()=>{view_drawer_disclosure.onToggle()})}>
             <Td>
-                <Avatar src={user?.profile_photo_url} borderRadius={10} name={user?.first_name} alt='profile_image' boxSize={50}/>
+                <Avatar src={user?.profile_photo_url} borderRadius={10} name={user?.first_name} alt='profile_image' boxSize={50} cursor='pointer'/>
             </Td>
             <Td> {user?.first_name} {user?.last_name} </Td>
             <Td> {user?.gender}</Td>
             <Td> {boards_data?.length}</Td>
-            <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'} onClick={(()=>{view_drawer_disclosure.onToggle()})}/> </Td>
+            <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'} /> </Td>
             <ViewUser view_drawer_disclosure={view_drawer_disclosure} data={user}/>
         </Tr>
     )
