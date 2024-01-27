@@ -10,9 +10,14 @@ export const Notification=()=>{
             <Alert_Card status={'error'} Title={'Your account has been suspended!'} Description={'contact our support at help@prokemia.com for any assistance.'}/>
         )
     }
-    if (user?.verified_email_status === false){
+    if (user?.verification_status === false){
         return (
             <Alert_Card status={'success'} Title={'Success!'} Description={'Your application has been received. We will review your application and respond within the next 48 hours.'}/>
+        )
+    }
+    if (user?.verified_email_status === false){
+        return (
+            <Alert_Card status={'info'} Title={'Hey there!'} Description={'You need to verify your email to activate your account.'}/>
         )
     }
     return null;

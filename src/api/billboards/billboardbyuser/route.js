@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function BoardDataByUser(boardid) {
+export default async function BoardDataByUser(payload) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -12,6 +12,6 @@ export default async function BoardDataByUser(boardid) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/api/billboards/billboard?query=${boardid}`);
+	const result = await axios.get(`${base_url}/api/billboards/billboard?query=${payload?.boardid}&&acc_type=${payload?.acc_type}`);
 	return result
 }

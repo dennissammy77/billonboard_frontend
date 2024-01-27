@@ -13,7 +13,6 @@ function BoardSection({query}) {
 
   const pathname = usePathname();
   const pathArr = pathname?.split('/');
-  console.log(pathArr[2])
 
   useEffect(()=>{
     fetch()

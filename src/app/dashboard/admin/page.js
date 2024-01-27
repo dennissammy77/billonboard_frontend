@@ -12,6 +12,7 @@ import { Edit_Board } from "@/components/ui/dashboard/boards/edit.js";
 import { Editside } from "@/components/ui/dashboard/boards/edit_side.js";
 import { Agencies } from "./Agencies.js";
 import { Footsoldiers } from "./FootSoldiers.js";
+import { Clients } from "./Clients.js";
 
 export default function Content(){
     const {active_page} = useContext(dashboardContext)
@@ -35,6 +36,8 @@ export default function Content(){
         return( <Admin_Panel/> ) 
     }else if (active_page == 'FootSoldiers'){ 
         return( <Footsoldiers/> ) 
+    }else if (active_page == 'Clients'){ 
+        return( <Clients/> ) 
     }else if (active_page == 'Agencies'){ 
         return( <Agencies/> ) 
     }else{

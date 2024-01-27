@@ -1,3 +1,5 @@
+'use client'
+
 import { Alert, AlertDescription, AlertIcon, AlertTitle, Badge, Box, Button, Collapse, Text, useDisclosure } from "@chakra-ui/react";
 import { FaArrowLeft } from "react-icons/fa";
 import { useContext } from "react";
@@ -9,12 +11,7 @@ export const Notification=()=>{
 
     if (user?.account_suspension_status === true){
         return (
-            <Alert_Card status={'error'} Title={'Your account has been suspended!'} Description={'you cannot add a product. Contact our support at help@prokemia.com for any assistance.'}/>
-        )
-    }
-    if (user?.verification_status === false){
-        return (
-            <Alert_Card status={'info'} Title={'Your account is yet to be verified!'} Description={'Your application has been received. We will review your application and respond within the next 48 hours. We appologize for the inconvinence.'}/>
+            <Alert_Card status={'error'} Title={'Your account has been suspended!'} Description={'you cannot add a new board. Contact our support at help@prokemia.com for any assistance.'}/>
         )
     }
     if(user?.verified_email_status === false){

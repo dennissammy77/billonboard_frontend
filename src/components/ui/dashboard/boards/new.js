@@ -4,13 +4,14 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import CreateNewBoard from "@/api/billboards/new/route";
-import { Addside } from "./add_side";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
     return(
         <Box p='2'>
-            <Body/>
+            {(!user?.verification_status || !user?.verified_email_status || user?.account_suspension_status) && user?.account_type !== 'admin'? 
+                <Notification />
+            :   <Body/> }
         </Box>
     )
 }
@@ -143,139 +144,124 @@ const Body=()=>{
                     </BreadcrumbItem>
                 </Breadcrumb>
             </Box>
-            {is_side_upload?
-                <Box bg='#fff' borderRadius={8} mt='4' p='4' py='4'>
-                    <Addside set_is_side_upload={set_is_side_upload}/>
-                </Box>
-                :
-                <Box>
-                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Details</Text>
-                        <Divider/>
-                        <FormControl mt='2' isRequired isInvalid={input_error && name_of_billboard == '' ? true : false}>
-                            <FormLabel>Name</FormLabel>
-                            <Input value={name_of_billboard} placeholder='Name of the billboard' type='text' onChange={((e)=>{set_name_of_billboard(e.target.value)})}/>
-                            {input_error && name_of_billboard == '' ? 
-                                <FormErrorMessage>Name of the billboard is required.</FormErrorMessage>
-                            : (
-                                null
-                            )}
-                        </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && description == '' ? true : false}>
-                            <FormLabel>Description</FormLabel>
-                            <Textarea value={description} type='text' placeholder='Give a detailed description of the billboard' onChange={((e)=>{set_description(e.target.value)})}/>
-                            {input_error && description == '' ?  <FormErrorMessage>Description of the billboard is required.</FormErrorMessage> : ( null )}
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Number of sides</FormLabel>
-                            <NumberInput defaultValue={1} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                        </FormControl>
-                        <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
-                            <option value='digital'>Digital</option>
-                            <option value='2D'>2D</option>
-                        </Select>
-                        {user?.account_type === 'admin'?
-                            <>
-                                <FormControl mt='2'>
-                                    <FormLabel>Bob Rating</FormLabel>
-                                    <NumberInput defaultValue={1} min={1} max={5} onChange={((e)=>{set_bob_rating(e)})}>
-                                        <NumberInputField />
-                                        <NumberInputStepper>
-                                            <NumberIncrementStepper />
-                                            <NumberDecrementStepper />
-                                        </NumberInputStepper>
-                                    </NumberInput>
-                                </FormControl>
-                                <FormControl mt='2'>
-                                    <FormLabel>Remark</FormLabel>
-                                    <Textarea value={bob_remark} type='text' placeholder='leave a profesional remark' onChange={((e)=>{set_bob_remark(e.target.value)})}/>
-                                </FormControl>
-                                <FormControl display='flex' alignItems='center' mt='4' gap='2' fontSize={'sm'}>
-                                    <FormLabel>{availability_status? 'Board is available' : 'Make board available'}</FormLabel>
-                                    <Switch id='availabity status' onChange={(()=>{set_availability_status(!availability_status)})}/>
-                                </FormControl>
-                            </>
-                            : null
-                        }
-                    </Box>
-                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Location Details</Text>
-                        <Divider/>
-                        <FormControl mt='2' isRequired isInvalid={input_error && location == '' ? true : false}>
-                            <FormLabel>Location</FormLabel>
-                            <Input value={location} placeholder='e.g along thika road' type='text' onChange={((e)=>{set_location(e.target.value)})}/>
-                            {input_error && location == '' ? 
-                                <FormErrorMessage>Location of the billboard is required.</FormErrorMessage>
-                            : (
-                                null
-                            )}
-                        </FormControl>
-                    </Box>
-                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
-                        <Divider/>
-                        <FormControl mt='2' isRequired isInvalid={input_error && ad_agency_name == '' ? true : false}>
-                            <FormLabel>Name</FormLabel>
-                            <Input value={ad_agency_name} placeholder='e.g BillonBoard' type='text' onChange={((e)=>{set_ad_agency_name(e.target.value)})}/>
-                            {input_error && ad_agency_name == '' ? 
-                                <FormErrorMessage>Name of the agency is required.</FormErrorMessage>
-                            : (
-                                null
-                            )}
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Email</FormLabel>
-                            <Input value={ad_agency_email} placeholder='e.g info@billonboard.co.ke' type='email' onChange={((e)=>{set_ad_agency_email(e.target.value)})}/>
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Mobile</FormLabel>
-                            <Input value={ad_agency_mobile} placeholder='e.g 07##-###-###' type='tel' onChange={((e)=>{set_ad_agency_mobile(e.target.value)})}/>
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Address</FormLabel>
-                            <Input value={ad_agency_address} placeholder='e.g Nairobi,kenya' type='text' onChange={((e)=>{set_ad_agency_address(e.target.value)})}/>
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Website</FormLabel>
-                            <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
-                        </FormControl>
-                    </Box>
+            <Box>
+                <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                    <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Details</Text>
+                    <Divider/>
+                    <FormControl mt='2' isRequired isInvalid={input_error && name_of_billboard == '' ? true : false}>
+                        <FormLabel>Name</FormLabel>
+                        <Input value={name_of_billboard} placeholder='Name of the billboard' type='text' onChange={((e)=>{set_name_of_billboard(e.target.value)})}/>
+                        {input_error && name_of_billboard == '' ? 
+                            <FormErrorMessage>Name of the billboard is required.</FormErrorMessage>
+                        : (
+                            null
+                        )}
+                    </FormControl>
+                    <FormControl mt='2' isRequired isInvalid={input_error && description == '' ? true : false}>
+                        <FormLabel>Description</FormLabel>
+                        <Textarea value={description} type='text' placeholder='Give a detailed description of the billboard' onChange={((e)=>{set_description(e.target.value)})}/>
+                        {input_error && description == '' ?  <FormErrorMessage>Description of the billboard is required.</FormErrorMessage> : ( null )}
+                    </FormControl>
+                    <FormControl mt='2'>
+                        <FormLabel>Number of sides</FormLabel>
+                        <NumberInput defaultValue={1} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
+                            <NumberInputField />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                    </FormControl>
+                    <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
+                        <option value='digital'>Digital</option>
+                        <option value='2D'>2D</option>
+                    </Select>
                     {user?.account_type === 'admin'?
                         <>
-                            <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                                <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Ownership Details</Text>
-                                <Divider/>
-                            </Box>  
+                            <FormControl mt='2'>
+                                <FormLabel>Bob Rating</FormLabel>
+                                <NumberInput defaultValue={1} min={1} max={5} onChange={((e)=>{set_bob_rating(e)})}>
+                                    <NumberInputField />
+                                    <NumberInputStepper>
+                                        <NumberIncrementStepper />
+                                        <NumberDecrementStepper />
+                                    </NumberInputStepper>
+                                </NumberInput>
+                            </FormControl>
+                            <FormControl mt='2'>
+                                <FormLabel>Remark</FormLabel>
+                                <Textarea value={bob_remark} type='text' placeholder='leave a profesional remark' onChange={((e)=>{set_bob_remark(e.target.value)})}/>
+                            </FormControl>
+                            <FormControl display='flex' alignItems='center' mt='4' gap='2' fontSize={'sm'}>
+                                <FormLabel>{availability_status? 'Board is available' : 'Make board available'}</FormLabel>
+                                <Switch id='availabity status' onChange={(()=>{set_availability_status(!availability_status)})}/>
+                            </FormControl>
                         </>
                         : null
                     }
-                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board status</Text>
-                        <Divider/>
-                        <FormControl display='flex' alignItems='center' mt='4' gap='2'>
-                            <FormLabel htmlFor='short_on_expiry_status' mb='0'>
-                                {publish_status? 'Board will be published' : 'Board will be saved as draft'}
-                            </FormLabel>
-                            <Switch id='short_on_expiry_status' onChange={(()=>{set_publish_status(!publish_status)})}/>
-                        </FormControl>
-                    </Box>
-                    <Flex justify={'space-between'} align='center'>
-                        <Text cursor={'pointer'} onClick={(()=>{DiscardDialog.onToggle()})}>Discard</Text>
-                        <AlertUserDialog DiscardDialog={DiscardDialog} Clean_input_data={Clean_input_data}/>
-                        <Box mt='2' align='end' gap='2'>
-                            <Tooltip hasArrow label='Save baord details and add boards later' placement='auto'>
-                                {is_saving? <Button variant='ghost' isLoading loadingText={publish_status? 'Publishing' : "Saving draft..."}/> : <Button ml={'2'} bg='#3874ff' color='#fff' onClick={Handle_Submit} >Save BillBoard</Button> }
-                            </Tooltip>
-                        </Box>
-                    </Flex>
                 </Box>
-            }
+                <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                    <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Location Details</Text>
+                    <Divider/>
+                    <FormControl mt='2' isRequired isInvalid={input_error && location == '' ? true : false}>
+                        <FormLabel>Location</FormLabel>
+                        <Input value={location} placeholder='e.g along thika road' type='text' onChange={((e)=>{set_location(e.target.value)})}/>
+                        {input_error && location == '' ? 
+                            <FormErrorMessage>Location of the billboard is required.</FormErrorMessage>
+                        : (
+                            null
+                        )}
+                    </FormControl>
+                </Box>
+                <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                    <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
+                    <Divider/>
+                    <FormControl mt='2' isRequired isInvalid={input_error && ad_agency_name == '' ? true : false}>
+                        <FormLabel>Name</FormLabel>
+                        <Input value={ad_agency_name} placeholder='e.g BillonBoard' type='text' onChange={((e)=>{set_ad_agency_name(e.target.value)})}/>
+                        {input_error && ad_agency_name == '' ? 
+                            <FormErrorMessage>Name of the agency is required.</FormErrorMessage>
+                        : (
+                            null
+                        )}
+                    </FormControl>
+                    <FormControl mt='2'>
+                        <FormLabel>Email</FormLabel>
+                        <Input value={ad_agency_email} placeholder='e.g info@billonboard.co.ke' type='email' onChange={((e)=>{set_ad_agency_email(e.target.value)})}/>
+                    </FormControl>
+                    <FormControl mt='2'>
+                        <FormLabel>Mobile</FormLabel>
+                        <Input value={ad_agency_mobile} placeholder='e.g 07##-###-###' type='tel' onChange={((e)=>{set_ad_agency_mobile(e.target.value)})}/>
+                    </FormControl>
+                    <FormControl mt='2'>
+                        <FormLabel>Address</FormLabel>
+                        <Input value={ad_agency_address} placeholder='e.g Nairobi,kenya' type='text' onChange={((e)=>{set_ad_agency_address(e.target.value)})}/>
+                    </FormControl>
+                    <FormControl mt='2'>
+                        <FormLabel>Website</FormLabel>
+                        <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
+                    </FormControl>
+                </Box>
+                <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                    <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board status</Text>
+                    <Divider/>
+                    <FormControl display='flex' alignItems='center' mt='4' gap='2'>
+                        <FormLabel htmlFor='short_on_expiry_status' mb='0'>
+                            {publish_status? 'Board will be published' : 'Board will be saved as draft'}
+                        </FormLabel>
+                        <Switch id='short_on_expiry_status' onChange={(()=>{set_publish_status(!publish_status)})}/>
+                    </FormControl>
+                </Box>
+                <Flex justify={'space-between'} align='center'>
+                    <Text cursor={'pointer'} onClick={(()=>{DiscardDialog.onToggle()})}>Discard</Text>
+                    <AlertUserDialog DiscardDialog={DiscardDialog} Clean_input_data={Clean_input_data}/>
+                    <Box mt='2' align='end' gap='2'>
+                        <Tooltip hasArrow label='Save baord details and add boards later' placement='auto'>
+                            {is_saving? <Button variant='ghost' isLoading loadingText={publish_status? 'Publishing' : "Saving draft..."}/> : <Button ml={'2'} bg='#3874ff' color='#fff' onClick={Handle_Submit} >Save BillBoard</Button> }
+                        </Tooltip>
+                    </Box>
+                </Flex>
+            </Box>
         </Box>
     )
 }
