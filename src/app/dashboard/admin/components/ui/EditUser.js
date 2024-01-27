@@ -141,7 +141,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                     </FormControl>
                     :
                     <FormControl mt='2'>
-                        <FormLabel>What is your position in the agency</FormLabel>
+                        <FormLabel>What is the position in the company</FormLabel>
                         <Input type='text' placeholder={position} onChange={((e)=>{set_position(e.target.value)})}/>
                     </FormControl>
                 }
@@ -200,7 +200,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                             <Divider/>
                             <FormControl display='flex' alignItems='center' mt='4' gap='2'>
                                 <FormLabel htmlFor='verification' mb='0'>
-                                    {verification_status? 'User has been verified' : 'User is not verified'}
+                                    {verification_status? 'Un Verify user' : 'Verify User'}
                                 </FormLabel>
                                 <Switch id='verification' onChange={(()=>{set_verification_status(!verification_status)})}/>
                             </FormControl>
@@ -210,7 +210,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                             <Divider/>
                             <FormControl display='flex' alignItems='center' mt='4' gap='2'>
                                 <FormLabel htmlFor='verification' mb='0'>
-                                    {verified_email_status? 'User has been verified email' : 'Users email is not verified'}
+                                    {verified_email_status? 'Unverify user email' : 'Verify user email account'}
                                 </FormLabel>
                                 <Switch id='verification' onChange={(()=>{set_verified_email_status(!verified_email_status)})}/>
                             </FormControl>
@@ -220,7 +220,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                             <Divider/>
                             <FormControl display='flex' alignItems='center' mt='4' gap='2'>
                                 <FormLabel htmlFor='suspension' mb='0'>
-                                    {account_suspension_status? 'This users account has been suspended' : 'This users account has been suspended'}
+                                    {account_suspension_status? 'Activate User acoount' : 'Suspend user account'}
                                 </FormLabel>
                                 <Switch id='suspension' onChange={(()=>{set_account_suspension_status(!account_suspension_status)})}/>
                             </FormControl>
@@ -230,7 +230,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                             <Divider/>
                             <FormControl display='flex' alignItems='center' mt='4' gap='2'>
                                 <FormLabel htmlFor='subscription' mb='0'>
-                                    {account_susbscription_status? 'This users account has been suspended' : 'This users account has been suspended'}
+                                    {account_susbscription_status? 'Remove Subscription' : 'Activate subscription'}
                                 </FormLabel>
                                 <Switch id='subscription' onChange={(()=>{set_account_susbscription_status(!account_susbscription_status)})}/>
                             </FormControl>

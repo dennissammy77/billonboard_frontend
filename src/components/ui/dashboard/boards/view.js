@@ -58,9 +58,9 @@ export const ViewBoard=()=>{
                 </Menu>
             </Flex>
             <Box bg='#fff' p='4' flex='1'>
-                {data?.availability_status? <Badge bgColor='green' color='#fff'>Available</Badge> : null }
+                {data?.availability_status? <Badge bgColor='green' color='#fff' my='2'>Available</Badge> : null }
                 <Divider />
-                <Text fontSize={'lg'}>{data?.name_of_billboard}</Text>
+                <Text fontSize={'lg'} my='2'>{data?.name_of_billboard}</Text>
                 <HStack my='2' fontSize={'xs'}>
                     <Text fontWeight={'bold'}>Sides: </Text>
                     <Text>{data?.number_of_sides}</Text>
@@ -77,10 +77,10 @@ export const ViewBoard=()=>{
                     <Icon boxSize={2} as={FaStar}/>
                     <Badge bgColor={'#3874ff'} color={'#fff'} size={'xs'}>{data?.bob_rating}/5</Badge>
                 </HStack>
-                <HStack color='#3874ff' mt='2' fontSize={'xs'}>
+                <Box color='#3874ff' mt='2' fontSize={'xs'}>
                     <Icon boxSize={3} as={GoCommentDiscussion}/>
-                    <Badge bgColor={'#3874ff'} color={'#fff'}>{data?.bob_remark}</Badge>
-                </HStack>
+                    <Text>{data?.bob_remark}</Text>
+                </Box>
             </Box>
             <Box bg='#fff' p='4' flex='1' my='2' >
                 <Text fontWeight={'bold'}>Description</Text>

@@ -50,6 +50,7 @@ export const Stat_Section=()=>{
                 bg='green.100'
                 colorTt='green.800'
                 colorSt='green.500'
+                page_link='Clients'
             />
             <StatCard 
                 icon={MdOutlineSwitchAccount} 
@@ -58,6 +59,7 @@ export const Stat_Section=()=>{
                 bg='orange.100'
                 colorTt='orange.800'
                 colorSt='orange.500'
+                page_link='Agencies'
             />
             <StatCard 
                 icon={FaPersonWalking} 
@@ -66,6 +68,7 @@ export const Stat_Section=()=>{
                 bg='blue.100'
                 colorTt='blue.800'
                 colorSt='blue.500'
+                page_link='FootSoldiers'
             />
             <StatCard 
                 icon={SiBillboard} 
@@ -74,6 +77,7 @@ export const Stat_Section=()=>{
                 bg='pink.100'
                 colorTt='pink.800'
                 colorSt='pink.500'
+                page_link='Boards'
             />
         </Grid>
     )

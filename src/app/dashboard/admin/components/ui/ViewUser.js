@@ -6,13 +6,19 @@ import { UserContext } from '@/components/providers/user.context';
 import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, Image, Text, Flex, Box, Icon, HStack, useDisclosure, FormControl, FormLabel, Input, FormErrorMessage, InputRightElement, Select, useFormControlStyles, Avatar, Wrap, WrapItem, Badge,} from '@chakra-ui/react';
 import { useContext, useEffect, useState, useTransition } from 'react';
 import { MdMarkEmailRead, MdOutlineMailOutline } from 'react-icons/md';
+import { EditUser } from './EditUser';
+import DeleteUserAccount from './deleteAccountAdmin.ui';
 
 export const ViewUser=({view_drawer_disclosure,data})=>{
     const {set_page,set_board_data} = useContext(dashboardContext);
     const {user} = useContext(UserContext);
     const [billboards_data, set_billboards_data]=useState([]);
     useEffect(()=>{
-        fetch()
+        if(data?.account_type == 'client'){
+            return ;
+        }else{
+            fetch();
+        }
     },[data?._id]);
     const fetch=async()=>{
         await BoardsByOwner(data?._id).then((response)=>{
@@ -21,6 +27,9 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
         }).catch((err)=>{
         })
     }
+
+    const delete_user_account_disclosure = useDisclosure();
+    const view_edit_user_drawer_disclosure = useDisclosure();
     return(
         <Drawer
             isOpen={view_drawer_disclosure?.isOpen}
@@ -36,11 +45,21 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
             <DrawerBody mt='10px' p='4'>
                 {user?.account_type === 'admin'? 
                 <Wrap my='2'>
-                    {data?.verified_email_status ? <WrapItem> <Badge><Icon as={MdMarkEmailRead} boxSize='3' />Email status</Badge> </WrapItem> : <WrapItem> <Badge><Icon as={MdOutlineMailOutline} boxSize='3' />Email status</Badge> </WrapItem> }
-                    {data?.verification_status ? <WrapItem> <Badge>Verified</Badge> </WrapItem> : null }
-                    {data?.account_suspension_status ? <WrapItem> <Badge bgColor='red.200'>Suspended</Badge> </WrapItem> : null }
-                    {data?.account_susbscription_status ? <WrapItem> <Badge bgColor='gold'>Subscribed</Badge> </WrapItem> : null }
+                    {data?.verified_email_status ? <WrapItem> <Badge bgColor={'green.200'}><Icon as={MdMarkEmailRead} boxSize='3' />Email</Badge> </WrapItem> : <WrapItem> <Badge bgColor={'gray.200'}><Icon as={MdOutlineMailOutline} boxSize='3' />Email</Badge> </WrapItem> }
+                    {data?.verification_status ? <WrapItem> <Badge bgColor={'green.200'}>Verified</Badge> </WrapItem> : <WrapItem> <Badge bgColor={'gray.200'}>Verified</Badge> </WrapItem> }
+                    {data?.account_suspension_status ? <WrapItem> <Badge bgColor='red.200'>Suspended</Badge> </WrapItem> : <WrapItem> <Badge bgColor='gray.200'>Suspended</Badge> </WrapItem> }
+                    {data?.account_susbscription_status ? <WrapItem> <Badge bgColor='gold'>Subscribed</Badge> </WrapItem> : <WrapItem> <Badge bgColor='gray.200'>Subscribed</Badge> </WrapItem> }
                 </Wrap> : null }
+                <Flex gap='2' fontSize={'10px'} my='2'>
+                    <HStack>
+                        <Box bgColor='green.200' borderRadius={'full'} boxSize={2}/>
+                        <Text>active</Text>
+                    </HStack>
+                    <HStack>
+                        <Box bgColor='gray.200' borderRadius={'full'} boxSize={2}/>
+                        <Text>not active</Text>
+                    </HStack>
+                </Flex>
                 <HStack p='4' bg='#e5e5e5' borderRadius={10} boxShadow={'sm'}>
                     <Avatar src={data?.profile_photo_url} name={data?.company_name || data?.first_name} />
                     <Box>
@@ -91,9 +110,18 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
             </DrawerBody>
 
             <DrawerFooter>
+                <Button variant='outline' ml={3} onClick={delete_user_account_disclosure?.onToggle}>
+                    Delete User
+                </Button>
+                <DeleteUserAccount delete_account_disclosure={delete_user_account_disclosure} data={data}/>
+                <Button variant='outline' ml={3} onClick={view_edit_user_drawer_disclosure?.onToggle}>
+                    Edit User
+                </Button>
+                <EditUser view_drawer_disclosure={view_edit_user_drawer_disclosure} data={data}/>
                 <Button variant='outline' ml={3} onClick={view_drawer_disclosure?.onClose}>
                     Close
                 </Button>
+                
             </DrawerFooter>
             </DrawerContent>
         </Drawer>
