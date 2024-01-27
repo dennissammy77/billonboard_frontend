@@ -30,7 +30,11 @@ export const ViewBoard=()=>{
         fetch()
     },[board_data?._id]);
     const fetch=async()=>{
-        await BoardDataByUser(board_data?._id).then((response)=>{
+        const payload={
+            boardid: board_data?._id,
+            acc_type: user?.account_type
+        }
+        await BoardDataByUser(payload).then((response)=>{
             set_data(response.data)
         }).catch((err)=>{
             console.log(err)
