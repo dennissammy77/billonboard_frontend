@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import CreateNewBoard from "@/api/billboards/new/route";
+import { GrMapLocation } from "react-icons/gr";
+import GetLocation from "@/components/hooks/GetLocation";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -131,6 +133,11 @@ const Body=()=>{
         set_suspension_status(false)
         set_publish_status(false)
     }
+
+    const HandleGetLocation=()=>{
+        const location_cord = GetLocation()
+        console.log(location_cord)
+    }
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -212,6 +219,10 @@ const Body=()=>{
                             null
                         )}
                     </FormControl>
+                    <HStack p='4' bg='#b3c8ff' border='1px solid gray.200' borderRadius={'md'} cursor='pointer' my='2' onClick={HandleGetLocation}>
+                        <Icon as={GrMapLocation} boxSize={4}/>
+                        <Text>Cick to pin the location of this billboard</Text>
+                    </HStack>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
