@@ -5,7 +5,9 @@ import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import CreateNewBoard from "@/api/billboards/new/route";
 import { GrMapLocation } from "react-icons/gr";
-import GetLocation from "@/components/hooks/GetLocation";
+import getPosition from "@/components/hooks/GetLocation";
+import { FaLocationPin } from "react-icons/fa6";
+import { CiLocationOff } from "react-icons/ci";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -134,9 +136,12 @@ const Body=()=>{
         set_publish_status(false)
     }
 
-    const HandleGetLocation=()=>{
-        const location_cord = GetLocation()
-        console.log(location_cord)
+    const HandleGetLocation=async()=>{
+        const resut = await getPosition()
+        set_location_cord(resut)
+    }
+    const HandleRemoveLocation=async()=>{
+        set_location_cord({Latitude:'',Longitude:''})
     }
     return(
         <Box>
@@ -219,10 +224,17 @@ const Body=()=>{
                             null
                         )}
                     </FormControl>
-                    <HStack p='4' bg='#b3c8ff' border='1px solid gray.200' borderRadius={'md'} cursor='pointer' my='2' onClick={HandleGetLocation}>
-                        <Icon as={GrMapLocation} boxSize={4}/>
-                        <Text>Cick to pin the location of this billboard</Text>
-                    </HStack>
+                    <Flex gap='2' align={'center'}>
+                        <HStack p='4' bg={location_cord.Latitude == '' ? '#b3c8ff' : 'green.200'} border='1px solid gray.200' borderRadius={'md'} cursor='pointer' my='2' onClick={HandleGetLocation} flex='1'>
+                            <Icon as={FaLocationPin} boxSize={4}/>
+                            <Text>{location_cord.Latitude == '' ? 'Cick to pin the location of this billboard' : 'Billboard has been pinned on map'}</Text>
+                        </HStack>
+                        {location_cord.Latitude == '' ? 
+                            <IconButton icon={<CiLocationOff/>} variant='ghost' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' isDisabled/>
+                            :
+                            <IconButton icon={<CiLocationOff/>} variant='outline' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' onClick={HandleRemoveLocation} />
+                        }
+                    </Flex>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>

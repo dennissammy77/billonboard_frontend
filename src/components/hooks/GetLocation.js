@@ -1,32 +1,40 @@
-const successCallback = (position) => {
-    let Latitude = position.coords.latitude;
-    let Longitude = position.coords.longitude;
-    const location_cord = {
-        Latitude,
-        Longitude
-    }
-    console.log(location_cord)
-};
+function getPosition(){
+    return new Promise((res, rej) => {
+        if(navigator.geolocation){
+            //postion = navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }else{
+            return 'Geolaction is not supported by this browser.'
+        }
 
-const errorCallback = (error) => {
-    console.log(error);
-};
+        function showPosition(position){
+            let Latitude = position.coords.latitude;
+            let Longitude = position.coords.longitude;
+            const location_cord = {
+                Latitude,
+                Longitude
+            }
+            console.log(location_cord)
+            res(location_cord)
+        }
 
-export default function GetLocation(){
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-    }else{
-        return 'Geolaction is not supported by this browser.'
-    }
+        // const successCallback = (position) => {
+        //     let Latitude = position.coords.latitude;
+        //     let Longitude = position.coords.longitude;
+        //     const location_cord = {
+        //         Latitude,
+        //         Longitude
+        //     }
+        //     console.log(location_cord)
+        //     res(location_cord)
+        // };
+        
+        // const errorCallback = (error) => {
+        //     console.log(error);
+        //     rej(error)
+        // };
+    })
 }
 
-const showPostion=(position)=>{
-    let Latitude = position.coords.latitude;
-    let Longitude = position.coords.longitude;
-    const location_cord = {
-        Latitude,
-        Longitude
-    }
-    console.log(location_cord)
-    return location_cord
-}
+
+export default getPosition
