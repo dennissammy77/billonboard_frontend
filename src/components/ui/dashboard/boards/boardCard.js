@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Card, CardBody, CardFooter, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Stack, Text, Tooltip, UnorderedList, VStack } from '@chakra-ui/react'
+import { Badge, Box, Button, Card, CardBody, CardFooter, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Stack, Text, Tooltip, UnorderedList, VStack, useDisclosure } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { FaInfoCircle, FaStar } from 'react-icons/fa';
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -12,9 +12,20 @@ import { dashboardContext } from '@/components/providers/dashboard.context';
 export const BoardCard=({board})=>{
     const {name_of_billboard, ad_agency_name,location, bob_rating, img_placeholder,advertisement_data,ad_agency_mobile,location_cord,ad_agency_email } = {...board}
     const {set_page,set_board_data} = useContext(dashboardContext);
+
+    const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <Box w='100%' h='400px' borderRadius={'md'} boxShadow={'md'} position={'relative'}>
-        <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
+        <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5' onClick={onOpen}/>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+            <ModalContent>
+            <ModalCloseButton />
+            <ModalBody>
+                <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
+            </ModalBody>
+            </ModalContent>
+        </Modal>
         <Flex justify={'end'} flexDirection={'column'} gap='2' position={'absolute'} bottom={'0'} left={'0'} p='2' color="white" bgGradient="linear(to-t,rgba(0,0,0,1), rgba(0,0,0,0.9),  rgba(0,0,0,0.8),  rgba(0,0,0,0.7), rgba(0,0,0,0.6), rgba(0,0,0,0.5), rgba(0,0,0,0.4), rgba(0,0,0,0.3), rgba(0,0,0,0.2), rgba(0,0,0,0))" w='full' h='40%' borderRadius={'md'} cursor={'pointer'} fontSize='xs' transition={'.3s ease-in-out'} _hover={{fontSize:'sm'}}>
             <Text>{name_of_billboard}</Text>
             <HStack>
@@ -42,7 +53,7 @@ export const BoardCard=({board})=>{
                 </MenuList>
             </Menu>
             {advertisement_data?.length === 0 ||  ad_agency_email == '' || ad_agency_mobile == '' || location_cord.Latitude == '' || location_cord.Longitude == '' ?
-                <Popover placement='left'>
+                <Popover placement='auto'>
                     <PopoverTrigger>
                         <IconButton icon={<FaInfoCircle/>} isRound={true} variant='solid' colorScheme='orange' border='1px solid #fff' borderRadius={'full'} cursor={'pointer'}/>
                     </PopoverTrigger>

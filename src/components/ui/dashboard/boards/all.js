@@ -13,13 +13,20 @@ import MapSection from '../../MapFeature';
 function Boards() {
   const {set_page} = useContext(dashboardContext);
   const [query,set_query]=useState('');
-  const [view_map,set_view_map]=useState(true);
+  const [view_map,set_view_map]=useState(false);
   return (
     <Box p={{base:'2',md:'4'}}>
         <Flex align='center' justify='space-between' my='3' >
             <Text>Billboards</Text>
             <HStack>
-              <IconButton icon={<FaMapLocation/>} variant='outline' aria-label='view map' colorScheme={'blue'}/>
+              {view_map?
+              <Text p='2' bg='#e3e3e3' borderRadius={'5'} onClick={(()=>{set_view_map(!view_map)})} cursor='pointer'>View Boards</Text>
+              :
+              <HStack onClick={(()=>{set_view_map(!view_map)})} cursor={'pointer'}>
+                <IconButton icon={<FaMapLocation/>} variant='outline' aria-label='view map' colorScheme={'blue'} />
+                <Text>Map</Text>
+              </HStack>
+              }
               <Button leftIcon={<IoMdAdd/>} bg={'#3874ff'} color='#fff' onClick={(()=>{set_page('New_Board')})}>New billboard</Button>
             </HStack>
         </Flex>

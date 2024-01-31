@@ -61,7 +61,7 @@ const Body=()=>{
     const payload = {
         name_of_billboard,
         description,
-        location,
+        location, 
         location_cord,
         number_of_sides,
         img_placeholder,
@@ -227,7 +227,7 @@ const Body=()=>{
                     <Flex gap='2' align={'center'}>
                         <HStack p='4' bg={location_cord.Latitude == '' ? '#b3c8ff' : 'green.200'} border='1px solid gray.200' borderRadius={'md'} cursor='pointer' my='2' onClick={HandleGetLocation} flex='1'>
                             <Icon as={FaLocationPin} boxSize={4}/>
-                            <Text>{location_cord.Latitude == '' ? 'Cick to pin the location of this billboard' : 'Billboard has been pinned on map'}</Text>
+                            <Text>{location_cord.Latitude == '' ? 'Click to pin the location of this billboard' : 'Billboard has been pinned on map'}</Text>
                         </HStack>
                         {location_cord.Latitude == '' ? 
                             <IconButton icon={<CiLocationOff/>} variant='ghost' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' isDisabled/>
