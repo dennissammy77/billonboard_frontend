@@ -4,6 +4,9 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import EditBoard from "@/api/billboards/edit/route";
+import getPosition from "@/components/hooks/GetLocation";
+import { CiLocationOff } from "react-icons/ci";
+import { FaLocationPin } from "react-icons/fa6";
 
 export const Edit_Board=()=>{
     return(
@@ -24,7 +27,7 @@ const Body=()=>{
     const [name_of_billboard,set_name_of_billboard]=useState(board_data?.name_of_billboard);
     const [description,set_description]=useState(board_data?.description);
     const [location,set_location]=useState(board_data?.location);
-    const [location_cord,set_location_cord]=useState({Latitude:'',Longitude:''});
+    const [location_cord,set_location_cord]=useState(board_data?.location_cord);
     const [number_of_sides,set_number_of_sides]=useState(board_data?.number_of_sides);
     const [availability_status,set_availability_status]=useState(board_data?.availability_status);
     const [billboard_type,set_billboard_type]=useState(board_data?.billboard_type);
@@ -101,6 +104,14 @@ const Body=()=>{
                 set_is_saving(false)
             })
         }
+    }
+
+    const HandleGetLocation=async()=>{
+        const resut = await getPosition()
+        set_location_cord(resut)
+    }
+    const HandleRemoveLocation=async()=>{
+        set_location_cord({Latitude:'',Longitude:''})
     }
     return(
         <Box>
@@ -183,6 +194,17 @@ const Body=()=>{
                             null
                         )}
                     </FormControl>
+                    <Flex gap='2' align={'center'}>
+                        <HStack p='4' bg={location_cord.Latitude == '' ? '#b3c8ff' : 'green.200'} border='1px solid gray.200' borderRadius={'md'} cursor='pointer' my='2' onClick={HandleGetLocation} flex='1'>
+                            <Icon as={FaLocationPin} boxSize={4}/>
+                            <Text>{location_cord.Latitude == '' ? 'Click to pin the location of this billboard' : 'Billboard has been pinned on map'}</Text>
+                        </HStack>
+                        {location_cord.Latitude == '' ? 
+                            <IconButton icon={<CiLocationOff/>} variant='ghost' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' isDisabled/>
+                            :
+                            <IconButton icon={<CiLocationOff/>} variant='outline' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' onClick={HandleRemoveLocation} />
+                        }
+                    </Flex>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>

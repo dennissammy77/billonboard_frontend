@@ -12,11 +12,15 @@ import { BoardCard } from '../billboards/boardCard';
 import GetBillBoards, { GetBillBoardsAdmin } from '@/api/billboards/all/route';
 import BoardsByOwner from '@/api/billboards/owner/route';
 import { UserContext } from '@/components/providers/user.context';
+import { usePathname } from 'next/navigation';
 
 
 export default function MapSection(){
 	const [data, set_data] = useState([]);
 	const {user} = useContext(UserContext);
+
+	const pathname = usePathname();
+	const pathArr = pathname?.split('/');
 
 	useEffect(()=>{
 		fetch()
@@ -66,32 +70,13 @@ export default function MapSection(){
 	)
 }
 
-
-// const data=[
-// 	{
-// 		id:1,
-// 		latitude:-1.089616,
-// 		longitude:37.033557
-// 	},
-// 	{
-// 		id:2,
-// 		latitude:-1.028071,
-// 		longitude:37.041622
-// 	},
-// 	{
-// 		id:3,
-// 		latitude:0.701078,
-// 		longitude:35.259376
-// 	},
-// ]
-
 const MarkProp=({board})=>{
 	const [show,setShow]=useState(false)
 	return(
 		<Marker longitude={board?.location_cord?.Longitude} latitude={board?.location_cord?.Latitude} color='#3874ff' onClick={(()=>{setShow(!show)})}>
 			<Popover>
 				<PopoverTrigger>
-					<Icon as={FaLocationPin} boxSize='8' />
+					<Icon as={FaLocationPin} boxSize='8' color='#3874ff'/>
 				</PopoverTrigger>
 				<PopoverContent>
 				<PopoverArrow />
