@@ -8,6 +8,7 @@ import { IoMdAdd } from 'react-icons/io';
 import BoardSection from './boardSection';
 import { dashboardContext } from '@/components/providers/dashboard.context';
 import { FaMapLocation } from 'react-icons/fa6';
+import MapSection from '../../MapFeature';
 
 function Boards() {
   const {set_page} = useContext(dashboardContext);
@@ -26,7 +27,9 @@ function Boards() {
             <Search_Input query={query} set_query={set_query} placeholder='search for boards'/>
         </HStack>
         {view_map?
-          <Text>Map</Text>
+          <Box h='600px' w='calc(100vw-20vw)'>
+            <MapSection />
+          </Box>  
           :
           <BoardSection query={query} set_query={set_query}/>
         }
