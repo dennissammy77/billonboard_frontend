@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Card, CardBody, CardFooter, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Stack, Text, Tooltip, UnorderedList, VStack, useDisclosure } from '@chakra-ui/react'
+import { Badge, Box, Button, Card, CardBody, CardFooter, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Portal, Stack, Text, Tooltip, UnorderedList, VStack, useDisclosure } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import { FaInfoCircle, FaStar } from 'react-icons/fa';
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -20,6 +20,7 @@ export const BoardCard=({board})=>{
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
             <ModalContent>
+            <ModalHeader>-</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
                 <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
