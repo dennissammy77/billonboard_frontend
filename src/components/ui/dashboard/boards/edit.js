@@ -235,15 +235,6 @@ const Body=()=>{
                         <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
                     </FormControl>
                 </Box>
-                {user?.account_type === 'admin'?
-                    <>
-                        <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                            <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Ownership Details</Text>
-                            <Divider/>
-                        </Box>  
-                    </>
-                    : null
-                }
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board status</Text>
                     <Divider/>
@@ -254,6 +245,31 @@ const Body=()=>{
                         <Switch id='short_on_expiry_status' onChange={(()=>{set_publish_status(!publish_status)})}/>
                     </FormControl>
                 </Box>
+                {user?.account_type === 'admin'?
+                    <>
+                        <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                            <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Verification status</Text>
+                            <Divider/>
+                            <FormControl display='flex' alignItems='center' mt='4' gap='2'>
+                                <FormLabel htmlFor='verification' mb='0'>
+                                    {verification_status? 'Un Verify Board' : 'Verify Board'}
+                                </FormLabel>
+                                <Switch id='verification' onChange={(()=>{set_verification_status(!verification_status)})}/>
+                            </FormControl>
+                        </Box>
+                        <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                            <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Suspension status</Text>
+                            <Divider/>
+                            <FormControl display='flex' alignItems='center' mt='4' gap='2'>
+                                <FormLabel htmlFor='suspension' mb='0'>
+                                    {suspension_status? 'Activate Board' : 'Suspend Board'}
+                                </FormLabel>
+                                <Switch id='suspension' onChange={(()=>{set_suspension_status(!suspension_status)})}/>
+                            </FormControl>
+                        </Box>
+                    </>
+                    : null
+                }
                 <Flex justify={'space-between'} align='center'>
                     <Text cursor={'pointer'} onClick={(()=>{DiscardDialog.onToggle()})}>Discard</Text>
                     <Box mt='2' align='end' gap='2'>

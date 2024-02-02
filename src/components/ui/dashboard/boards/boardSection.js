@@ -20,15 +20,15 @@ function BoardSection({query}) {
   async function fetch(){
     if (pathArr[2] === 'admin'){
       await GetBillBoardsAdmin().then((response)=>{
-        const arr = response?.data
+        const arr = response?.data.reverse()
         set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
       }).catch((err)=>{
         console.log(err)
       })
     }else{
       await BoardsByOwner(user?._id).then((response)=>{
-        const arr = response?.data
-        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+        const arr = response?.data.reverse()
+        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())).reverse())
       }).catch((err)=>{
         console.log(err)
       })

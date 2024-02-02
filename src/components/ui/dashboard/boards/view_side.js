@@ -17,6 +17,12 @@ import {
     Icon,
     HStack,
     useDisclosure,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalCloseButton,
+    ModalBody,
   } from '@chakra-ui/react';
 import moment from 'moment';
 import { useContext } from 'react';
@@ -38,6 +44,7 @@ export const View_side_Board=({data,view_side_disclosure})=>{
         delete_sideboard_disclosure.onToggle()
         set_side_board_data(data);
     }
+    const view_image_modal = useDisclosure()
     return(
         <Drawer
             isOpen={view_side_disclosure?.isOpen}
@@ -52,7 +59,17 @@ export const View_side_Board=({data,view_side_disclosure})=>{
 
             <DrawerBody mt='10px' p='4'>
                 <Flex gap='2' my='2'>
-                    <Image src={data?.image_url} alt="board image" boxSize={200} backgroundSize="cover" objectFit={'cover'} borderRadius={5}/>
+                    <Image src={data?.image_url} alt="board image" boxSize={200} backgroundSize="cover" objectFit={'cover'} borderRadius={5} onClick={(()=>{view_image_modal?.onToggle()})} cursor='pointer' boxShadow={'mds'}/>
+                    <Modal isOpen={view_image_modal?.isOpen} onClose={view_image_modal?.onClose} isCentered>
+                        <ModalOverlay />
+                        <ModalContent>
+                        <ModalHeader>-</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Image src={data?.image_url} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
+                        </ModalBody>
+                        </ModalContent>
+                    </Modal>
                     <Box>
                         <Text my='2' fontSize={'2xl'}>{data?.brand}</Text>
                         <Text fontSize='xl'>Side: {data?.side_ref_Id}</Text>
