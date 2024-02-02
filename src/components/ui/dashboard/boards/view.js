@@ -1,22 +1,19 @@
 'use client'
-import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react"
+import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react"
 import { dashboardContext } from "@/components/providers/dashboard.context"
-import { use, useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
-import { MdCancel, MdDelete, MdEmail } from "react-icons/md";
-import { IoCalendarNumberOutline } from "react-icons/io5";
+import { MdDelete, MdEmail } from "react-icons/md";
 import { RiUserLocationFill } from "react-icons/ri";
-import { IoIosArrowDown, IoIosArrowUp, IoIosDoneAll, IoMdAdd, IoMdCloudDone } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowUp, IoMdAdd } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
 import { GoCommentDiscussion } from "react-icons/go";
 import { UserContext } from "@/components/providers/user.context";
 import DeleteBillboard from "./delete_billboard.ui";
 import { View_side_Board } from "./view_side";
 import BoardDataByUser from "@/api/billboards/billboardbyuser/route";
-import { TbCloudCancel, TbDownload, TbDownloadOff } from "react-icons/tb";
-import EditBoard from "@/api/billboards/board/edit/route";
 
 export const ViewBoard=()=>{
     const toast = useToast()
@@ -43,49 +40,7 @@ export const ViewBoard=()=>{
             console.log(err)
         })
     }
-
-    const [verification_status,set_verification_status]=useState(board_data?.verification_status);
-    const [suspension_status,set_suspension_status]=useState(board_data?.suspension_status);
-    const [publish_status,set_publish_status]=useState(board_data?.publish_status);
-
-    const [is_saving,set_is_saving]=useState(false);
-
-    const payload = {
-        id: board_data?._id,
-        verification_status,
-        suspension_status,
-        publish_status
-    }
-    const Update_billboard=async()=>{
-        set_is_saving(true);
-        if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
-            await EditBoard(payload).then(()=>{
-                set_page('Boards');
-                return toast({title:'Success!',description:'Billboard updated successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
-            }).catch((err)=>{
-                console.log(err)
-                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
-            }).finally(()=>{
-                set_is_saving(false)
-            })
-        }else{
-            set_is_saving(false)
-            return toast({title:'Error!',description:'You are not authorized to update billboards',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
-        }
-        if(user?.account_type !== 'admin' && verification_status == verification_status && suspension_status == suspension_status){
-            await EditBoard(payload).then(()=>{
-                set_page('Boards');
-                return toast({title:'Success!',description:'Billboard saved successfully',status:'success',position:'top-left',variant:'left-accent',isClosable:true});
-            }).catch((err)=>{
-                console.log(err)
-                return toast({title:'Error!',description:`Something went wrong: ${err?.response?.data}`,status:'error',position:'top-left',variant:'left-accent',isClosable:true})
-            }).finally(()=>{
-                set_is_saving(false)
-            })
-        }else{
-            return ;
-        }
-    }
+    
     return(
         <Box>
             <Flex align={'center'} justify={'space-between'} my='2'>
@@ -97,30 +52,15 @@ export const ViewBoard=()=>{
                         <BreadcrumbLink color='gray.400'>{data?.name_of_billboard}</BreadcrumbLink>
                     </BreadcrumbItem>
                 </Breadcrumb>
-                <HStack>
-                    {verification_status !== board_data?.verification_status || publish_status !== board_data?.publish_status || suspension_status !== board_data?.suspension_status? 
-                        <>
-                            {is_saving ? <Button loadingText='saving...' isLoading/> : <Button bg={'#343838'} color='#fff' onClick={Update_billboard}>Save changes</Button>}
-                        </>
-                        : null 
-                    }
-                    <Menu>
-                        <MenuButton as={Button} rightIcon={<IoIosArrowDown />} bg={'#3874ff'} color='#fff'>  Actions </MenuButton>
-                        <MenuList p='2'>
-                            <MenuItem icon={<IoMdAdd/>} onClick={(()=>{set_page('New_Side')})}>Add a Board</MenuItem>
-                            <MenuItem icon={<FiEdit/>} onClick={(()=>{set_page('Edit_Board')})}>Edit BillBoard</MenuItem>
-                            <MenuItem bg={publish_status !== board_data?.publish_status ? '#e3e3e3' : ''} icon={publish_status? <TbDownloadOff/> : <TbDownload/>} onClick={(()=>{set_publish_status(!publish_status)})}>{publish_status? 'Save as draft' : 'Publish BillBoard'}</MenuItem>
-                            {user?.account_type === 'admin'?
-                            <>
-                                <MenuItem bg={verification_status !== board_data?.verification_status ? '#e3e3e3' : ''} icon={verification_status? <MdCancel/> : <IoIosDoneAll/>} onClick={(()=>{set_verification_status(!verification_status)})}>{verification_status? 'Decline Billboard' : 'Approve BillBoard'}</MenuItem>
-                                <MenuItem bg={suspension_status !== board_data?.suspension_status ? '#e3e3e3' : ''} icon={suspension_status? <IoMdCloudDone/> : <TbCloudCancel/>} onClick={(()=>{set_suspension_status(!suspension_status)})}>{suspension_status? 'Activate Billboard' : 'Suspend BillBoard'}</MenuItem>
-                            </>
-                            :null}
-                            <MenuItem icon={<MdDelete />} onClick={HandleDeleteSale}>Delete BillBoard</MenuItem>
-                            <DeleteBillboard delete_billboard_disclosure={delete_billboard_disclosure}/>
-                        </MenuList>
-                    </Menu>
-                </HStack>
+                <Menu>
+                    <MenuButton as={Button} rightIcon={<IoIosArrowDown />} bg={'#3874ff'} color='#fff'>  Actions </MenuButton>
+                    <MenuList p='2'>
+                        <MenuItem icon={<IoMdAdd/>} onClick={(()=>{set_page('New_Side')})}>Add a Board</MenuItem>
+                        <MenuItem icon={<FiEdit/>} onClick={(()=>{set_page('Edit_Board')})}>Edit BillBoard</MenuItem>
+                        <MenuItem icon={<MdDelete />} onClick={HandleDeleteSale}>Delete BillBoard</MenuItem>
+                        <DeleteBillboard delete_billboard_disclosure={delete_billboard_disclosure}/>
+                    </MenuList>
+                </Menu>
             </Flex>
             <Box bg='#fff' p='4' flex='1'>
                 <Wrap>
@@ -222,9 +162,20 @@ const Card=(props)=>{
 
     const handleToggle = () => setShow(!show);
     const view_side_disclosure = useDisclosure();
+    const view_image_modal = useDisclosure()
     return(
         <Flex gap='2' p='2' fontSize={'xs'} bg='#fff' boxShadow={'sm'} position={'relative'}>
-            <Image src={image_url} alt="board image" boxSize={100} backgroundSize="cover" objectFit={'cover'} borderRadius={5}/>
+            <Modal isOpen={view_image_modal?.isOpen} onClose={view_image_modal?.onClose} isCentered>
+                <ModalOverlay />
+                <ModalContent>
+                    <ModalHeader>-</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody>
+                        <Image src={image_url} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
+                    </ModalBody>
+                </ModalContent>
+            </Modal>
+            <Image src={image_url} alt="board image" boxSize={100} backgroundSize="cover" objectFit={'cover'} borderRadius={5} onClick={(()=>{view_image_modal?.onToggle()})} cursor='pointer'/>
             <Box>
                 <HStack my='1'>
                     <Text fontWeight={'bold'}>Side:</Text>
