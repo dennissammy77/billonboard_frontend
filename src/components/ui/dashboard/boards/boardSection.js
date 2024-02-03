@@ -7,7 +7,7 @@ import BoardsByOwner from '@/api/billboards/owner/route';
 import { usePathname } from 'next/navigation';
 import { GetBillBoardsAdmin } from '@/api/billboards/all/route';
 
-function BoardSection({query}) {
+function BoardSection({query,filter_option}) {
   const {user} = useContext(UserContext);
   const [data, set_data] = useState([]);
 
@@ -16,19 +16,71 @@ function BoardSection({query}) {
 
   useEffect(()=>{
     fetch()
-  },[query])
+  },[query,filter_option])
   async function fetch(){
     if (pathArr[2] === 'admin'){
       await GetBillBoardsAdmin().then((response)=>{
         const arr = response?.data.reverse()
-        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+        let filtered_data;
+        switch(filter_option){
+          case 'all':
+            filtered_data = arr
+            break;
+          case 'available':
+            filtered_data = arr.filter((item) => item.availability_status)
+            break;
+          case 'draft':
+            filtered_data = arr.filter((item) => !item.publish_status)
+            break;
+          case 'published':
+            filtered_data = arr.filter((item) => item.publish_status)
+            break;
+          case 'suspended':
+            filtered_data = arr.filter((item) => item.suspension_status)
+            break;
+          case 'verified':
+            filtered_data = arr.filter((item) => item.verification_status)
+            break;
+          case 'unverified':
+            filtered_data = arr.filter((item) => !item.verification_status)
+            break;
+          default:
+            filtered_data = arr
+        }
+        set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
       }).catch((err)=>{
         console.log(err)
       })
     }else{
       await BoardsByOwner(user?._id).then((response)=>{
-        const arr = response?.data.reverse()
-        set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())).reverse())
+        const arr = response?.data.reverse();
+        let filtered_data;
+        switch(filter_option){
+          case 'all':
+            filtered_data = arr
+            break;
+          case 'available':
+            filtered_data = arr.filter((item) => item.availability_status)
+            break;
+          case 'draft':
+            filtered_data = arr.filter((item) => !item.publish_status)
+            break;
+          case 'published':
+            filtered_data = arr.filter((item) => item.publish_status)
+            break;
+          case 'suspended':
+            filtered_data = arr.filter((item) => item.suspension_status)
+            break;
+          case 'verified':
+            filtered_data = arr.filter((item) => item.verification_status)
+            break;
+          case 'unverified':
+            filtered_data = arr.filter((item) => !item.verification_status)
+            break;
+          default:
+            filtered_data = arr
+        }
+        set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())).reverse())
       }).catch((err)=>{
         console.log(err)
       })

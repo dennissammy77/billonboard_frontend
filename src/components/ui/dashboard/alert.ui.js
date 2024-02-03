@@ -19,6 +19,11 @@ export const Notification=()=>{
             <Alert_Card status={'info'} Title={'You Need to verify your email first!'} Description={''}/>
         )
     }
+    if(user?.verification_status === false){
+        return (
+            <Alert_Card status={'info'} Title={'Your account needs to be verified!'} Description={''}/>
+        )
+    }
     return null;
 }
 

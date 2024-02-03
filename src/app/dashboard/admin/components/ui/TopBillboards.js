@@ -1,11 +1,12 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GetBillBoardsAdmin } from "@/api/billboards/all/route";
-import { Box, Center, Flex, HStack, Icon, Image, Text } from "@chakra-ui/react";
+import { Box, Center, Divider, Flex, HStack, Icon, Image, Text } from "@chakra-ui/react";
 import { SiGoogleanalytics } from "react-icons/si";
 import { MdVisibility } from "react-icons/md";
 import { IoTrophySharp } from "react-icons/io5";
+import { dashboardContext } from "@/components/providers/dashboard.context";
 
 export const TopBillboards=()=>{
     const [billboards,set_billboards]=useState([]);
@@ -24,7 +25,10 @@ export const TopBillboards=()=>{
                 <>
                     {billboards?.sort((a, b) => b?.views - a?.views).slice(0,3).map((board,index)=>{
                         return(
-                            <Board_Card key={board?._id} board={board} index={index}/>
+                            <>
+                                <Board_Card key={board?._id} board={board} index={index}/>
+                                <Divider/>
+                            </>
                         )
                     })}
                 </>
@@ -49,8 +53,9 @@ const Board_Card=({board,index})=>{
     }else{
         color=''
     }
+    const {set_page,set_board_data} = useContext(dashboardContext)
     return(
-        <Flex gap='2' my='2' align='center' position={'relative'}>
+        <Flex gap='2' my='2' align='center' position={'relative'} onClick={(()=>{set_page('View_Side');set_board_data(board)})} cursor={'pointer'}>
             <Image src={board?.advertisement_data[0]?.image_url || board?.img_placeholder} borderRadius={10} alt='bord_image' boxSize={50}/>
             <Box >
                 <Text fontSize={'sm'} fontWeight={'bold'}>{board?.name_of_billboard}</Text>

@@ -14,6 +14,7 @@ import { UserContext } from "@/components/providers/user.context";
 import DeleteBillboard from "./delete_billboard.ui";
 import { View_side_Board } from "./view_side";
 import BoardDataByUser from "@/api/billboards/billboardbyuser/route";
+import ViewBoardMapSection from "../../MapFeature/view_Board";
 
 export const ViewBoard=()=>{
     const toast = useToast()
@@ -71,10 +72,10 @@ export const ViewBoard=()=>{
                         {data?.publish_status? <Badge bgColor='green.300' color='#fff' my='2'>Published</Badge> : <Badge bgColor='gray.300' color='#fff' my='2' textDecoration={'line-through'}>draft</Badge> }
                     </WrapItem>
                     <WrapItem>
-                        {data?.verification_status? <Badge bgColor='green.300' color='#fff' my='2'>verified</Badge> : <Badge bgColor='gray.300' color='#fff' my='2' textDecoration={'line-through'}>verified</Badge> }
+                        {data?.verification_status? <Badge bgColor='green.300' color='#fff' my='2'>verified</Badge> : <Badge bgColor='gray.300' color='#fff' my='2' textDecoration={'line-through'}>not verified</Badge> }
                     </WrapItem>
                     <WrapItem>
-                        {data?.suspension_status? <Badge bgColor='red.200' color='#fff' my='2'>Suspended</Badge> : <Badge bgColor='green.300' color='#fff' my='2' textDecoration={'line-through'}>Active</Badge> }
+                        {data?.suspension_status? <Badge bgColor='red.200' color='#fff' my='2'>Suspended</Badge> : <Badge bgColor='green.300' color='#fff' my='2' >Active</Badge> }
                     </WrapItem>
                 </Wrap>
                 <Divider />
@@ -145,10 +146,13 @@ export const ViewBoard=()=>{
                 </Box>: 
                 null 
             }
+            <Box h='300px' w='calc(100vw-20vw)' my='2'>
+                <ViewBoardMapSection board_data={data}/>
+            </Box>  
             <Flex flexDirection={'column'} gap='2' mt='2'>
                 {data?.advertisement_data.map((data, data_id)=>{
                     return(
-                        <Card data={data}/>
+                        <Card data={data} key={data_id}/>
                     )
                 })}
             </Flex>

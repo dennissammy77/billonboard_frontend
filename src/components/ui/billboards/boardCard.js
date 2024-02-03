@@ -1,15 +1,14 @@
-import { Badge, Box, Card, CardBody, CardFooter, HStack, Icon, IconButton, Image, Stack, Text, VStack } from '@chakra-ui/react'
+import { Badge, Box, HStack, Icon, IconButton, Image, Stack, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { FaStar } from 'react-icons/fa';
 import { BsFillPinMapFill } from "react-icons/bs";
 import { FaChalkboardUser } from "react-icons/fa6";
-import { AiFillLike } from "react-icons/ai";
 import { TbExternalLink } from "react-icons/tb";
 import { useRouter } from 'next/navigation';
 
 export const BoardCard=({board})=>{
+    const {name_of_billboard, ad_agency_name,location, bob_rating, img_placeholder,advertisement_data } = {...board};
     const router = useRouter()
-    const {name_of_billboard, ad_agency_name,location, bob_rating, img_placeholder,advertisement_data } = {...board}
   return (
     <Box w='100%' h='250px' borderRadius={'md'} boxShadow={'md'} position={'relative'}>
         <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
@@ -30,7 +29,6 @@ export const BoardCard=({board})=>{
         </Stack>
         <VStack position={'absolute'} top='2' right={'2'}>
             <IconButton aria-label='View board' icon={<TbExternalLink />} size='sm' transition={'.3s ease-in-out'} _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{router.push(`/billboards/board?query=${board?._id}`)})}/>
-            <IconButton aria-label='Like board' icon={<AiFillLike />} size='sm' transition={'.3s ease-in-out'} _hover={{bgColor:'#3874ff',color:'#fff'}}/>
         </VStack>
     </Box>
   )

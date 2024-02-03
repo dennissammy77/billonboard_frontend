@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Button, Flex, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Input, InputGroup, InputRightElement, Select, Text } from '@chakra-ui/react'
 import React, { useContext, useState } from 'react'
 import CardWrapper from './CardWrapper'
 import {
@@ -117,6 +117,15 @@ const SignUpForm=()=>{
         <FormLabel>Email</FormLabel>
         <Input disabled={isPending} type='email' placeholder='johndoe@email.com ' variant='filled' required onChange={((e)=>{set_email(e.target.value)})}/>
         {input_error && email == '' ?  <FormErrorMessage>email is required.</FormErrorMessage> : ( null )}
+      </FormControl>
+      <FormControl my='3' isRequired isInvalid={input_error && account_type == '' ? true : false}>
+        <FormLabel>How will you use our platform?</FormLabel>
+        <Select placeholder='Select the type of account' onChange={((e)=>{set_account_type(e.target.value)})} my='4'>
+          <option value='client'>I am looking for billboards</option>
+          <option value='agency'>I have a billboard agency </option>
+          <option value='footsoldier'>I can list billboards</option>
+        </Select>
+        {input_error && account_type == '' ?  <FormErrorMessage>Tell us how you want to use our platform.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormControl mt='1' isRequired isInvalid={input_error && password == '' ? true : false}>
         <FormLabel>Password</FormLabel>

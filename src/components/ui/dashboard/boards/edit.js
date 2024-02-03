@@ -1,6 +1,5 @@
-import { Alert, AlertDescription, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertIcon, AlertTitle, Avatar, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuList, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, Wrap, useDisclosure, useToast } from "@chakra-ui/react"
-import { Notification } from "../alert.ui";
-import { useContext, useEffect, useState } from "react";
+import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
+import { useContext, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
 import EditBoard from "@/api/billboards/edit/route";
@@ -89,7 +88,7 @@ const Body=()=>{
             }).finally(()=>{
                 set_is_saving(false)
             })
-        }else{
+        }else if (user?.account_type === 'admin' && (user?.position !== 'MANAGER' || user?.position !== 'SUPER ADMIN' || user?.position !== 'SALES')){
             set_is_saving(false)
             return toast({title:'Error!',description:'You are not authorized to update billboards',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
         }

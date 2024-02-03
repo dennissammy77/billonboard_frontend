@@ -8,11 +8,12 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import { useContext, useEffect, useState } from 'react';
 import { Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react';
 import { FaLocationPin } from "react-icons/fa6";
-import { BoardCard } from '../billboards/boardCard';
 import GetBillBoards, { GetBillBoardsAdmin } from '@/api/billboards/all/route';
 import BoardsByOwner from '@/api/billboards/owner/route';
 import { UserContext } from '@/components/providers/user.context';
 import { usePathname } from 'next/navigation';
+import { Notification } from '../dashboard/alert.ui';
+import { BoardCard } from '../dashboard/boards/boardCard';
 
 
 export default function MapSection(){
@@ -50,23 +51,29 @@ export default function MapSection(){
 		}
 	}
 	return(
-		<Map
-			mapStyle="mapbox://styles/mapbox/streets-v9"
-			mapboxAccessToken="pk.eyJ1IjoibXVzZW1iaSIsImEiOiJjbHJ6cG1wOTMxdm5qMnFsbXVod2J3Z3FwIn0.AwwZCnNzLvnDVtqvW-nBiw"
-		    initialViewState={{
-	          	latitude: -1.099616,
-			    longitude: 37.043557,
-			    zoom: 10,
-	        }}
-	    >
-			{data.map((board)=>{
-				return(
-					<div key={board?._id}>
-						<MarkProp board={board}/>
-					</div>
-				)
-			})}
-	    </Map>
+		<>
+			{(!user?.verification_status || !user?.verified_email_status || user?.account_suspension_status) && user?.account_type !== 'admin'? 
+                <Notification />
+            :
+				<Map
+					mapStyle="mapbox://styles/mapbox/streets-v9"
+					mapboxAccessToken="pk.eyJ1IjoibXVzZW1iaSIsImEiOiJjbHJ6cG1wOTMxdm5qMnFsbXVod2J3Z3FwIn0.AwwZCnNzLvnDVtqvW-nBiw"
+					initialViewState={{
+						latitude: -1.099616,
+						longitude: 37.043557,
+						zoom: 10,
+					}}
+				>
+					{data.map((board)=>{
+						return(	
+							<div key={board?._id}>
+								<MarkProp board={board}/>
+							</div>
+						)
+					})}
+				</Map>
+			}
+		</>
 	)
 }
 
@@ -88,4 +95,4 @@ const MarkProp=({board})=>{
 			</Popover>
 		</Marker>
 	)
-}
+}								
