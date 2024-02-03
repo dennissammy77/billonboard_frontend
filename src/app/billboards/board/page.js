@@ -54,10 +54,10 @@ function Page() {
                     <Icon boxSize={2} as={FaStar}/>
                     <Badge bgColor={'#3874ff'} color={'#fff'} size={'xs'}>{data?.bob_rating}/5</Badge>
                 </HStack>
-                <HStack color='#3874ff' mt='2' fontSize={'xs'}>
+                <Box color='#3874ff' mt='2' fontSize={'xs'}>
                     <Icon boxSize={3} as={GoCommentDiscussion}/>
-                    <Badge bgColor={'#3874ff'} color={'#fff'}>{data?.bob_remark}</Badge>
-                </HStack>
+                    <Text>{data?.bob_remark}</Text>
+                </Box>
             </Box>
             <Box bg='#fff' p='4' flex='1' my='2' borderRadius={5}>
                 <Text fontWeight={'bold'}>Description</Text>
