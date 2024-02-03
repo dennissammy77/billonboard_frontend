@@ -42,7 +42,10 @@ function Header(){
                 }
             </Flex>
             <Flex display={{base:'flex',md:'none'}} gap='2' align={'center'}>
-                <Icon as={MdExplore} boxSize='6' onClick={(()=>{router.push(`/billboards/all`)})} />
+                <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
+                    <Icon as={MdExplore} boxSize='6'/>
+                    <Text>Explore</Text>
+                </HStack>
                 <MenuComponent/>
             </Flex>
         </Flex>

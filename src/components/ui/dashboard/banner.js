@@ -9,9 +9,13 @@ export const Banner=({msg,msg2,img})=>{
             <Box px='2' gap='2'>
                 <Text fontSize={'2xl'} my='2'> Welcome back 👋 {user?.first_name} </Text>
                 <Text my='3'>{msg}<br/>{msg2}</Text>
-                <Button bg='#343838' color='white'>Go now</Button>
             </Box>
             <Image src={img} boxSize='200' display={{sm:'block',md:'none',lg:'block'}}/>
         </Flex>
     )
+}
+{
+    /**
+     * <Button bg='#343838' color='white'>Go now</Button>
+     */
 }

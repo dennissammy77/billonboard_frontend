@@ -7,6 +7,7 @@ import { Box, Button, Flex, Grid, HStack, Text, useDisclosure } from '@chakra-ui
 import React, { useContext, useState } from 'react'
 import { IoMdAdd } from 'react-icons/io';
 import { NewUser } from './components/ui/NewUser';
+import { AgenciesUser } from './components/ui/agencies';
 
 export const Agencies=()=>{
   const [query,set_query]=useState('');
@@ -23,7 +24,7 @@ export const Agencies=()=>{
         <HStack my='2'>
             <Search_Input query={query} set_query={set_query} placeholder='search agencies'/>
         </HStack>
-        <AgencySection query={query}/>
+        <AgenciesUser query={query}/>
     </Box>
   )
 }

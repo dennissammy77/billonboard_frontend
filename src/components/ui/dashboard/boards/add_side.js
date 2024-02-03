@@ -79,7 +79,7 @@ export const Addside=()=>{
                 set_page('Boards');
                 set_is_saving(false);
             })
-        }else{
+        }else if (user?.account_type === 'admin' && (user?.position !== 'MANAGER' || user?.position !== 'SUPER ADMIN' || user?.position !== 'SALES')){
             set_is_saving(false)
             return toast({title:'Error!',description:'You are not authorized to add side board',status:'error',position:'top-left',variant:'left-accent',isClosable:true});
         }
