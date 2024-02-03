@@ -7,7 +7,7 @@ export const Notification=()=>{
     const {user} = useContext(UserContext)
     if (user?.account_suspension_status === true){
         return (
-            <Alert_Card status={'error'} Title={'Your account has been suspended!'} Description={'contact our support at help@prokemia.com for any assistance.'}/>
+            <Alert_Card status={'error'} Title={'Your account has been suspended!'} Description={'contact our support at info@billonboard.com for any assistance.'}/>
         )
     }
     if (user?.verification_status === false){
