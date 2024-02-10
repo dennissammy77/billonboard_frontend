@@ -1,5 +1,5 @@
 'use client'
-import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react"
+import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, HStack, Heading, Icon, IconButton, Image, Input, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react"
 import { dashboardContext } from "@/components/providers/dashboard.context"
 import { useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
@@ -15,6 +15,7 @@ import DeleteBillboard from "./delete_billboard.ui";
 import { View_side_Board } from "./view_side";
 import BoardDataByUser from "@/api/billboards/billboardbyuser/route";
 import ViewBoardMapSection from "../../MapFeature/view_Board";
+import { CiFilter } from "react-icons/ci";
 
 export const ViewBoard=()=>{
     const toast = useToast()
@@ -22,6 +23,9 @@ export const ViewBoard=()=>{
     const {user} = useContext(UserContext)
     const [data, set_data]=useState(board_data);
     const delete_billboard_disclosure = useDisclosure();
+    const [filter_option,set_filter_option]=useState('');
+    const [query,set_query]=useState('');
+
     
     const HandleDeleteSale=()=>{
         delete_billboard_disclosure?.onToggle();
@@ -29,7 +33,7 @@ export const ViewBoard=()=>{
 
     useEffect(()=>{
         fetch()
-    },[board_data?._id]);
+    },[board_data?._id,filter_option,query]);
     const fetch=async()=>{
         const payload={
             boardid: board_data?._id,
@@ -150,7 +154,11 @@ export const ViewBoard=()=>{
                 <ViewBoardMapSection board_data={data}/>
             </Box>  
             <Flex flexDirection={'column'} gap='2' mt='2'>
-                {data?.advertisement_data.map((data, data_id)=>{
+                <HStack>
+                    <Filter set_filter_option={set_filter_option} sides={data?.number_of_sides}/>
+                    <Input w={{base:'full',md:'30vw'}} placeholder='search advertisements made on this billboard' size='md' onChange={((e)=>{set_query(e.target.value)})}/>
+                </HStack>
+                {data?.advertisement_data?.filter((item)=>item?.brand.toLowerCase().includes(query.toLowerCase())||item?.message?.toLowerCase().includes(query.toLowerCase())).filter((item)=>item?.category.toLowerCase().includes(filter_option.toLowerCase())||item?.season.toLowerCase().includes(filter_option.toLowerCase())).map((data, data_id)=>{
                     return(
                         <Card data={data} key={data_id}/>
                     )
@@ -200,5 +208,40 @@ const Card=(props)=>{
             <IconButton icon={<BsThreeDotsVertical/>} position='absolute' top='5' right='5' size={'sm'} onClick={view_side_disclosure?.onToggle}/>
             <View_side_Board data={props?.data} view_side_disclosure={view_side_disclosure}/>
         </Flex>
+    )
+}
+
+const Filter=({set_filter_option,sides,set_query})=>{
+    return(
+        <Menu>
+            <MenuButton as={Button} rightIcon={<CiFilter />}>
+                Filter
+            </MenuButton>
+            <MenuList>
+                <Select placeholder='Seasons' variant='Unstyled' cursor='pointer' onChange={((e)=>{set_filter_option(e.target.value)})}>
+                    <option value='End of Year'>End of Year</option>
+                    <option value='New Year'>New Year</option>
+                    <option value='Easter'>Easter</option>
+                    <option value='Valentine'>Valentine</option>
+                    <option value='Eid'>Eid</option>
+                    <option value='Christmas'>Christmas</option>
+                    <option value='otherseason'>Other</option>
+                </Select>
+                <Divider/>
+                <Select placeholder='Category' variant='Unstyled' cursor='pointer' onChange={((e)=>{set_filter_option(e.target.value)})}>
+                    <option value='education'>Education</option>
+                    <option value='finance'>Finance</option>
+                    <option value='agriculture'>Agriculture</option>
+                    <option value='government'>Government</option>
+                    <option value='technology'>Technology</option>
+                    <option value='ecommerce'>Ecommerce</option>
+                    <option value='Beauty&cosmetics'>Beauty & cosmetics</option>
+                    <option value='business'>Business</option>
+                    <option value='beverages'>Beverages</option>
+                    <option value='government'>Government</option>
+                    <option value='othercategory'>Other</option>
+                </Select>
+            </MenuList>
+        </Menu>
     )
 }
