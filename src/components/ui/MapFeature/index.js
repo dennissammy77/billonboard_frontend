@@ -80,7 +80,12 @@ export default function MapSection(){
 const MarkProp=({board})=>{
 	const [show,setShow]=useState(false)
 	return(
-		<Marker longitude={board?.location_cord?.Longitude} latitude={board?.location_cord?.Latitude} color='#3874ff' onClick={(()=>{setShow(!show)})}>
+		<Marker 			
+			longitude={board?.location_cord?.Longitude? board?.location_cord?.Longitude : ''} 
+			latitude={board?.location_cord?.Latitude? board?.location_cord?.Latitude : ''} 
+			color='#3874ff' 
+			onClick={(()=>{setShow(!show)})}
+		>
 			<Popover>
 				<PopoverTrigger>
 					<Icon as={FaLocationPin} boxSize='8' color='#3874ff'/>

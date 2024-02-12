@@ -68,7 +68,7 @@ export const BoardCard=({board})=>{
                                 <UnorderedList fontSize={'xs'}>
                                     <ListItem textDecoration={advertisement_data?.length > 0 ? 'line-through' : ''} color={advertisement_data?.length > 0 ? 'gray.200': ''}>Add at least one side board </ListItem>
                                     <ListItem textDecoration={ad_agency_email !== '' && ad_agency_mobile !== '' ? 'line-through' : ''} color={ad_agency_email !== '' && ad_agency_mobile !== '' ? 'gray.200': ''}>Complete details for the agency</ListItem>
-                                    <ListItem textDecoration={location_cord.Latitude !== '' && location_cord.Longitude !== '' ? 'line-through' : ''} color={location_cord.Latitude !== '' && location_cord.Longitude !== '' ? 'gray.200': ''}>Pin the location for the billboard</ListItem>
+                                    <ListItem textDecoration={location_cord?.Latitude !== '' && location_cord?.Longitude !== '' ? 'line-through' : ''} color={location_cord?.Latitude !== '' && location_cord?.Longitude !== '' ? 'gray.200': ''}>Pin the location for the billboard</ListItem>
                                 </UnorderedList>
                             </PopoverBody>
                         </PopoverContent>
