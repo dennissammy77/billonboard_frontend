@@ -76,8 +76,8 @@ const User_Card=(props)=>{
             <Td>
                 <Avatar src={user?.profile_photo_url} borderRadius={10} name={user?.first_name} alt='profile_image' boxSize={50} cursor='pointer'/>
             </Td>
-            <Td> {user?.company_name} </Td>
-            <Td> <Text fontSize={'xs'} color='gray.300'>{user?.company_email? user?.company_email : '-'}</Text></Td>
+            <Td> {user?.company_name? user?.company_name : user?.first_name} </Td>
+            <Td> <Text fontSize={'xs'} color='gray.300'>{user?.company_email? user?.company_email : user?.email}</Text></Td>
             <Td> <Text fontSize={'xs'} color='gray.300'>{user?.position? user?.position : '-'}</Text></Td>
             <Td> {boards_data?.length}</Td>
             <Td> <IconButton icon={<HiOutlineExternalLink/>} size={'md'} /> </Td>

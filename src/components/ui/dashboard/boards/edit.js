@@ -1,4 +1,4 @@
-import { Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
@@ -6,6 +6,7 @@ import EditBoard from "@/api/billboards/edit/route";
 import getPosition from "@/components/hooks/GetLocation";
 import { CiLocationOff } from "react-icons/ci";
 import { FaLocationPin } from "react-icons/fa6";
+import GetCordFromURL from "@/components/hooks/GetCordFromURL";
 
 export const Edit_Board=()=>{
     return(
@@ -112,6 +113,11 @@ const Body=()=>{
     const HandleRemoveLocation=async()=>{
         set_location_cord({Latitude:'',Longitude:''})
     }
+    const [location_url,set_location_url]=useState('')
+    const Handle_Get_Location_From_URL=async()=>{
+        const result = await GetCordFromURL(location_url);
+        console.log(result)
+    }
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -204,6 +210,14 @@ const Body=()=>{
                             <IconButton icon={<CiLocationOff/>} variant='outline' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' onClick={HandleRemoveLocation} />
                         }
                     </Flex>
+                    <Box position='relative' padding='10'>
+                        <Divider />
+                        <AbsoluteCenter bg='white' px='4'>
+                            or
+                        </AbsoluteCenter>
+                    </Box>
+                    <Input placeholder='paste link from google maps' type='text' onChange={((e)=>{set_location_url(e.target.value)})}/>
+                    <Button onClick={Handle_Get_Location_From_URL}>Fetch Url</Button>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>

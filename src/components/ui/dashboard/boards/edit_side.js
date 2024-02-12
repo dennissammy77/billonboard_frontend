@@ -225,6 +225,7 @@ export const Editside=()=>{
                 <option value='Valentine'>Valentine</option>
                 <option value='Eid'>Eid</option>
                 <option value='Christmas'>Christmas</option>
+                <option value='otherseason'>Other</option>
             </Select>
             <Select placeholder='Select category of message' onChange={((e)=>{set_category(e.target.value)})} my='4'>
                 <option value='education'>Education</option>
@@ -233,6 +234,11 @@ export const Editside=()=>{
                 <option value='government'>Government</option>
                 <option value='technology'>Technology</option>
                 <option value='ecommerce'>Ecommerce</option>
+                <option value='Beauty&cosmetics'>Beauty & cosmetics</option>
+                <option value='business'>Business</option>
+                <option value='beverages'>Beverages</option>
+                <option value='government'>Government</option>
+                <option value='othercategory'>Other</option>
             </Select>
             <FormControl mt='2'>
                 <FormLabel>Orientation</FormLabel>

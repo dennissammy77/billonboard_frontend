@@ -28,6 +28,7 @@ export default function MapSection(){
 	async function fetch(){
 		await GetBillBoards().then((response)=>{
 			const arr = response?.data
+			console.log(arr)
 			set_data(arr)
 		}).catch((err)=>{
 			console.log(err)
@@ -56,8 +57,14 @@ export default function MapSection(){
 
 const MarkProp=({board})=>{
 	const [show,setShow]=useState(false)
+	console.log(board)
 	return(
-		<Marker longitude={board?.location_cord?.Longitude} latitude={board?.location_cord?.Latitude} color='#3874ff' onClick={(()=>{setShow(!show)})}>
+		<Marker 			
+			longitude={board?.location_cord?.Longitude? board?.location_cord?.Longitude : ''} 
+			latitude={board?.location_cord?.Latitude? board?.location_cord?.Latitude : ''} 
+			color='#3874ff' 
+			onClick={(()=>{setShow(!show)})}
+		>
 			<Popover>
 				<PopoverTrigger>
 					<Icon as={FaLocationPin} boxSize='8' color='#3874ff'/>
