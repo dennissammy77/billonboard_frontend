@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertIcon, AlertTitle, Avatar, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuList, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, Wrap, useDisclosure, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Alert, AlertDescription, AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, AlertIcon, AlertTitle, Avatar, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Image, Input, InputGroup, InputLeftAddon, Menu, MenuButton, MenuItem, MenuList, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, Wrap, useDisclosure, useToast } from "@chakra-ui/react"
 import { Notification } from "../alert.ui";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
@@ -30,7 +30,10 @@ const Body=()=>{
     const [name_of_billboard,set_name_of_billboard]=useState('');
     const [description,set_description]=useState('');
     const [location,set_location]=useState('');
-    const [location_cord,set_location_cord]=useState({Latitude:'',Longitude:''});
+    let location_cord = {
+        Latitude : '',
+        Longitude : ''
+    }
     const [number_of_sides,set_number_of_sides]=useState(1);
     const [img_placeholder,set_img_placeholder]=useState('https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5');
     const [availability_status,set_availability_status]=useState(false);
@@ -118,7 +121,6 @@ const Body=()=>{
         set_name_of_billboard('')
         set_description('')
         set_location('')
-        set_location_cord({Latitude:'',Longitude:''})
         set_number_of_sides('')
         set_img_placeholder('')
         set_availability_status(false)
@@ -134,15 +136,18 @@ const Body=()=>{
         set_verification_status(false)
         set_suspension_status(false)
         set_publish_status(false)
+        HandleRemoveLocation()
     }
 
     const HandleGetLocation=async()=>{
-        const resut = await getPosition()
-        set_location_cord(resut)
+        const result = await getPosition();
+        location_cord.Latitude = result.Latitude
+        location_cord.Longitude = result.Longitude
     }
     const HandleRemoveLocation=async()=>{
-        set_location_cord({Latitude:'',Longitude:''})
-    }
+        location_cord.Latitude = '',
+        location_cord.Longitude = ''
+    };
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -234,6 +239,22 @@ const Body=()=>{
                             :
                             <IconButton icon={<CiLocationOff/>} variant='outline' colorScheme={'red'} aria-label={'remove pin'} cursor='pointer' onClick={HandleRemoveLocation} />
                         }
+                    </Flex>
+                    <Box position='relative' padding='10'>
+                        <Divider />
+                        <AbsoluteCenter bg='white' px='4'>
+                            or
+                        </AbsoluteCenter>
+                    </Box>
+                    <Flex>
+                        <FormControl mt='2' mr='2'>
+                            <FormLabel>Latitude</FormLabel>
+                            <Input placeholder={'paste latitude co-ordinate'} type='text' onChange={((e)=>{location_cord.Latitude=e.target.value})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Longitude</FormLabel>
+                            <Input placeholder={'paste longitude co-ordinate'} type='text' onChange={((e)=>{location_cord.Longitude=e.target.value})}/>
+                        </FormControl>
                     </Flex>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
