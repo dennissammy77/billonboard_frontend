@@ -27,7 +27,12 @@ const Body=()=>{
     const [name_of_billboard,set_name_of_billboard]=useState(board_data?.name_of_billboard);
     const [description,set_description]=useState(board_data?.description);
     const [location,set_location]=useState(board_data?.location);
-    const [location_cord,set_location_cord]=useState(board_data?.location_cord);
+
+    //const [location_cord,set_location_cord]=useState(board_data?.location_cord);
+    let location_cord = {
+        Latitude : board_data?.location_cord?.Latitude,
+        Longitude : board_data?.location_cord?.Longitude
+    }
     const [number_of_sides,set_number_of_sides]=useState(board_data?.number_of_sides);
     const [availability_status,set_availability_status]=useState(board_data?.availability_status);
     const [billboard_type,set_billboard_type]=useState(board_data?.billboard_type);
@@ -107,17 +112,14 @@ const Body=()=>{
     }
 
     const HandleGetLocation=async()=>{
-        const resut = await getPosition()
-        set_location_cord(resut)
+        const result = await getPosition();
+        location_cord.Latitude = result.Latitude
+        location_cord.Longitude = result.Longitude
     }
     const HandleRemoveLocation=async()=>{
-        set_location_cord({Latitude:'',Longitude:''})
-    }
-    const [location_url,set_location_url]=useState('')
-    const Handle_Get_Location_From_URL=async()=>{
-        const result = await GetCordFromURL(location_url);
-        console.log(result)
-    }
+        location_cord.Latitude = '',
+        location_cord.Longitude = ''
+    };
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -216,8 +218,16 @@ const Body=()=>{
                             or
                         </AbsoluteCenter>
                     </Box>
-                    <Input placeholder='paste link from google maps' type='text' onChange={((e)=>{set_location_url(e.target.value)})}/>
-                    <Button onClick={Handle_Get_Location_From_URL}>Fetch Url</Button>
+                    <Flex>
+                        <FormControl mt='2' mr='2'>
+                            <FormLabel>Latitude</FormLabel>
+                            <Input placeholder={location_cord?.Latitude} type='text' onChange={((e)=>{location_cord.Latitude=e.target.value})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Longitude</FormLabel>
+                            <Input placeholder={location_cord?.Longitude} type='text' onChange={((e)=>{location_cord.Longitude=e.target.value})}/>
+                        </FormControl>
+                    </Flex>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
