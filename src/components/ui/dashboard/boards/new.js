@@ -246,16 +246,7 @@ const Body=()=>{
                             or
                         </AbsoluteCenter>
                     </Box>
-                    <Flex>
-                        <FormControl mt='2' mr='2'>
-                            <FormLabel>Latitude</FormLabel>
-                            <Input placeholder={'paste latitude co-ordinate'} type='text' onChange={((e)=>{location_cord.Latitude=e.target.value})}/>
-                        </FormControl>
-                        <FormControl mt='2'>
-                            <FormLabel>Longitude</FormLabel>
-                            <Input placeholder={'paste longitude co-ordinate'} type='text' onChange={((e)=>{location_cord.Longitude=e.target.value})}/>
-                        </FormControl>
-                    </Flex>
+                    <Text fontWeight={'bold'} color='gray' fontSize={'small'}>Update the location later</Text>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
