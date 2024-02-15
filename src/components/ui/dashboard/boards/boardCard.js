@@ -14,7 +14,6 @@ export const BoardCard=({board})=>{
     const {set_page,set_board_data} = useContext(dashboardContext);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    console.log(board)
   return (
     <Box w='100%' h='400px' borderRadius={'md'} boxShadow={'md'} position={'relative'} opacity={publish_status? '1' : '.6'}>
         <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5' onClick={onOpen}/>

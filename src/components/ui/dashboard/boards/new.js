@@ -8,6 +8,7 @@ import { GrMapLocation } from "react-icons/gr";
 import getPosition from "@/components/hooks/GetLocation";
 import { FaLocationPin } from "react-icons/fa6";
 import { CiLocationOff } from "react-icons/ci";
+import { IoMdRemoveCircleOutline } from "react-icons/io";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -35,6 +36,13 @@ const Body=()=>{
         Longitude : ''
     }
     const [number_of_sides,set_number_of_sides]=useState(1);
+    
+    const [side_info_input_fields,set_side_info_input_fields]=useState([{
+        ref_id:'',
+        orientation: ''
+    }])
+    const [sides_Arr,set_sides_Arr]=useState([]);
+
     const [img_placeholder,set_img_placeholder]=useState('https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5');
     const [availability_status,set_availability_status]=useState(false);
     const [billboard_type,set_billboard_type]=useState('');
@@ -67,6 +75,7 @@ const Body=()=>{
         location, 
         location_cord,
         number_of_sides,
+        sides: sides_Arr,
         img_placeholder,
         availability_status,
         billboard_type,
@@ -148,6 +157,27 @@ const Body=()=>{
         location_cord.Latitude = '',
         location_cord.Longitude = ''
     };
+
+    const HandleFormChange = (index, event) => {
+        let data = [...side_info_input_fields];
+        data[index][event.target.name] = event.target.value;
+        console.log(data)
+    }
+
+    const HandleAddNewSideInputField=()=>{
+        if(number_of_sides == side_info_input_fields?.length){
+            toast({title:'Error: Could not add new field!',description:'Side boards limit has been reached add a side to perform action.',status:'warning',position:'top-left',variant:'left-accent'})
+            return;
+        }
+        let new_side_info_field = {ref_id: '',orientation:''};
+        set_side_info_input_fields([...side_info_input_fields,new_side_info_field])
+    }
+
+    const removeFields = (index) => {
+        let data = [...side_info_input_fields];
+        data.splice(index, 1)
+        set_side_info_input_fields(data)
+    }
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -189,6 +219,18 @@ const Body=()=>{
                             </NumberInputStepper>
                         </NumberInput>
                     </FormControl>
+                    <Button onClick={HandleAddNewSideInputField}>Add field</Button>
+                    <form>
+                        {side_info_input_fields.map((input, index) => {
+                            return (
+                                <HStack key={index}>
+                                    <Input name='ref_id' placeholder='side number e.g 1, 2 ...'/>
+                                    <Input name='Orientation' placeholder='e.g The billboard is facing the main highway'/>
+                                    <Icon as={IoMdRemoveCircleOutline} boxSize={"4"} onClick={() => removeFields(index)}/>
+                                </HStack>
+                            )
+                        })}
+                    </form>
                     <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
                         <option value='digital'>Digital</option>
                         <option value='2D'>2D</option>
@@ -246,7 +288,7 @@ const Body=()=>{
                             or
                         </AbsoluteCenter>
                     </Box>
-                    <Text fontWeight={'bold'} color='gray' fontSize={'small'}>Update the location later</Text>
+                    <Text fontWeight={'bold'} color='gray' fontSize={'small'} textAlign={'center'}>Update the location later</Text>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
@@ -338,3 +380,22 @@ const AlertUserDialog=(props)=>{
         </AlertDialog>
     )
 }
+
+{/**<div key={index}>
+                                <input
+                                    name='ref_id'
+                                    placeholder='ref_id'
+                                    value={input.ref_id}
+                                    onChange={event => HandleFormChange(index, event)}
+                                />
+                                <input
+                                    name='orientation'
+                                    placeholder='orientation'
+                                    value={input.orientation}
+                                    onChange={event => HandleFormChange(index, event)}
+                                />
+                                <button onClick={() => removeFields(index)}>Remove</button>
+                                </div>
+                                 onChange={{event => HandleFormChange(index,event)}} value={input.ref_id}
+                                 onChange={{event => HandleFormChange(index,event)}} value={input.orientation}
+                            **/}
