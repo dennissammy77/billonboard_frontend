@@ -8,6 +8,7 @@ import { GrMapLocation } from "react-icons/gr";
 import getPosition from "@/components/hooks/GetLocation";
 import { FaLocationPin } from "react-icons/fa6";
 import { CiLocationOff } from "react-icons/ci";
+import { IoMdRemoveCircleOutline } from "react-icons/io";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -30,11 +31,17 @@ const Body=()=>{
     const [name_of_billboard,set_name_of_billboard]=useState('');
     const [description,set_description]=useState('');
     const [location,set_location]=useState('');
-    let location_cord = {
+    const [location_cord,set_location_cord]=useState({
         Latitude : '',
         Longitude : ''
-    }
+    });
     const [number_of_sides,set_number_of_sides]=useState(1);
+    
+    const [side_info_input_fields,set_side_info_input_fields]=useState([{
+        ref_id:'',
+        orientation: ''
+    }]);
+
     const [img_placeholder,set_img_placeholder]=useState('https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5');
     const [availability_status,set_availability_status]=useState(false);
     const [billboard_type,set_billboard_type]=useState('');
@@ -67,6 +74,7 @@ const Body=()=>{
         location, 
         location_cord,
         number_of_sides,
+        sides: side_info_input_fields,
         img_placeholder,
         availability_status,
         billboard_type,
@@ -90,6 +98,10 @@ const Body=()=>{
             set_input_error(true);
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
+        if (number_of_sides !== side_info_input_fields.length){
+            set_is_saving(false)
+            return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
             await CreateNewBoard(payload).then(()=>{
@@ -141,13 +153,34 @@ const Body=()=>{
 
     const HandleGetLocation=async()=>{
         const result = await getPosition();
-        location_cord.Latitude = result.Latitude
-        location_cord.Longitude = result.Longitude
+        set_location_cord(result);
     }
     const HandleRemoveLocation=async()=>{
         location_cord.Latitude = '',
         location_cord.Longitude = ''
     };
+
+    const HandleFormChange = (index, event) => {
+        let data = [...side_info_input_fields];
+        data[index]['ref_id'] = index + 1;
+        data[index]['orientation'] = event.target.value;
+        set_side_info_input_fields(data)
+    }
+
+    const HandleAddNewSideInputField=()=>{
+        if(number_of_sides == side_info_input_fields?.length){
+            toast({title:'Error: Could not add new field!',description:'Side boards limit has been reached add a side to perform action.',status:'warning',position:'top-left',variant:'left-accent'})
+            return;
+        }
+        let new_side_info_field = {ref_id: '',orientation:''};
+        set_side_info_input_fields([...side_info_input_fields,new_side_info_field])
+    }
+
+    const removeFields = (index) => {
+        let data = [...side_info_input_fields];
+        data.splice(index, 1)
+        set_side_info_input_fields(data)
+    }
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -179,7 +212,7 @@ const Body=()=>{
                         <Textarea value={description} type='text' placeholder='Give a detailed description of the billboard' onChange={((e)=>{set_description(e.target.value)})}/>
                         {input_error && description == '' ?  <FormErrorMessage>Description of the billboard is required.</FormErrorMessage> : ( null )}
                     </FormControl>
-                    <FormControl mt='2'>
+                    <FormControl my='2'>
                         <FormLabel>Number of sides</FormLabel>
                         <NumberInput defaultValue={1} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
                             <NumberInputField />
@@ -189,6 +222,18 @@ const Body=()=>{
                             </NumberInputStepper>
                         </NumberInput>
                     </FormControl>
+                    <form>
+                        {side_info_input_fields.map((input, index) => {
+                            return (
+                                <HStack key={index} my='2'>
+                                    <Input name='ref_id' type='number' placeholder='side number e.g 1, 2 ...' w='20%' value={index+1} onChange={event => HandleFormChange(index, event)}/>
+                                    <Input name='orientation' placeholder='e.g The billboard is facing the main highway' value={input.orientation} onChange={event => HandleFormChange(index, event)}/>
+                                    {index == 0 ? <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} color={'gray.300'}/> : <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} onClick={() => removeFields(index)}/> }
+                                </HStack>
+                            )
+                        })}
+                    </form>
+                    <Button onClick={HandleAddNewSideInputField} my='2'>Add field</Button>
                     <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
                         <option value='digital'>Digital</option>
                         <option value='2D'>2D</option>
@@ -246,7 +291,7 @@ const Body=()=>{
                             or
                         </AbsoluteCenter>
                     </Box>
-                    <Text fontWeight={'bold'} color='gray' fontSize={'small'}>Update the location later</Text>
+                    <Text fontWeight={'bold'} color='gray' fontSize={'small'} textAlign={'center'}>Update the location later</Text>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
@@ -338,3 +383,22 @@ const AlertUserDialog=(props)=>{
         </AlertDialog>
     )
 }
+
+{/**<div key={index}>
+                                <input
+                                    name='ref_id'
+                                    placeholder='ref_id'
+                                    value={input.ref_id}
+                                    onChange={event => HandleFormChange(index, event)}
+                                />
+                                <input
+                                    name='orientation'
+                                    placeholder='orientation'
+                                    value={input.orientation}
+                                    onChange={event => HandleFormChange(index, event)}
+                                />
+                                <button onClick={() => removeFields(index)}>Remove</button>
+                                </div>
+                                 onChange={{event => HandleFormChange(index,event)}} value={input.ref_id}
+                                 onChange={{event => HandleFormChange(index,event)}} value={input.orientation}
+                            **/}
