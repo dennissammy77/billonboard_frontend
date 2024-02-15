@@ -7,6 +7,7 @@ import getPosition from "@/components/hooks/GetLocation";
 import { CiLocationOff } from "react-icons/ci";
 import { FaLocationPin } from "react-icons/fa6";
 import GetCordFromURL from "@/components/hooks/GetCordFromURL";
+import { IoMdRemoveCircleOutline } from "react-icons/io";
 
 export const Edit_Board=()=>{
     return(
@@ -34,6 +35,8 @@ const Body=()=>{
         Longitude : board_data?.location_cord?.Longitude
     }
     const [number_of_sides,set_number_of_sides]=useState(board_data?.number_of_sides);
+    const [side_info_input_fields,set_side_info_input_fields]=useState(board_data?.sides);
+    
     const [availability_status,set_availability_status]=useState(board_data?.availability_status);
     const [billboard_type,set_billboard_type]=useState(board_data?.billboard_type);
 
@@ -63,6 +66,7 @@ const Body=()=>{
         location,
         location_cord,
         number_of_sides,
+        sides: side_info_input_fields,
         availability_status,
         billboard_type,
         ad_agency_name,
@@ -83,6 +87,10 @@ const Body=()=>{
             set_input_error(true);
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
+        if (number_of_sides !== side_info_input_fields.length){
+            set_is_saving(false)
+            return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
             await EditBoard(payload).then(()=>{
@@ -120,6 +128,28 @@ const Body=()=>{
         location_cord.Latitude = '',
         location_cord.Longitude = ''
     };
+
+    const HandleFormChange = (index, event) => {
+        let data = [...side_info_input_fields];
+        data[index]['ref_id'] = index + 1;
+        data[index]['orientation'] = event.target.value;
+        set_side_info_input_fields(data)
+    }
+
+    const HandleAddNewSideInputField=()=>{
+        if(number_of_sides == side_info_input_fields?.length){
+            toast({title:'Error: Could not add new field!',description:'Side boards limit has been reached add a side to perform action.',status:'warning',position:'top-left',variant:'left-accent'})
+            return;
+        }
+        let new_side_info_field = {ref_id: '',orientation:''};
+        set_side_info_input_fields([...side_info_input_fields,new_side_info_field])
+    }
+
+    const removeFields = (index) => {
+        let data = [...side_info_input_fields];
+        data.splice(index, 1)
+        set_side_info_input_fields(data)
+    }
     return(
         <Box>
             <Box bg='#fff' borderRadius={'md'} boxShadow={'sm'} p='2' mb='2'>
@@ -161,6 +191,18 @@ const Body=()=>{
                             </NumberInputStepper>
                         </NumberInput>
                     </FormControl>
+                    <form>
+                        {side_info_input_fields.map((input, index) => {
+                            return (
+                                <HStack key={index} my='2'>
+                                    <Input name='ref_id' type='number' placeholder='side number e.g 1, 2 ...' w='20%' value={index+1} onChange={event => HandleFormChange(index, event)}/>
+                                    <Input name='orientation' placeholder='e.g The billboard is facing the main highway' value={input.orientation} onChange={event => HandleFormChange(index, event)}/>
+                                    {index == 0 ? <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} color={'gray.300'}/> : <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} onClick={() => removeFields(index)}/> }
+                                </HStack>
+                            )
+                        })}
+                    </form>
+                    <Button onClick={HandleAddNewSideInputField} my='2'>Add field</Button>
                     <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
                         <option value='digital'>Digital</option>
                         <option value='2D'>2D</option>

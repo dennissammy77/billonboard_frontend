@@ -31,17 +31,16 @@ const Body=()=>{
     const [name_of_billboard,set_name_of_billboard]=useState('');
     const [description,set_description]=useState('');
     const [location,set_location]=useState('');
-    let location_cord = {
+    const [location_cord,set_location_cord]=useState({
         Latitude : '',
         Longitude : ''
-    }
+    });
     const [number_of_sides,set_number_of_sides]=useState(1);
     
     const [side_info_input_fields,set_side_info_input_fields]=useState([{
         ref_id:'',
         orientation: ''
-    }])
-    const [sides_Arr,set_sides_Arr]=useState([]);
+    }]);
 
     const [img_placeholder,set_img_placeholder]=useState('https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5');
     const [availability_status,set_availability_status]=useState(false);
@@ -75,7 +74,7 @@ const Body=()=>{
         location, 
         location_cord,
         number_of_sides,
-        sides: sides_Arr,
+        sides: side_info_input_fields,
         img_placeholder,
         availability_status,
         billboard_type,
@@ -99,6 +98,10 @@ const Body=()=>{
             set_input_error(true);
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
+        if (number_of_sides !== side_info_input_fields.length){
+            set_is_saving(false)
+            return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
             await CreateNewBoard(payload).then(()=>{
@@ -150,8 +153,7 @@ const Body=()=>{
 
     const HandleGetLocation=async()=>{
         const result = await getPosition();
-        location_cord.Latitude = result.Latitude
-        location_cord.Longitude = result.Longitude
+        set_location_cord(result);
     }
     const HandleRemoveLocation=async()=>{
         location_cord.Latitude = '',
@@ -160,8 +162,9 @@ const Body=()=>{
 
     const HandleFormChange = (index, event) => {
         let data = [...side_info_input_fields];
-        data[index][event.target.name] = event.target.value;
-        console.log(data)
+        data[index]['ref_id'] = index + 1;
+        data[index]['orientation'] = event.target.value;
+        set_side_info_input_fields(data)
     }
 
     const HandleAddNewSideInputField=()=>{
@@ -209,7 +212,7 @@ const Body=()=>{
                         <Textarea value={description} type='text' placeholder='Give a detailed description of the billboard' onChange={((e)=>{set_description(e.target.value)})}/>
                         {input_error && description == '' ?  <FormErrorMessage>Description of the billboard is required.</FormErrorMessage> : ( null )}
                     </FormControl>
-                    <FormControl mt='2'>
+                    <FormControl my='2'>
                         <FormLabel>Number of sides</FormLabel>
                         <NumberInput defaultValue={1} min={1} onChange={((e)=>{set_number_of_sides(e)})}>
                             <NumberInputField />
@@ -219,18 +222,18 @@ const Body=()=>{
                             </NumberInputStepper>
                         </NumberInput>
                     </FormControl>
-                    <Button onClick={HandleAddNewSideInputField}>Add field</Button>
                     <form>
                         {side_info_input_fields.map((input, index) => {
                             return (
-                                <HStack key={index}>
-                                    <Input name='ref_id' placeholder='side number e.g 1, 2 ...'/>
-                                    <Input name='Orientation' placeholder='e.g The billboard is facing the main highway'/>
-                                    <Icon as={IoMdRemoveCircleOutline} boxSize={"4"} onClick={() => removeFields(index)}/>
+                                <HStack key={index} my='2'>
+                                    <Input name='ref_id' type='number' placeholder='side number e.g 1, 2 ...' w='20%' value={index+1} onChange={event => HandleFormChange(index, event)}/>
+                                    <Input name='orientation' placeholder='e.g The billboard is facing the main highway' value={input.orientation} onChange={event => HandleFormChange(index, event)}/>
+                                    {index == 0 ? <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} color={'gray.300'}/> : <Icon as={IoMdRemoveCircleOutline} boxSize={"6"} cursor={'pointer'} onClick={() => removeFields(index)}/> }
                                 </HStack>
                             )
                         })}
                     </form>
+                    <Button onClick={HandleAddNewSideInputField} my='2'>Add field</Button>
                     <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
                         <option value='digital'>Digital</option>
                         <option value='2D'>2D</option>
