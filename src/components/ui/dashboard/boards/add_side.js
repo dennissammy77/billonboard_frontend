@@ -151,10 +151,18 @@ export const Addside=()=>{
         set_image_url('');
         set_input_error(false)
     }
+    const HandleSideDetail=(e)=>{
+        const data = e.target.value;
+        const temp = data?.split('-');
+        set_side_ref_Id(parseInt(temp[0]));
+        set_orientation(temp[1]);
+    }
     return (
         <Box bg='#fff' borderRadius={8} mt='2' p='4'>
             <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Side board Details</Text>
             <Divider/>
+            {/**
+             * 
             <FormControl mt='2' >
                 <FormLabel>Side of the board e.g 1, 2</FormLabel>
                 <NumberInput defaultValue={1} min={1} max={board_data?.number_of_sides} onChange={((e)=>{set_side_ref_Id(e)})}>
@@ -165,6 +173,15 @@ export const Addside=()=>{
                     </NumberInputStepper>
                 </NumberInput>
             </FormControl>
+             */}
+            <Text>Select Orientation and side of the board</Text>
+            <Select placeholder='eg. 1 : Faces the main road' onChange={(e)=>HandleSideDetail(e)} my='2'>
+                {board_data?.sides.map((item)=>{
+                    return(
+                        <option value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
+                    )
+                })}
+            </Select>
             <FormControl mt='2' isRequired isInvalid={input_error && brand == '' ? true : false}>
                 <FormLabel>Brand</FormLabel>
                 <Input value={brand} placeholder='e.g Safaricom' type='text' onChange={((e)=>{set_brand(e.target.value)})}/>
@@ -223,10 +240,13 @@ export const Addside=()=>{
                 <option value='government'>Government</option>
                 <option value='othercategory'>Other</option>
             </Select>
+            {/**
+             * 
             <FormControl mt='2'>
                 <FormLabel>Orientation</FormLabel>
                 <Input value={orientation} placeholder='e.g the board directly faces the main highway road' type='email' onChange={((e)=>{set_orientation(e.target.value)})}/>
             </FormControl>
+             */}
             <FormControl mt='2'>
                 <FormLabel>Email outreach</FormLabel>
                 <Input value={email_contact} placeholder='e.g info@safaricom.co.ke' type='email' onChange={((e)=>{set_email_contact(e.target.value)})}/>

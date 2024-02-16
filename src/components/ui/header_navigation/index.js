@@ -1,11 +1,13 @@
 'use client'
 import React, { useContext, useState } from 'react'
 import {useRouter} from 'next/navigation';
-import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image, Icon} from '@chakra-ui/react'
+import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image, Icon, Menu, MenuButton, MenuList, MenuItem, Divider} from '@chakra-ui/react'
 import { ProfileTag } from './profile_tag';
 import { MenuComponent } from './menu';
 import { UserContext } from '@/components/providers/user.context';
 import { MdExplore } from 'react-icons/md';
+import { FaChevronDown } from "react-icons/fa";
+import { FaChalkboardUser } from 'react-icons/fa6';
 
 
 function Header(){
@@ -24,6 +26,10 @@ function Header(){
                             <Icon as={MdExplore} boxSize='4'/>
                             <Text>Explore boards</Text>
                         </HStack>
+                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/agencies/all`)})}>
+                            <Icon as={FaChalkboardUser} boxSize='4'/>
+                            <Text>Explore Agencies</Text>
+                        </HStack>
                         <ProfileTag/>
                     </Flex>
                     :
@@ -31,6 +37,10 @@ function Header(){
                         <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
                             <Icon as={MdExplore} boxSize='4'/>
                             <Text>Explore boards</Text>
+                        </HStack>
+                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/agencies/all`)})}>
+                            <Icon as={FaChalkboardUser} boxSize='4'/>
+                            <Text>Explore Agencies</Text>
                         </HStack>
                         {links?.map((i, index)=>{
                             return(
@@ -42,10 +52,22 @@ function Header(){
                 }
             </Flex>
             <Flex display={{base:'flex',md:'none'}} gap='2' align={'center'}>
-                <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
-                    <Icon as={MdExplore} boxSize='6'/>
-                    <Text>Explore</Text>
-                </HStack>
+                <Menu>
+                    <MenuButton as={Button} rightIcon={<FaChevronDown />}>
+                        Explore
+                    </MenuButton>
+                    <MenuList>
+                        <HStack p='4' cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
+                            <Icon as={MdExplore} boxSize='6'/>
+                            <Text>Explore Billboards</Text>
+                        </HStack>
+                        <Divider/>
+                        <HStack p='4' cursor={'pointer'} onClick={(()=>{router.push(`/agencies/all`)})}>
+                            <Icon as={FaChalkboardUser} boxSize='6'/>
+                            <Text>Explore Agencies</Text>
+                        </HStack>
+                    </MenuList>
+                </Menu>
                 <MenuComponent/>
             </Flex>
         </Flex>
