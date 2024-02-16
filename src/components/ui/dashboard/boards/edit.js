@@ -78,7 +78,8 @@ const Body=()=>{
         bob_remark,
         verification_status,
         suspension_status,
-        publish_status
+        publish_status,
+        side_info_flag: true
     }
 
     const Handle_Submit=async()=>{
@@ -88,7 +89,9 @@ const Body=()=>{
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
-        if (number_of_sides !== side_info_input_fields.length){
+        if (parseInt(number_of_sides) !== side_info_input_fields.length){
+            console.log(typeof(parseInt(number_of_sides)),typeof(side_info_input_fields.length))
+            console.log(number_of_sides,side_info_input_fields.length)
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }

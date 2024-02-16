@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { BoardCard } from './boardCard';
 import GetBillBoards from '@/api/billboards/all/route';
 
-function BoardSection({query,filter_option}) {
+function BoardSection({query}) {
   const [data, set_data] = useState([]);
   useEffect(()=>{
     fetch()
