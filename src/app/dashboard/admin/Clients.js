@@ -10,7 +10,6 @@ import { ClientsUser } from './components/ui/Clients';
 export const Clients=()=>{
   const [query,set_query]=useState('');
   const view_drawer_disclosure = useDisclosure();
-
   return (
     <Box p={{base:'2',md:'4'}}>
         <Flex align='center' justify='space-between' my='3' >
@@ -21,7 +20,7 @@ export const Clients=()=>{
         <HStack my='2'>
             <Search_Input query={query} set_query={set_query} placeholder='search clients'/>
         </HStack>
-        <ClientsUser  query={query} set_query={set_query}/>
+        <ClientsUser query={query} set_query={set_query}/>
     </Box>
   )
 }

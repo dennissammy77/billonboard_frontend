@@ -1,16 +1,20 @@
 'use client'
 
-import { Box, Grid } from "@chakra-ui/react";
-import {StatCard} from './stat_card'
-import { RiAccountPinCircleFill } from "react-icons/ri"
-import { MdOutlineSwitchAccount } from "react-icons/md";
-import { FaPersonWalking } from "react-icons/fa6";
-import { SiBillboard } from "react-icons/si";
+import { Grid } from "@chakra-ui/react";
+// utils
 import { useEffect, useState } from "react";
+// components
+import { StatCard} from './stat_card'
+// api
 import GetAgencies from "@/api/auth/client/agency/all/route";
 import GetClients from "@/api/auth/client/client/all/route";
 import GetFootsolidier from "@/api/auth/client/footsoldier/all/route";
 import { GetBillBoardsAdmin } from "@/api/billboards/all/route";
+// icons
+import { RiAccountPinCircleFill } from "react-icons/ri"
+import { MdOutlineSwitchAccount } from "react-icons/md";
+import { FaPersonWalking } from "react-icons/fa6";
+import { SiBillboard } from "react-icons/si";
 
 export const Stat_Section=()=>{
     const [agencies,set_agencies]=useState([]);

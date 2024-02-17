@@ -1,4 +1,4 @@
-import { AbsoluteCenter, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
+import { AbsoluteCenter, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Icon, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Switch, Text, Textarea, Tooltip, useDisclosure, useToast } from "@chakra-ui/react"
 import { useContext, useState } from "react";
 import { UserContext } from "@/components/providers/user.context";
 import { dashboardContext } from "@/components/providers/dashboard.context";
@@ -6,8 +6,10 @@ import EditBoard from "@/api/billboards/edit/route";
 import getPosition from "@/components/hooks/GetLocation";
 import { CiLocationOff } from "react-icons/ci";
 import { FaLocationPin } from "react-icons/fa6";
-import GetCordFromURL from "@/components/hooks/GetCordFromURL";
 import { IoMdRemoveCircleOutline } from "react-icons/io";
+import GetAgencies from "@/api/auth/client/agency/all/route";
+import { IoSearch } from "react-icons/io5";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export const Edit_Board=()=>{
     return(
@@ -30,9 +32,11 @@ const Body=()=>{
     const [location,set_location]=useState(board_data?.location);
 
     //const [location_cord,set_location_cord]=useState(board_data?.location_cord);
+    const [Latitude,set_Latitude]=useState(board_data?.location_cord?.Latitude,);
+    const [Longitude,set_Longitude]=useState(board_data?.location_cord?.Longitude);
     let location_cord = {
-        Latitude : board_data?.location_cord?.Latitude,
-        Longitude : board_data?.location_cord?.Longitude
+        Latitude,
+        Longitude
     }
     const [number_of_sides,set_number_of_sides]=useState(board_data?.number_of_sides);
     const [side_info_input_fields,set_side_info_input_fields]=useState(board_data?.sides);
@@ -58,6 +62,31 @@ const Body=()=>{
     const [is_saving,set_is_saving]=useState(false);
 
     const [input_error,set_input_error]=useState(false);
+
+    const [agencies,set_agencies]=useState([]);
+    const viewAgencies = useDisclosure();
+    useEffect(()=>{
+        if(user?.account_type === 'agency'){
+            HandleSelectAgency(user)   
+        }else{
+            fetch()
+        }
+      },[])
+    async function fetch(){
+        await GetAgencies().then((response)=>{
+          const arr = response?.data;
+          set_agencies(arr)
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+    const HandleSelectAgency=(agency)=>{
+        set_ad_agency_name(agency?.company_name)
+        set_ad_agency_email(agency?.company_email)
+        set_ad_agency_address(agency?.company_address)
+        set_ad_agency_mobile(agency?.company_mobile)
+        //set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+    }
 
     const payload = {
         id: board_data?._id,
@@ -124,12 +153,12 @@ const Body=()=>{
 
     const HandleGetLocation=async()=>{
         const result = await getPosition();
-        location_cord.Latitude = result.Latitude
-        location_cord.Longitude = result.Longitude
+        set_Latitude(result.Latitude)
+        set_Longitude(result.Longitude)
     }
     const HandleRemoveLocation=async()=>{
-        location_cord.Latitude = '',
-        location_cord.Longitude = ''
+        set_Latitude(''),
+        set_Longitude('')
     };
 
     const HandleFormChange = (index, event) => {
@@ -266,17 +295,26 @@ const Body=()=>{
                     <Flex>
                         <FormControl mt='2' mr='2'>
                             <FormLabel>Latitude</FormLabel>
-                            <Input placeholder={location_cord?.Latitude} type='text' onChange={((e)=>{location_cord.Latitude=e.target.value})}/>
+                            <Input placeholder={location_cord?.Latitude} type='text' onChange={((e)=>{set_Latitude(e.target.value)})}/>
                         </FormControl>
                         <FormControl mt='2'>
                             <FormLabel>Longitude</FormLabel>
-                            <Input placeholder={location_cord?.Longitude} type='text' onChange={((e)=>{location_cord.Longitude=e.target.value})}/>
+                            <Input placeholder={location_cord?.Longitude} type='text' onChange={((e)=>{set_Longitude(e.target.value)})}/>
                         </FormControl>
                     </Flex>
                 </Box>
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
-                    <Divider/>
+                    <Button onClick={viewAgencies.onToggle} leftIcon={<IoSearch/>} rightIcon={viewAgencies.isOpen ? <FaChevronUp /> : <FaChevronDown/>} w='full' my='3'>Find existing agency</Button>
+                    <Collapse in={viewAgencies.isOpen} animateOpacity>
+                        <Box p='10px'>
+                            {agencies?.map((agency)=>{
+                                return(
+                                    <Text onClick={(()=>{HandleSelectAgency(agency);viewAgencies.onToggle()})} p='2' bg='#eee' my='1' cursor={'pointer'}>{agency?.company_name}</Text>
+                                )
+                            })}
+                        </Box>
+                    </Collapse>
                     <FormControl mt='2' isRequired isInvalid={input_error && ad_agency_name == '' ? true : false}>
                         <FormLabel>Name</FormLabel>
                         <Input value={ad_agency_name} placeholder='e.g BillonBoard' type='text' onChange={((e)=>{set_ad_agency_name(e.target.value)})}/>

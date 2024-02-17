@@ -9,6 +9,9 @@ import getPosition from "@/components/hooks/GetLocation";
 import { FaLocationPin } from "react-icons/fa6";
 import { CiLocationOff } from "react-icons/ci";
 import { IoMdRemoveCircleOutline } from "react-icons/io";
+import GetAgencies from "@/api/auth/client/agency/all/route";
+import { IoSearch } from "react-icons/io5";
+import { FaChevronDown } from "react-icons/fa";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -53,8 +56,9 @@ const Body=()=>{
     const [ad_agency_address,set_ad_agency_address]=useState('');
     const [ad_agency_website, set_ad_agency_website]=useState('');
     // lister details
-    const [listed_by,set_listed_by]=useState({ Name: user?.first_name, lister_id: user?._id, account_type: user?.account_type })
-    const [currently_owned_by,set_currently_owned_by]=useState({ Name: user?.first_name, owner_id: user?._id, account_type: user?.account_type })
+    const [listed_by,set_listed_by]=useState({ Name: user?.first_name, lister_id: user?._id, account_type: user?.account_type });
+
+    const [currently_owned_by,set_currently_owned_by]=useState({ Name: user?.first_name, owner_id: user?._id, account_type: user?.account_type });
     // rating
     const [bob_rating,set_bob_rating]=useState(1);
     const [bob_remark,set_bob_remark]=useState('');
@@ -68,6 +72,30 @@ const Body=()=>{
 
     const [input_error,set_input_error]=useState(false);
 
+    const [agencies,set_agencies]=useState([]);
+    const viewAgencies = useDisclosure()
+    useEffect(()=>{
+        if(user?.account_type === 'agency'){
+            HandleSelectAgency(user)   
+        }else{
+            fetch()
+        }
+      },[])
+    async function fetch(){
+        await GetAgencies().then((response)=>{
+          const arr = response?.data;
+          set_agencies(arr)
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+    const HandleSelectAgency=(agency)=>{
+        set_ad_agency_name(agency?.company_name)
+        set_ad_agency_email(agency?.company_email)
+        set_ad_agency_address(agency?.company_address)
+        set_ad_agency_mobile(agency?.company_mobile)
+        set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+    }
     const payload = {
         name_of_billboard,
         description,
@@ -156,8 +184,10 @@ const Body=()=>{
         set_location_cord(result);
     }
     const HandleRemoveLocation=async()=>{
-        location_cord.Latitude = '',
-        location_cord.Longitude = ''
+        set_location_cord({
+            Latitude : '',
+            Longitude : ''
+        });
     };
 
     const HandleFormChange = (index, event) => {
@@ -293,35 +323,49 @@ const Body=()=>{
                     </Box>
                     <Text fontWeight={'bold'} color='gray' fontSize={'small'} textAlign={'center'}>Update the location later</Text>
                 </Box>
-                <Box bg='#fff' borderRadius={8} mt='4' p='4'>
-                    <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
-                    <Divider/>
-                    <FormControl mt='2' isRequired isInvalid={input_error && ad_agency_name == '' ? true : false}>
-                        <FormLabel>Name</FormLabel>
-                        <Input value={ad_agency_name} placeholder='e.g BillonBoard' type='text' onChange={((e)=>{set_ad_agency_name(e.target.value)})}/>
-                        {input_error && ad_agency_name == '' ? 
-                            <FormErrorMessage>Name of the agency is required.</FormErrorMessage>
-                        : (
-                            null
-                        )}
-                    </FormControl>
-                    <FormControl mt='2'>
-                        <FormLabel>Email</FormLabel>
-                        <Input value={ad_agency_email} placeholder='e.g info@billonboard.co.ke' type='email' onChange={((e)=>{set_ad_agency_email(e.target.value)})}/>
-                    </FormControl>
-                    <FormControl mt='2'>
-                        <FormLabel>Mobile</FormLabel>
-                        <Input value={ad_agency_mobile} placeholder='e.g 07##-###-###' type='tel' onChange={((e)=>{set_ad_agency_mobile(e.target.value)})}/>
-                    </FormControl>
-                    <FormControl mt='2'>
-                        <FormLabel>Address</FormLabel>
-                        <Input value={ad_agency_address} placeholder='e.g Nairobi,kenya' type='text' onChange={((e)=>{set_ad_agency_address(e.target.value)})}/>
-                    </FormControl>
-                    <FormControl mt='2'>
-                        <FormLabel>Website</FormLabel>
-                        <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
-                    </FormControl>
-                </Box>
+                {user?.account_type === 'agency'?
+                    null 
+                    :
+                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board Owner Details</Text>
+                        <Button onClick={viewAgencies.onToggle} leftIcon={<IoSearch/>} rightIcon={viewAgencies.isOpen ? <FaChevronUp /> : <FaChevronDown/>} w='full' my='3'>Find existing agency</Button>
+                        <Collapse in={viewAgencies.isOpen} animateOpacity>
+                            <Box p='10px'>
+                                {agencies?.map((agency)=>{
+                                    return(
+                                        <Text onClick={(()=>{HandleSelectAgency(agency);viewAgencies.onToggle()})} p='2' bg='#eee' my='1' cursor={'pointer'}>{agency?.company_name}</Text>
+                                    )
+                                })}
+                            </Box>
+                        </Collapse>
+                        <Divider/>
+                        <FormControl mt='2' isRequired isInvalid={input_error && ad_agency_name == '' ? true : false}>
+                            <FormLabel>Name</FormLabel>
+                            <Input value={ad_agency_name} placeholder='e.g BillonBoard' type='text' onChange={((e)=>{set_ad_agency_name(e.target.value)})}/>
+                            {input_error && ad_agency_name == '' ? 
+                                <FormErrorMessage>Name of the agency is required.</FormErrorMessage>
+                            : (
+                                null
+                            )}
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Email</FormLabel>
+                            <Input value={ad_agency_email} placeholder='e.g info@billonboard.co.ke' type='email' onChange={((e)=>{set_ad_agency_email(e.target.value)})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Mobile</FormLabel>
+                            <Input value={ad_agency_mobile} placeholder='e.g 07##-###-###' type='tel' onChange={((e)=>{set_ad_agency_mobile(e.target.value)})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Address</FormLabel>
+                            <Input value={ad_agency_address} placeholder='e.g Nairobi,kenya' type='text' onChange={((e)=>{set_ad_agency_address(e.target.value)})}/>
+                        </FormControl>
+                        <FormControl mt='2'>
+                            <FormLabel>Website</FormLabel>
+                            <Input value={ad_agency_website} placeholder='e.g www.billonboard.co.ke' type='text' onChange={((e)=>{set_ad_agency_website(e.target.value)})}/>
+                        </FormControl>
+                    </Box>
+                }
                 <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                     <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Board status</Text>
                     <Divider/>

@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { BoardCard } from './boardCard';
 import GetBillBoards from '@/api/billboards/all/route';
 
-function BoardSection({query}) {
+function BoardSection({query,owner_id}) {
   const [data, set_data] = useState([]);
   useEffect(()=>{
     fetch()
@@ -12,7 +12,11 @@ function BoardSection({query}) {
   async function fetch(){
     await GetBillBoards().then((response)=>{
       const arr = response?.data;
-      set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+      if(owner_id){
+				set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	
+			}else{
+				set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+			};
     }).catch((err)=>{
       console.log(err)
     })
