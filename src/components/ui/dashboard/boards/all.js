@@ -7,7 +7,7 @@ import { IoMdAdd, IoMdCloseCircle } from 'react-icons/io';
 import BoardSection from './boardSection';
 import { dashboardContext } from '@/components/providers/dashboard.context';
 import { FaMapLocation } from 'react-icons/fa6';
-import MapSection from '../../MapFeature';
+import MapSection from '@/components/ui/MapFeature/view_boards';
 import { Filter } from '../../billboards/filter.ui';
 
 function Boards() {
@@ -42,7 +42,7 @@ function Boards() {
         }
         {view_map?
           <Box h='600px' w='calc(100vw-20vw)'>
-            <MapSection />
+             <MapSection query={query}/>
           </Box>  
           :
           <BoardSection query={query} set_query={set_query} filter_option={filter_option} set_filter_option={set_filter_option}/>

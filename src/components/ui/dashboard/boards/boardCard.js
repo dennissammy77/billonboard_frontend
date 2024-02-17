@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Portal, Text, Tooltip, UnorderedList, VStack, useDisclosure } from '@chakra-ui/react'
+import { Badge, Box, Button, Divider, Flex, HStack, Icon, IconButton, Image, ListItem, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Portal, Text, Tooltip, UnorderedList, VStack, useDisclosure } from '@chakra-ui/react';
 import React, { useContext } from 'react'
 import { FaInfoCircle, FaStar } from 'react-icons/fa';
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
@@ -15,8 +15,8 @@ export const BoardCard=({board})=>{
 
     const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box w='100%' h='400px' borderRadius={'md'} boxShadow={'md'} position={'relative'} opacity={publish_status? '1' : '.6'}>
-        <Image src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5' onClick={onOpen}/>
+    <Box w='100%' h='400px' borderRadius={'md'} boxShadow={'md'} position={'relative'}>
+        <Image opacity={publish_status? '1' : '.6'} src={advertisement_data?.length > 0 && advertisement_data[advertisement_data.length - 1]?.image_url !== ''? advertisement_data[advertisement_data.length - 1]?.image_url: img_placeholder} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5' onClick={onOpen}/>
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
             <ModalContent>
@@ -43,7 +43,7 @@ export const BoardCard=({board})=>{
             </HStack>
         </Flex>
         <VStack position={'absolute'} top='2' right={'2'}>
-            <Menu>
+            <Menu >
                 <MenuButton as={Button} size='sm' transition={'.3s ease-in-out'} bgColor='#fff' _hover={{bgColor:'#3874ff',color:'#fff'}}> 
                     <Icon aria-label='options for board' as={BsThreeDotsVertical} boxSize={4}/>
                 </MenuButton>

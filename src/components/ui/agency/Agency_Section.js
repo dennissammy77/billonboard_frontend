@@ -44,7 +44,7 @@ return (
           <Text fontSize={'xl'}>{company_name}</Text>
       </Stack>
       <VStack position={'absolute'} top='2' right={'2'}>
-          <IconButton aria-label='View board' icon={<TbExternalLink />} size='sm' transition={'.3s ease-in-out'} _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{router.push(`/billboards/board?query=${_id}`)})}/>
+          <IconButton aria-label='View board' icon={<TbExternalLink />} size='sm' transition={'.3s ease-in-out'} _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{router.push(`/agencies/agency?query=${_id}`)})}/>
       </VStack>
   </Box>
 )

@@ -17,7 +17,7 @@ function Page() {
     <Box p={{base:'2',md:'6'}}>
         <Flex my='4'>
           <Text cursor={'pointer'} fontWeight={'bold'} borderTopLeftRadius='5' borderBottomLeftRadius='5' bg={toggle_board_options? '#3874ff':'gray.200'} color={toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Billboards</Text>
-          <Text cursor={'pointer'} fontWeight={'bold'} borderTopRightRadius='5' borderBottomRightRadius='5' bg={!toggle_board_options? '#3874ff':'gray.200'} color={!toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>advertisements</Text>
+          <Text cursor={'pointer'} fontWeight={'bold'} borderTopRightRadius='5' borderBottomRightRadius='5' bg={!toggle_board_options? '#3874ff':'gray.200'} color={!toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Advertisements</Text>
         </Flex>
         {toggle_board_options? 
           <>

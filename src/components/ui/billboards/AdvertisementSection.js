@@ -5,31 +5,36 @@ import GetAllSideBoard from '@/api/billboards/board/all/route';
 import { CiFilter } from 'react-icons/ci';
 import { AdvertisementCard } from './AdvertisementCard';
 
-function AdvertisementSection() {
+function AdvertisementSection({owner_id}) {
   const [data, set_data] = useState([]);
   const [agenciesArr,set_agenciesArr]=useState([]);
-
+  const [query,set_query]=useState('');
+  const [filter_option,set_filter_option]=useState('');
+  
   useEffect(()=>{
     fetch()
   },[query]);
 
   async function fetch(){
     await GetAllSideBoard().then((response)=>{
-      const arr = response?.data;
-      set_data(arr);
+        const arr = response?.data;
+        if(owner_id){
+            set_data(arr.filter((item)=>item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id)))	
+        }else{
+            set_data(arr);
+        };
+      
       const agencies = arr.map((item)=>item?.billboard_id?.ad_agency_name);
       const uniqueArr = [...new Set(agencies)]
       const tempArr = uniqueArr.filter(function( element ) {
         return element !== undefined;
         });
-      set_agenciesArr(uniqueArr);
+      set_agenciesArr(tempArr);
     }).catch((err)=>{
       console.log(err)
     })
   }
 
-  const [query,set_query]=useState('');
-  const [filter_option,set_filter_option]=useState('');
   return (
     <Flex flexDirection={'column'} gap='2' mt='2'>
         <HStack>
