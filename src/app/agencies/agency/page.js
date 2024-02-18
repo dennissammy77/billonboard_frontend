@@ -39,7 +39,7 @@ export default function Page() {
     const [toggle_board_options,set_toggle_board_options]=useState(false);
     return(
         <Box p='4'>
-            <Flex gap='2' flexDirection={{md:'row',base:'column'}} my='4' bg='#fff' borderRadius={'md'}>
+            <Flex gap='2' my='4' bg='#fff' borderRadius={'md'} alignItems={'center'}>
 				<Image src={data?.profile_photo_url || img_placeholder} alt='image' boxSize={100} objectFit={'cover'} borderRadius={'md'} boxShadow={'sm'}/>
 				<Flex flexDirection={'column'} flex='1' fontSize={'sm'}>
 					<Heading as={'h2'}>{data?.company_name}</Heading>

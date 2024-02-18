@@ -62,8 +62,12 @@ const User_Card=(props)=>{
     useEffect(()=>{
         fetch()
     },[user?._id]);
+    const payload = {
+        id: user?._id,
+        acc_type: user?.account_type
+    }
     const fetch=async()=>{
-        await BoardsByOwner(user?._id).then((response)=>{
+        await BoardsByOwner(payload).then((response)=>{
             const arr = response?.data;
             set_boards_data(arr)
         }).catch((err)=>{

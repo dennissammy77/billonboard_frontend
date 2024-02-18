@@ -17,6 +17,10 @@ function BoardSection({query,filter_option}) {
   useEffect(()=>{
     fetch()
   },[query,filter_option])
+  const payload = {
+      id: user?._id,
+      acc_type: user?.account_type
+  }
   async function fetch(){
     if (pathArr[2] === 'admin'){
       await GetBillBoardsAdmin().then((response)=>{
@@ -52,7 +56,7 @@ function BoardSection({query,filter_option}) {
         console.log(err)
       })
     }else{
-      await BoardsByOwner(user?._id).then((response)=>{
+      await BoardsByOwner(payload).then((response)=>{
         const arr = response?.data.reverse();
         let filtered_data;
         switch(filter_option){

@@ -85,7 +85,7 @@ export const Settings=()=>{
                         <HStack fontSize='12px' justify='space-between' pb='2'>
                             <Text fontWeight='semibold'>Password</Text>
                             <Tooltip label='click to change your password'>
-                                <Button _hover={{bg:'#3874ff',color:'white'}} onClick={(()=>{router.push(`/password_reset?email=${user?.email}`)})}>Change Password</Button>
+                                <Button _hover={{bg:'#3874ff',color:'white'}} onClick={(()=>{router.push(`/auth/password_reset?email=${user?.email}`)})}>Change Password</Button>
                             </Tooltip>
                         </HStack>
                         <Divider/>

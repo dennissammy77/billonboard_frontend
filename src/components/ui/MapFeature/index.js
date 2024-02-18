@@ -26,6 +26,10 @@ export default function MapSection(){
 	useEffect(()=>{
 		fetch()
 	},[])
+	const payload = {
+		id: user?._id,
+		acc_type: user?.account_type
+	}
 	async function fetch(){
 		if (pathArr[2] === 'admin'){
 			await GetBillBoardsAdmin().then((response)=>{
@@ -35,7 +39,7 @@ export default function MapSection(){
 				console.log(err)
 			})
 		}else if(pathArr[2] === 'agency' || pathArr[2] === 'footsoldier'){
-			await BoardsByOwner(user?._id).then((response)=>{
+			await BoardsByOwner(payload).then((response)=>{
 				const arr = response?.data
 				set_data(arr)
 			}).catch((err)=>{

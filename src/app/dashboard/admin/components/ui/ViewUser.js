@@ -20,11 +20,16 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
             fetch();
         }
     },[data?._id]);
+    const payload = {
+        id: data?._id,
+        acc_type: data?.account_type
+    }
     const fetch=async()=>{
-        await BoardsByOwner(data?._id).then((response)=>{
+        await BoardsByOwner(payload).then((response)=>{
             const arr = response?.data;
             set_billboards_data(arr)
         }).catch((err)=>{
+            console.log(err)
         })
     }
 
