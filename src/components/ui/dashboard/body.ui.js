@@ -75,11 +75,15 @@ const SidebarContent = (props) => {
             Admin Panel
           </Flex> : null
         }
+        {/**
+         * 
+         * 
         {pathArr[2] === 'admin' && user?.account_type === 'admin' ? null :
         <Button m='2' boxShadow={'md'} bg='#343838' color='#fff' gap='2'> 
           <Icon as={MdSupportAgent} boxSize={6} />
           Support
         </Button>}
+         */}
       </Flex>
     </Box>
   )};

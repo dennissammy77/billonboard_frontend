@@ -44,6 +44,7 @@ const Body=()=>{
     const [availability_status,set_availability_status]=useState(board_data?.availability_status);
     const [billboard_type,set_billboard_type]=useState(board_data?.billboard_type);
 
+    const [currently_owned_by,set_currently_owned_by]=useState({ Name: board_data?.currently_owned_by?.Name, owner_id: board_data?.currently_owned_by?.owner_id, account_type: board_data?.currently_owned_by?.account_type });
     // agency details
     const [ad_agency_name,set_ad_agency_name]=useState(board_data?.ad_agency_name);
     const [ad_agency_email,set_ad_agency_email]=useState(board_data?.ad_agency_email);
@@ -58,6 +59,7 @@ const Body=()=>{
     const [verification_status,set_verification_status]=useState(board_data?.verification_status);
     const [suspension_status,set_suspension_status]=useState(board_data?.suspension_status);
     const [publish_status,set_publish_status]=useState(board_data?.publish_status);
+    const [lister_edit_status,set_lister_edit_status]=useState(board_data?.lister_edit_status);
     
     const [is_saving,set_is_saving]=useState(false);
 
@@ -85,7 +87,7 @@ const Body=()=>{
         set_ad_agency_email(agency?.company_email)
         set_ad_agency_address(agency?.company_address)
         set_ad_agency_mobile(agency?.company_mobile)
-        //set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+        set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
     }
 
     const payload = {
@@ -105,10 +107,12 @@ const Body=()=>{
         ad_agency_website,
         bob_rating,
         bob_remark,
+        currently_owned_by,
         verification_status,
         suspension_status,
         publish_status,
-        side_info_flag: true
+        side_info_flag: true,
+        lister_edit_status
     }
 
     const Handle_Submit=async()=>{
@@ -117,6 +121,10 @@ const Body=()=>{
             set_input_error(true);
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
+        if(user?.account_type === 'footsoldier' && !board_data?.lister_edit_status){
+            set_is_saving(false)
+            return toast({title:'Error!:You are not authorized to make changes to this billboard',description:'Contact support or request for change permissions from the agency',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         if (parseInt(number_of_sides) !== side_info_input_fields.length){
             console.log(typeof(parseInt(number_of_sides)),typeof(side_info_input_fields.length))
@@ -375,6 +383,19 @@ const Body=()=>{
                         </Box>
                     </>
                     : null
+                }
+                {user?.account_type === 'footsoldier'?
+                    null:
+                    <Box bg='#fff' borderRadius={8} mt='4' p='4'>
+                        <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Lister Edit Status</Text>
+                        <Divider/>
+                        <FormControl display='flex' alignItems='center' mt='4' gap='2'>
+                            <FormLabel htmlFor='lister edit status' mb='0'>
+                                {lister_edit_status? 'Allow lister to make changes' : 'Prevent Lister from making changes'}
+                            </FormLabel>
+                            <Switch id='lister edit status' onChange={(()=>{set_lister_edit_status(!lister_edit_status)})}/>
+                        </FormControl>
+                    </Box>
                 }
                 <Flex justify={'space-between'} align='center'>
                     <Text cursor={'pointer'} onClick={(()=>{DiscardDialog.onToggle()})}>Discard</Text>

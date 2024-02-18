@@ -62,7 +62,10 @@ export const Editside=()=>{
             set_is_saving(false)
             return ;
         }
-
+        if(user?.account_type === 'footsoldier' && !board_data?.lister_edit_status){
+            set_is_saving(false)
+            return toast({title:'Error!:You are not authorized to make changes to this advertisement',description:'Contact support or request for change permissions from the agency',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
         if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
             if(image_file !== ''){
                 await EditBoard(payload).then((res)=>{

@@ -11,7 +11,7 @@ import { CiLocationOff } from "react-icons/ci";
 import { IoMdRemoveCircleOutline } from "react-icons/io";
 import GetAgencies from "@/api/auth/client/agency/all/route";
 import { IoSearch } from "react-icons/io5";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 export const New_Board=()=>{
     const {user} = useContext(UserContext);
@@ -117,7 +117,8 @@ const Body=()=>{
         bob_remark,
         verification_status,
         suspension_status,
-        publish_status
+        publish_status,
+        lister_edit_status : true
     }
 
     const Handle_Submit=async()=>{
