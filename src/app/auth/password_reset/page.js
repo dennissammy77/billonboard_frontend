@@ -1,7 +1,8 @@
 'use client'
 
-// import { Generate_Otp, Send_otp, Verify_otp } from '@/components/hooks/useHandleOtp.hook';
-// import useLogOut from '@/components/hooks/useLogOut.hook';
+import SendEmailOtp from '@/api/auth/password/Otp/route';
+import { Generate_Otp } from '@/components/hooks/useHandleOtp.hook';
+
 import { UserContext } from '@/components/providers/user.context'
 import { Button, Flex, HStack, Heading, Input, InputGroup, InputRightElement, PinInput, PinInputField, Text, useToast } from '@chakra-ui/react'
 import { useRouter } from 'next/navigation';
@@ -30,17 +31,25 @@ function Page() {
     const [input_error,set_input_error]=useState(false);
 
     const handle_otp=async()=>{
-		// const code = await Generate_Otp();
-		// if (code){
-		// 	const email_status = await Send_otp(code, email);
-		// 	console.log(email_status)
-		// 	if (email_status?.data == 'success'){
-		// 		set_code_active(!code_active)
-		// 		return 'success'
-		// 	}
-		// 	return null;
-		// }
-		// return null;
+        if(!email){
+		 return toast({ title: 'Error!:No input', description: `enter your email `, status: 'error', variant:'left-accent', position: 'top-left', isClosable: true });
+        }
+		const code = await Generate_Otp();
+        console.log(code)
+		if (code){
+            const payload = {
+                code,
+                email
+            }
+			const email_status = await SendEmailOtp(payload);
+            //const email_status = '';
+			if (email_status?.data == 'success'){
+				set_code_active(!code_active)
+				return 'success'
+			}
+			return null;
+		}
+		return null;
 	}
 	
 	const Compare_Codes=()=>{
@@ -77,68 +86,66 @@ function Page() {
   	}
 
     return (
-    <Flex>
-        <Flex direction='column'>
-            <Heading as='h3' >Forgot password?</Heading>
-            {active?
-                <Flex direction='column' gap='3' mt='3'>
-                    {code_active?
-                        <Text>Enter the code to change your password.</Text>
-                        :
-                        <Text>Enter email to receive the code to change your password.</Text>
-                    }
-                    {code_active?
-                        <Flex direction='column' gap='2'>
-                            <HStack>
-                                <PinInput type='number' onChange={((e)=>{set_confirmation_code(e)})} otp={true}>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                    <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
-                                </PinInput>
-                            </HStack>
-                            <Flex gap='2'>
-                                <Button bg='#000' color='#fff' flex='1' onClick={(()=>{set_code_active(!code_active)})}>Resend Code</Button>
-                                <Button bg='' flex='1' color='#fff' onClick={Compare_Codes}>Verify Code</Button>
-                            </Flex>
-                        </Flex>
+    <Flex direction='column' alignItems={'center'} justify={'center'} w='full'>
+        <Heading as='h3' >Forgot password?</Heading>
+        {active?
+            <Flex direction='column' gap='3' mt='3'>
+                {code_active?
+                    <Text>Enter the code to change your password.</Text>
                     :
-                        <Flex direction='column' gap='2'>
-                            <Input value={email} variant='filled' bg='#eee' required type='email' placeholder='Enter your email' onChange={((e)=>{set_email(e.target.value)})}/>
-                            <Button bg='#000' color='#fff' onClick={handle_otp}>Send Email</Button>
+                    <Text>Enter email to receive the code to change your password.</Text>
+                }
+                {code_active?
+                    <Flex direction='column' gap='2'>
+                        <HStack>
+                            <PinInput type='number' onChange={((e)=>{set_confirmation_code(e)})} otp={true}>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                                <PinInputField errorBorderColor={input_error && confirmation_code == '' ? true : false}/>
+                            </PinInput>
+                        </HStack>
+                        <Flex gap='2'>
+                            <Button bg='#000' color='#fff' flex='1' onClick={(()=>{set_code_active(!code_active)})}>Resend Code</Button>
+                            <Button bg='' flex='1' color='#fff' onClick={Compare_Codes}>Verify Code</Button>
                         </Flex>
-                    }
-                    
-                </Flex>
-                :
-                <>
-                    <Text>Enter your new password for your account.</Text>
-                    <Flex direction='column' gap='2' w='80%'>
-                        <Text>New Password</Text>
-                        <InputGroup size='md'>
-                            <Input pr='4.5rem' type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required onChange={((e)=>{set_new_password(e.target.value)})} />
-                            <InputRightElement width='4.5rem'>
-                                <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
-                                {show ? <MdVisibilityOff/> : <MdVisibility/>}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        <Text>Confirm new password</Text>
-                        <InputGroup size='md'>
-                            <Input pr='4.5rem' type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required onChange={((e)=>{set_confirm_password(e.target.value)})} />
-                            <InputRightElement width='4.5rem'>
-                                <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
-                                {show ? <MdVisibilityOff/> : <MdVisibility/>}
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                        <Button bg='#009393' color='#fff' onClick={Set_New_Password}>Set New Password</Button>
                     </Flex>
-                </>
-            }
-        </Flex>
+                :
+                    <Flex direction='column' gap='2'>
+                        <Input value={email} variant='filled' bg='#eee' required type='email' placeholder='Enter your email' onChange={((e)=>{set_email(e.target.value)})}/>
+                        <Button bg='#000' color='#fff' onClick={handle_otp}>Send Email</Button>
+                    </Flex>
+                }
+                
+            </Flex>
+            :
+            <>
+                <Text>Enter your new password for your account.</Text>
+                <Flex direction='column' gap='2' w='80%'>
+                    <Text>New Password</Text>
+                    <InputGroup size='md'>
+                        <Input pr='4.5rem' type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required onChange={((e)=>{set_new_password(e.target.value)})} />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
+                            {show ? <MdVisibilityOff/> : <MdVisibility/>}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                    <Text>Confirm new password</Text>
+                    <InputGroup size='md'>
+                        <Input pr='4.5rem' type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required onChange={((e)=>{set_confirm_password(e.target.value)})} />
+                        <InputRightElement width='4.5rem'>
+                            <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
+                            {show ? <MdVisibilityOff/> : <MdVisibility/>}
+                            </Button>
+                        </InputRightElement>
+                    </InputGroup>
+                    <Button bg='#009393' color='#fff' onClick={Set_New_Password}>Set New Password</Button>
+                </Flex>
+            </>
+        }
     </Flex>
     )
 }

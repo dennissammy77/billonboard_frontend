@@ -100,6 +100,7 @@ const LoginForm=()=>{
         :
         <Button variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Login</Button>
       }
+      <Text fontSize={'sm'} color='red' my='4' cursor={'pointer'} onClick={(()=>{router.push('/auth/password_reset')})}>Forgot password?</Text>
     </CardWrapper>
   )
 }
