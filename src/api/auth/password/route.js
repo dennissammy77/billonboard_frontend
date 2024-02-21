@@ -8,11 +8,6 @@ export async function Password_Reset(payload) {
     return result;
 }
 
-// export const Otp=async(payload)=>{
-//     const result = axios.post(`${base_url}/api/otp/send/password_reset`,payload);
-//     return result;
-// }
-
 export async function EmailOtp(payload) {
     const result = axios.post(`${base_url}/api/otp/send/verify_email`,payload);
     return result;
