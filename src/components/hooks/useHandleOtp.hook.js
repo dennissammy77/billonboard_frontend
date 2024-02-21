@@ -1,6 +1,4 @@
-'use client'
-
-// import Otp from '@/api/auth/password/Otp/route';
+import Send_Otp_Code from '@/api/auth/password/Send_Otp_Code/route';
 import Cookies from 'universal-cookie';
 const cookies = new Cookies();
 
@@ -15,28 +13,21 @@ export const Generate_Otp=async()=>{
     return result;
 }
 
-// export const Send_otp= async(code,email)=>{
-//     const payload = {
-//         code,
-//         email
-//     }
-//     const result =  await Otp(payload);
-//     return result;
-// }
+export const SendEmailOtp=async(payload)=>{
+    try {
+        const result = await Send_Otp_Code(payload);
+        return result;
+    } catch (error) {
+        console.log(error);
+        return null;
+    }
+}
 
-// export const Send_Email_Otp= async(code,email)=>{
-//     const payload = {
-//         code,
-//         email
-//     }
-//     const result =  await EmailOtp(payload);
-//     return result;
-// }
-
-// export const Verify_otp=(user_input)=>{
-//     const otp_code = cookies.get("otp_code");
-//     if (user_input === otp_code){
-//         return 'success';
-//     }
-//     return 'error'
-// }
+export const Verify_otp=async(user_input)=>{
+    const otp_code = await cookies.get('otp_code');
+    console.log(otp_code,user_input)
+    if (user_input === otp_code){
+        return 'success';
+    }
+    return 'error'
+}
