@@ -6,3 +6,9 @@ export default async function PaymentHandler(payload) {
     const result = await axios.post(`${base_url}/api/payment/new`,payload)
     return(result)
 }
+
+export async function GetTransactionStatus(orderTrackingId){
+    let base_url = await Handler();
+    const result = await axios.get(`${base_url}/api/payment/transaction_status?query=${orderTrackingId}`)
+    return(result)
+}
