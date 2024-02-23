@@ -1,27 +1,40 @@
 'use client';
 
+import PaymentHandler from '@/api/payment/route';
 import { UserContext } from '@/components/providers/user.context';
 import { Box, Button, Flex, HStack, Icon, Text, VStack, useToast } from '@chakra-ui/react'
+import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
-import { IoCheckmark } from 'react-icons/io5'
+import { IoCheckmark } from 'react-icons/io5';
+import { Cookies } from 'react-cookie';
 
 function Page() {
   const {user}=useContext(UserContext);
   const toast = useToast();
-  const [amount,set_amount]=useState(0)
-  const HandleUpgrade=()=>{
+  const [amount,set_amount]=useState(0);
+  const router = useRouter();
+  const cookies = new Cookies();
+
+  const HandleUpgrade=async()=>{
     if (!user){
       return toast({title:'Error! could not perform action.',description:'You need to be signed in to upgrade your account!',status:'error',isClosable:true,variant:'left-accent',position:'top-left'})
     }
     const payload={
+      id: user?._id,
       email: user?.email,
       amount: amount,
-      description: description,
+      description: 'description',
       mobile: user?.mobile,
       first_name: user?.first_name,
       last_name: user?.last_name,
     }
-
+    await PaymentHandler(payload).then((res)=>{
+      console.log(res.data);
+      cookies.set('order_tracking_id', res?.data?.order_tracking_id, { path: '/' });
+      router.push(res?.data?.redirect_url);
+    }).catch((err)=>{
+      console.log(err)
+    })
   }
   return (
     <Flex bg="#fff" p={10} w="full" justifyContent="center" alignItems="center">
@@ -52,7 +65,7 @@ function Page() {
                     <Text fontSize="lg" color="#fff">99.99% Guaranteed Uptime SLA</Text>
                 </Flex>
             </VStack>
-            <Button>Get started</Button>
+            <Button w='full' onClick={(()=>{set_amount(5000);HandleUpgrade()})}>Get started</Button>
           </VStack>
         </Flex>
         <Flex flex={{ sm: 1, lg: "initial",}}w={{lg: 2.3 / 7 }} rounded="lg" borderTopRightRadius={0} borderBottomLeftRadius="lg" bg="white" my={6} direction="column" mx={{base:'0',md:'2'}}>
@@ -88,7 +101,7 @@ function Page() {
                     <Text fontSize="lg" color="#fff">99.99% Guaranteed Uptime SLA</Text>
                 </Flex>
             </VStack>
-            <Button>Get started</Button>
+            <Button w='full'>Get started</Button>
           </VStack>
         </Flex>
         <Flex flex={{ sm: 1, lg: "initial",}}w={{lg: 2.3 / 7 }} rounded="lg" borderTopRightRadius={0} borderBottomLeftRadius="lg" bg="white" my={6} direction="column">
@@ -124,7 +137,7 @@ function Page() {
                     <Text fontSize="lg" color="#fff">99.99% Guaranteed Uptime SLA</Text>
                 </Flex>
             </VStack>
-            <Button>Get started</Button>
+            <Button w='full'>Get started</Button>
           </VStack>
         </Flex>
       </Flex>
