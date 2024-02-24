@@ -1,24 +1,28 @@
 'use client'
 import { GetTransactionStatus } from '@/api/payment/route';
+import { UserContext } from '@/components/providers/user.context';
 import { Box, Center, Image, Text } from '@chakra-ui/react'
 import { useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Cookies } from 'react-cookie';
 
 function Page() {
-  //const orderTrackingId = 
+  const {user}=useContext(UserContext);
   const cookies = new Cookies();
   const params = useSearchParams();
   useEffect(()=>{
     const id = params?.get('OrderTrackingId');
-    getStatus(id)
+    console.log(user)
+    console.log(user?.email)
+    getStatus(id,user?.email)
   },[]);
-  const getStatus=async(id)=>{
-    await GetTransactionStatus(id).then((res)=>{
-      console.log(res)
-    }).catch((err)=>{
-      console.log(err)
-    })
+  const getStatus=async(id,email)=>{
+    console.log(id,email)
+    // await GetTransactionStatus(id,email).then((res)=>{
+    //   console.log(res)
+    // }).catch((err)=>{
+    //   console.log(err)
+    // })
   }
   return (
     <Center>
