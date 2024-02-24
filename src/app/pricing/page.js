@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
 import { IoCheckmark } from 'react-icons/io5';
 import { Cookies } from 'react-cookie';
+import { v4 as uuidv4 } from 'uuid';
 
 function Page() {
   const {user}=useContext(UserContext);
@@ -14,13 +15,14 @@ function Page() {
   const [amount,set_amount]=useState(0);
   const router = useRouter();
   const cookies = new Cookies();
+  const uid = (`(${user?._id})`+ uuidv4());
 
   const HandleUpgrade=async()=>{
     if (!user){
       return toast({title:'Error! could not perform action.',description:'You need to be signed in to upgrade your account!',status:'error',isClosable:true,variant:'left-accent',position:'top-left'})
     }
     const payload={
-      id: user?._id,
+      id: uid.slice(0,49),
       email: user?.email,
       amount: amount,
       description: 'description',
@@ -65,7 +67,7 @@ function Page() {
                     <Text fontSize="lg" color="#fff">99.99% Guaranteed Uptime SLA</Text>
                 </Flex>
             </VStack>
-            <Button w='full' onClick={(()=>{set_amount(5000);HandleUpgrade()})}>Get started</Button>
+            <Button w='full' onClick={(()=>{set_amount(1);HandleUpgrade()})}>Get started</Button>
           </VStack>
         </Flex>
         <Flex flex={{ sm: 1, lg: "initial",}}w={{lg: 2.3 / 7 }} rounded="lg" borderTopRightRadius={0} borderBottomLeftRadius="lg" bg="white" my={6} direction="column" mx={{base:'0',md:'2'}}>
