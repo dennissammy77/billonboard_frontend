@@ -1,10 +1,10 @@
 'use client'
 import { Box, Button, Divider, Drawer, DrawerContent, DrawerOverlay, Flex, Icon, IconButton, Text, useDisclosure } from "@chakra-ui/react";
-import { MdAdminPanelSettings, MdOutlineMenu } from "react-icons/md";
+import { MdAdminPanelSettings, MdOutlineMenu, MdUpgrade } from "react-icons/md";
 import { MdSupportAgent } from "react-icons/md";
 import { dashboardContext } from "../../providers/dashboard.context";
 import { useContext } from "react";
-import { usePathname  } from "next/navigation";
+import { usePathname, useRouter  } from "next/navigation";
 import { UserContext } from "@/components/providers/user.context";
 
 function Dashboard_Body({children,navigation}){
@@ -53,6 +53,7 @@ const SidebarContent = (props) => {
   const {user} = useContext(UserContext)
   const pathname = usePathname();
   const pathArr = pathname?.split('/');
+  const router = useRouter();
 
   return(
     <Box as="nav" pos="fixed" top={{  base: "70px",  md: "70px" }} left="0" zIndex="sticky" h="calc(100vh - 70px)" pb="10" overflowX="hidden" overflowY="auto" bg="white" _dark={{ bg: "gray.800", }} bordercolor="inherit" borderRightWidth="1px" w="60" {...props} >
@@ -75,15 +76,12 @@ const SidebarContent = (props) => {
             Admin Panel
           </Flex> : null
         }
-        {/**
-         * 
-         * 
-        {pathArr[2] === 'admin' && user?.account_type === 'admin' ? null :
-        <Button m='2' boxShadow={'md'} bg='#343838' color='#fff' gap='2'> 
-          <Icon as={MdSupportAgent} boxSize={6} />
-          Support
-        </Button>}
-         */}
+        {user?.account_type === 'agency' && !user?.account_susbscription_token?
+          <Flex align="center" m='2' mb='4' px="4" pl="4" py="3" cursor="pointer" _dark={{ color: "gray.400" }} _hover={{ bg: "gray.300", _dark: { bg: "gray.900" }, color: "gray.900", borderRadius:5,boxShadow:'sm' }} role="group" fontWeight="regular" fontSize={'md'} transition=".3s ease" bg={active_page == 'Admin_Panel'? '#3874ff' : 'gray.100'} color={active_page == 'Admin_Panel'? '#fff' : '#000'} borderRadius={active_page == 'Admin_Panel'? 'md' : '5'} onClick={(()=>{router.push('/pricing')})}>
+            <Icon mx="2" boxSize="5" _groupHover={{ color: "gray.900", }} as={MdUpgrade} />
+            Upgrade
+          </Flex> : null
+        }
       </Flex>
     </Box>
   )};
