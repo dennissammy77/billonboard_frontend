@@ -1,7 +1,7 @@
 'use client'
 
 import { UserContext } from '@/components/providers/user.context';
-import { Box, Text,Heading, HStack, Tooltip, Avatar, Icon, Flex, Input, Button, useDisclosure, Divider, useToast} from '@chakra-ui/react';
+import { Box, Text,Heading, HStack, Tooltip, Avatar, Icon, Flex, Input, Button, useDisclosure, Divider, useToast, Badge} from '@chakra-ui/react';
 import React, { useContext, useState } from 'react'
 
 import { IoClose } from "react-icons/io5";
@@ -70,6 +70,11 @@ export const Settings=()=>{
                         <Text fontSize={{ base:'lg', md:'xl'}} fontWeight='bold'> {user?.company_name || user?.first_name ? user?.company_name || user?.first_name : '-'} </Text>
                         <Text fontSize={{ base:'xs', md:'md' }} w='80%'> {user?.email || user?.company_email ? user?.company_email || user?.email : '-'} </Text>
                         <Text fontSize={{ base:'sm', md:'md' }}> {user?.address || user?.company_address ? user?.company_address || user?.address : '-'} </Text>
+                        {user?.account_susbscription_token?
+                            <Badge bg='gold' color='white'>Enterprise</Badge>
+                            :
+                            <Badge bg='blue.200' color='white'>Free</Badge>
+                        }
                     </Box>
                 }
             </HStack>

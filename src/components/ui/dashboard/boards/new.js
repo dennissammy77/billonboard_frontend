@@ -122,7 +122,7 @@ const Body=()=>{
     }
 
     const Handle_Submit=async()=>{
-        set_is_saving(true)
+        set_is_saving(true);
         if(!name_of_billboard || !description || !location || !ad_agency_name){
             set_input_error(true);
             set_is_saving(false)
@@ -428,22 +428,3 @@ const AlertUserDialog=(props)=>{
         </AlertDialog>
     )
 }
-
-{/**<div key={index}>
-                                <input
-                                    name='ref_id'
-                                    placeholder='ref_id'
-                                    value={input.ref_id}
-                                    onChange={event => HandleFormChange(index, event)}
-                                />
-                                <input
-                                    name='orientation'
-                                    placeholder='orientation'
-                                    value={input.orientation}
-                                    onChange={event => HandleFormChange(index, event)}
-                                />
-                                <button onClick={() => removeFields(index)}>Remove</button>
-                                </div>
-                                 onChange={{event => HandleFormChange(index,event)}} value={input.ref_id}
-                                 onChange={{event => HandleFormChange(index,event)}} value={input.orientation}
-                            **/}

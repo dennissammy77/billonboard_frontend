@@ -56,7 +56,7 @@ const Board_Card=({board,index})=>{
     const {set_page,set_board_data} = useContext(dashboardContext)
     return(
         <Flex gap='2' my='2' align='center' position={'relative'} onClick={(()=>{set_page('View_Side');set_board_data(board)})} cursor={'pointer'}>
-            <Image src={board?.advertisement_data[0]?.image_url || board?.img_placeholder} borderRadius={10} alt='bord_image' boxSize={50}/>
+            <Image src={board?.advertisement_data[0]?.image_url || board?.img_placeholder} borderRadius={10} alt='bord_image' boxSize={50} objectFit={'cover'}/>
             <Box >
                 <Text fontSize={'sm'} fontWeight={'bold'}>{board?.name_of_billboard}</Text>
                 <HStack>

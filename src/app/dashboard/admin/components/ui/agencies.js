@@ -1,7 +1,7 @@
 'use client'
 
 import { Avatar, Center, Icon, IconButton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
-import { FaFolderOpen } from "react-icons/fa";
+import { FaFolderOpen, FaStar } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { ViewUser } from "./ViewUser";
@@ -79,6 +79,7 @@ const User_Card=(props)=>{
         <Tr onClick={(()=>{view_drawer_disclosure.onToggle()})}>
             <Td>
                 <Avatar src={user?.profile_photo_url} borderRadius={10} name={user?.first_name} alt='profile_image' boxSize={50} cursor='pointer'/>
+                {user?.account_susbscription_token? <Icon as={FaStar} boxSize={'4'} color='gold'/> : <Icon as={FaStar} boxSize={'4'} color='gray.200' my='3'/> }
             </Td>
             <Td> {user?.company_name? user?.company_name : user?.first_name} </Td>
             <Td> <Text fontSize={'xs'} color='gray.300'>{user?.company_email? user?.company_email : user?.email}</Text></Td>
