@@ -10,6 +10,7 @@ import { IoMdRemoveCircleOutline } from "react-icons/io";
 import GetAgencies from "@/api/auth/client/agency/all/route";
 import { IoSearch } from "react-icons/io5";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import detectCoordinateFormat from "@/components/hooks/GeoLocationDataHandler";
 
 export const Edit_Board=()=>{
     return(
@@ -31,7 +32,6 @@ const Body=()=>{
     const [description,set_description]=useState(board_data?.description);
     const [location,set_location]=useState(board_data?.location);
 
-    //const [location_cord,set_location_cord]=useState(board_data?.location_cord);
     const [Latitude,set_Latitude]=useState(board_data?.location_cord?.Latitude,);
     const [Longitude,set_Longitude]=useState(board_data?.location_cord?.Longitude);
     let location_cord = {
@@ -73,7 +73,8 @@ const Body=()=>{
         }else{
             fetch()
         }
-      },[])
+    },[]);
+
     async function fetch(){
         await GetAgencies().then((response)=>{
           const arr = response?.data;
@@ -90,47 +91,86 @@ const Body=()=>{
         set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
     }
 
-    const payload = {
-        id: board_data?._id,
-        name_of_billboard,
-        description,
-        location,
-        location_cord,
-        number_of_sides,
-        sides: side_info_input_fields,
-        availability_status,
-        billboard_type,
-        ad_agency_name,
-        ad_agency_email,
-        ad_agency_mobile,
-        ad_agency_address,
-        ad_agency_website,
-        bob_rating,
-        bob_remark,
-        currently_owned_by,
-        verification_status,
-        suspension_status,
-        publish_status,
-        side_info_flag: true,
-        lister_edit_status
-    }
+    // const payload = {
+    //     id: board_data?._id,
+    //     name_of_billboard,
+    //     description,
+    //     location,
+    //     location_cord,
+    //     number_of_sides,
+    //     sides: side_info_input_fields,
+    //     availability_status,
+    //     billboard_type,
+    //     ad_agency_name,
+    //     ad_agency_email,
+    //     ad_agency_mobile,
+    //     ad_agency_address,
+    //     ad_agency_website,
+    //     bob_rating,
+    //     bob_remark,
+    //     currently_owned_by,
+    //     verification_status,
+    //     suspension_status,
+    //     publish_status,
+    //     side_info_flag: true,
+    //     lister_edit_status
+    // }
 
     const Handle_Submit=async()=>{
-        set_is_saving(true)
+        set_is_saving(true);
         if(!name_of_billboard || !description || !location || !ad_agency_name){
             set_input_error(true);
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all required inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
+
         if(user?.account_type === 'footsoldier' && !board_data?.lister_edit_status){
             set_is_saving(false)
             return toast({title:'Error!:You are not authorized to make changes to this billboard',description:'Contact support or request for change permissions from the agency',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
         if (parseInt(number_of_sides) !== side_info_input_fields.length){
-            console.log(typeof(parseInt(number_of_sides)),typeof(side_info_input_fields.length))
-            console.log(number_of_sides,side_info_input_fields.length)
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
+        const geo_cord_validator = detectCoordinateFormat(Latitude.concat(Longitude));
+        let location_cord ;
+        if (geo_cord_validator === 'Unknown'){
+            return toast({title:'Error!:Invalid Location coordinate format',description:`e.g use the format(38° 53' 23" N) (77° 00' 32.5" W) or (38.88972222222222) (-77.00902777777777)`,status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }else if(geo_cord_validator == 'dd'){
+            location_cord = {
+                Latitude,
+                Longitude
+            };
+        }else{
+            location_cord = {
+                Latitude: geo_cord_validator.split(",")[0],
+                Longitude: geo_cord_validator.split(",")[1]
+            };
+        }
+
+        const payload = {
+            id: board_data?._id,
+            name_of_billboard,
+            description,
+            location,
+            location_cord,
+            number_of_sides,
+            sides: side_info_input_fields,
+            availability_status,
+            billboard_type,
+            ad_agency_name,
+            ad_agency_email,
+            ad_agency_mobile,
+            ad_agency_address,
+            ad_agency_website,
+            bob_rating,
+            bob_remark,
+            currently_owned_by,
+            verification_status,
+            suspension_status,
+            publish_status,
+            side_info_flag: true,
+            lister_edit_status
         }
         if (user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN' || user?.position === 'SALES')){
             await EditBoard(payload).then(()=>{
@@ -189,6 +229,25 @@ const Body=()=>{
         let data = [...side_info_input_fields];
         data.splice(index, 1)
         set_side_info_input_fields(data)
+    }
+    const ValidateCoordinates=()=>{
+        const geo_cord_validator = detectCoordinateFormat(Latitude.concat(Longitude));
+        let location_cord ;
+        if (geo_cord_validator === 'Unknown'){
+            return toast({title:'Error!:Invalid Location coordinate format',description:`use the format(38° 53' 23" N) (77° 00' 32.5" W) or (38.88972222222222) (-77.00902777777777)`,status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }else if(geo_cord_validator == 'dd'){
+            location_cord = {
+                Latitude,
+                Longitude
+            }
+            console.log(location_cord)
+        }else{
+            location_cord = {
+                Latitude: geo_cord_validator.split(",")[0],
+                Longitude: geo_cord_validator.split(",")[1]
+            }
+            console.log(location_cord)
+        }
     }
     return(
         <Box>

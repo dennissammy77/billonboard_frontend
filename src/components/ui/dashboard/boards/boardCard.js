@@ -43,20 +43,26 @@ export const BoardCard=({board})=>{
             </HStack>
         </Flex>
         <VStack position={'absolute'} top='2' right={'2'}>
+            {/**
+             * 
             <Menu >
                 <MenuButton as={Button} size='sm' transition={'.3s ease-in-out'} bgColor='#fff' _hover={{bgColor:'#3874ff',color:'#fff'}}> 
                     <Icon aria-label='options for board' as={BsThreeDotsVertical} boxSize={4}/>
                 </MenuButton>
-                <MenuList p='2'>
-                    <MenuItem icon={<IoMdAdd/>} onClick={(()=>{set_page('New_Side');set_board_data(board)})}>Add a Board</MenuItem>
-                    <MenuItem icon={<TbExternalLink/>} onClick={(()=>{set_page('View_Side');set_board_data(board)})}>View BillBoard</MenuItem>
-                    <MenuItem icon={<FiEdit/>} onClick={(()=>{set_page('Edit_Board');set_board_data(board)})}>Edit BillBoard</MenuItem>
+                <MenuList>
+                <MenuItem icon={<IoMdAdd/>} onClick={(()=>{set_page('New_Side');set_board_data(board)})}>Add a Board</MenuItem>
+                <MenuItem icon={<TbExternalLink/>} onClick={(()=>{set_page('View_Side');set_board_data(board)})}>View BillBoard</MenuItem>
+                <MenuItem icon={<FiEdit/>} onClick={(()=>{set_page('Edit_Board');set_board_data(board)})}>Edit BillBoard</MenuItem>
                 </MenuList>
             </Menu>
+            */}
+            <IconButton icon={<IoMdAdd />} size='sm' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('New_Side');set_board_data(board)})}/>
+            <IconButton icon={<TbExternalLink />} size='sm' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('View_Side');set_board_data(board)})}/>
+            <IconButton icon={<FiEdit />} size='sm' _hover={{bgColor:'#3874ff',color:'#fff'}} onClick={(()=>{set_page('Edit_Board');set_board_data(board)})}/>
             {advertisement_data?.length === 0 ||  ad_agency_email == '' || ad_agency_mobile == '' || location_cord.Latitude == '' || location_cord.Longitude == '' ?
                 <Popover placement='auto'>
                     <PopoverTrigger>
-                        <IconButton icon={<FaInfoCircle/>} isRound={true} variant='solid' colorScheme='orange' border='1px solid #fff' borderRadius={'full'} cursor={'pointer'}/>
+                        <IconButton icon={<FaInfoCircle/>} isRound={true} variant='solid' colorScheme='orange' border='1px solid #fff' borderRadius={'full'} cursor={'pointer'} size='sm'/>
                     </PopoverTrigger>
                     <Portal>
                         <PopoverContent>

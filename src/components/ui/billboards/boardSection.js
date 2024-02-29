@@ -1,5 +1,5 @@
 'use client'
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { BoardCard } from './boardCard';
 import GetBillBoards from '@/api/billboards/all/route';
@@ -23,11 +23,19 @@ function BoardSection({query,owner_id}) {
   }
   return (
     <Grid templateColumns={{base:'repeat(1, 1fr)',md:'repeat(2, 1fr)',lg:'repeat(5, 1fr)'}} gap={6} my='4'>
-        {data.map((board)=>{
-            return(
-                <BoardCard key={board?._id} board={board}/>
-            )
-        })}
+      {data?.length === 0? 
+        <Flex w='full' h='full' justify={'center'} alignItems='center'>
+            <Text color='gray.300' w='full'>No results found</Text>
+        </Flex>
+        :
+        <>
+          {data.map((board)=>{
+              return(
+                  <BoardCard key={board?._id} board={board}/>
+              )
+          })}
+        </>
+      }
     </Grid>
   )
 }
