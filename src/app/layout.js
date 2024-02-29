@@ -1,6 +1,7 @@
 import './globals.css';
 import Header from '@/components/ui/header_navigation';
 import { Providers } from '@/components/providers/providers';
+import Footer from '@/components/ui/footer';
 
 export const metadata = {
   title: 'BillonBoard',
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
         <Providers>
             <Header />
             {children}
+            <Footer/>
         </Providers>
       </body>
     </html>

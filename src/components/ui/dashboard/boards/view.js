@@ -40,7 +40,7 @@ export const ViewBoard=()=>{
             acc_type: user?.account_type
         }
         await BoardDataByUser(payload).then((response)=>{
-            set_data(response.data)
+            set_data(response.data);
         }).catch((err)=>{
             console.log(err)
         })

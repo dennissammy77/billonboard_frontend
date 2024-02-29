@@ -45,7 +45,12 @@ function Boards() {
              <MapSection query={query}/>
           </Box>  
           :
-          <BoardSection query={query} set_query={set_query} filter_option={filter_option} set_filter_option={set_filter_option}/>
+          <Box>
+            {/**
+             * 
+             */}
+            <BoardSection query={query} set_query={set_query} filter_option={filter_option} set_filter_option={set_filter_option}/>
+          </Box>
         }
     </Box>
   )
