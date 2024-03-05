@@ -43,7 +43,7 @@ export const Manage=({set_profile_edit})=>{
     }
     const handle_Edit=async()=>{
         set_saving(true)
-        if (!first_name || !last_name || !mobile || !company_name){
+        if (!first_name || !last_name || !mobile){
             toast({ title: '!Important', description: 'required fields need to be filled', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, });
             set_saving(false)
         }else{
