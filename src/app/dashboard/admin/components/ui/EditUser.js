@@ -147,20 +147,23 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                 }
                 {data?.account_type === 'agency'? 
                     <>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>
+                        {/**<FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Name of the agency</FormLabel>
                             <Input placeholder={company_name? company_name : '-'} type='text' onChange={((e)=>{set_company_name(e.target.value)})}/>
-                            {input_error && company_name.trim().length == 0 ? <FormErrorMessage>The name of your agency is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_name.trim().length == 0 ? <FormErrorMessage>The name of your agency is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Agency Email</FormLabel>
                             <Input placeholder={company_email? company_email : '-'} type='email' onChange={((e)=>{set_company_email(e.target.value)})}/>
-                            {input_error && company_email.trim().length == 0 ? <FormErrorMessage>Email for the agency is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_email.trim().length == 0 ? <FormErrorMessage>Email for the agency is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Agency Mobile</FormLabel>
                             <Input type='tel' placeholder={company_mobile} onChange={((e)=>{set_company_mobile(e.target.value)})}/>
-                            {input_error && company_mobile.trim().length == 0 ? <FormErrorMessage>mobile of the company is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_mobile.trim().length == 0 ? <FormErrorMessage>mobile of the company is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
                         <FormControl mt='2'>
                             <FormLabel>Address for the company</FormLabel>
@@ -170,25 +173,29 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                 : null}
                 {data?.account_type === 'client' || data?.account_type === 'footsoldier'? 
                     <>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_name.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Name of the company</FormLabel>
                             <Input placeholder={company_name? company_name : '-'} type='text' onChange={((e)=>{set_company_name(e.target.value)})}/>
-                            {input_error && company_name.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}
+                            {/**{input_error && company_name.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_email.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Email of the company</FormLabel>
                             <Input placeholder={company_email? company_email : '-'} type='text' onChange={((e)=>{set_company_email(e.target.value)})}/>
-                            {input_error && company_email.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_email.trim().length == 0 ?  <FormErrorMessage>Name of the company is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_mobile.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Mobile of the company</FormLabel>
                             <Input placeholder={company_mobile? company_mobile : '-'} type='text' onChange={((e)=>{set_company_mobile(e.target.value)})}/>
-                            {input_error && company_mobile.trim().length == 0 ?  <FormErrorMessage>Mobile of the company is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_mobile.trim().length == 0 ?  <FormErrorMessage>Mobile of the company is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
-                        <FormControl mt='2' isRequired isInvalid={input_error && company_address.trim().length == 0 ? true : false}>
+                        {/*<FormControl mt='2' isRequired isInvalid={input_error && company_address.trim().length == 0 ? true : false}>*/}
+                        <FormControl mt='2'>
                             <FormLabel>Address of the company</FormLabel>
                             <Input placeholder={company_address? company_address : '-'} type='text' onChange={((e)=>{set_company_address(e.target.value)})}/>
-                            {input_error && company_address.trim().length == 0 ?  <FormErrorMessage>Address of the company is required.</FormErrorMessage> : ( null )}
+                            {/*{input_error && company_address.trim().length == 0 ?  <FormErrorMessage>Address of the company is required.</FormErrorMessage> : ( null )}*/}
                         </FormControl>
                     </>
                 : null}
