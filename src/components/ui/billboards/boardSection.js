@@ -4,13 +4,16 @@ import React, { useEffect, useState } from 'react';
 import { BoardCard } from './boardCard';
 import GetBillBoards from '@/api/billboards/all/route';
 
-function BoardSection({query,owner_id}) {
+function BoardSection({query,owner_id,currentPage}) {
   const [data, set_data] = useState([]);
   useEffect(()=>{
     fetch()
-  },[query])
+  },[query,currentPage])
   async function fetch(){
-    await GetBillBoards().then((response)=>{
+    const payload = {
+      page: currentPage
+    }
+    await GetBillBoards(payload).then((response)=>{
       const arr = response?.data;
       if(owner_id){
 				set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	

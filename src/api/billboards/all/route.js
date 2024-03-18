@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export default async function GetBillBoards() {
+export default async function GetBillBoards(payload) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -12,7 +12,7 @@ export default async function GetBillBoards() {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/api/billboards/all`);
+	const result = await axios.get(`${base_url}/api/billboards/all?page=${payload?.page}`);
 	return result
 }
 
