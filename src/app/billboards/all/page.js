@@ -6,6 +6,7 @@ import Pagination from '@/components/ui/billboards/Pagination';
 import BoardSection from '@/components/ui/billboards/boardSection';
 import { Filter } from '@/components/ui/billboards/filter.ui';
 import { Search_Input } from '@/components/ui/billboards/input';
+import Footer from '@/components/ui/footer';
 import { Box, Flex, Grid, HStack, IconButton, Text } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { FaMapLocation } from 'react-icons/fa6';
@@ -48,7 +49,7 @@ function Page() {
                 <MapSection query={query}/>
               </Box>  
               :
-                <Flex direction={'column'} justify={'space-between'} flex='1'>
+                <Box h='100%' my='4'>
                   <BoardSection query={query} set_query={set_query} toggle_board_options={toggle_board_options} set_toggle_board_options={set_toggle_board_options} currentPage={currentPage}/>
                   {/**Pagination Component goes here */}
                   <Pagination
@@ -56,12 +57,13 @@ function Page() {
                     totalPages={totalPages}
                     onPageChange={handlePageChange}
                   />
-                </Flex>
+                </Box>
             }
           </>
           :
           <AdvertisementSection/>
         }
+        <Footer/>
     </Box>
   )
 }
