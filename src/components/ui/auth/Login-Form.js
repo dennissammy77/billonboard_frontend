@@ -1,7 +1,7 @@
 'use client'
 
 import { Box, Button, Input, InputGroup, InputRightElement, Text } from '@chakra-ui/react'
-import React, { use, useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CardWrapper from './CardWrapper'
 import {
   FormControl,
@@ -50,6 +50,11 @@ const LoginForm=()=>{
 			return ;
 		}
 	}
+
+  useEffect(()=>{
+    router.prefetch('/dashboard')
+  },[]);
+
 	const handle_Sign_In=async()=>{
 		await SignIn(payload).then((response)=>{
         set_form_status_message('SignIn successfull')

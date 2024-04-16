@@ -51,9 +51,9 @@ const SignUpForm=()=>{
     company_name
   }
   const Verify_Inputs=()=>{
-		const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const EmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		if (password && first_name && last_name && email && confirm_password){
-			if (!email.match(validRegex)){
+			if (!email.match(EmailRegex)){
         set_form_status_message('Use a valid email format e.g example@company.com')
         set_form_status_status('warning');
 				return;
