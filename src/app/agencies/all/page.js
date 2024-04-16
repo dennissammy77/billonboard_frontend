@@ -2,6 +2,7 @@
 
 import AgencySection from '@/components/ui/agency/Agency_Section';
 import { Search_Input } from '@/components/ui/billboards/input';
+import Footer from '@/components/ui/footer';
 import { Box, Grid, HStack, Text } from '@chakra-ui/react';
 import React, { useState } from 'react'
 
@@ -14,6 +15,7 @@ function Page() {
             <Search_Input query={query} set_query={set_query} placeholder='search agencies'/>
         </HStack>
         <AgencySection query={query}/>
+        <Footer/>
     </Box>
   )
 }
