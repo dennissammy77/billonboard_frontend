@@ -7,7 +7,7 @@ import BoardsByOwner from '@/api/billboards/owner/route';
 import { usePathname } from 'next/navigation';
 import { GetBillBoardsAdmin } from '@/api/billboards/all/route';
 
-function BoardSection({query,filter_option}) {
+function BoardSection({query,filter_option,currentPage}) {
   const {user} = useContext(UserContext);
   const [data, set_data] = useState([]);
 
@@ -16,14 +16,15 @@ function BoardSection({query,filter_option}) {
 
   useEffect(()=>{
     fetch()
-  },[query,filter_option])
+  },[query,filter_option,currentPage])
   const payload = {
       id: user?._id,
-      acc_type: user?.account_type
+      acc_type: user?.account_type,
+      page: currentPage
   }
   async function fetch(){
     if (pathArr[2] === 'admin'){
-      await GetBillBoardsAdmin().then((response)=>{
+      await GetBillBoardsAdmin(payload).then((response)=>{
         const arr = response?.data.reverse()
         let filtered_data;
         switch(filter_option){

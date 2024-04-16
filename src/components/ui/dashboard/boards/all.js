@@ -9,12 +9,24 @@ import { dashboardContext } from '@/components/providers/dashboard.context';
 import { FaMapLocation } from 'react-icons/fa6';
 import MapSection from '@/components/ui/MapFeature/view_boards';
 import { Filter } from '../../billboards/filter.ui';
+import Pagination from '../../billboards/Pagination';
 
 function Boards() {
   const {set_page} = useContext(dashboardContext);
   const [query,set_query]=useState('');
   const [filter_option,set_filter_option]=useState('');
   const [view_map,set_view_map]=useState(false);
+
+  const [toggle_board_options,set_toggle_board_options]=useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 10; // Replace this with the actual total number of pages
+
+  // Function to handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    // Perform data fetching or any other actions based on the new page
+  };
   return (
     <Box p={{base:'2',md:'4'}}>
         <Flex align='center' justify='space-between' my='3' >
@@ -46,10 +58,12 @@ function Boards() {
           </Box>  
           :
           <Box>
-            {/**
-             * 
-             */}
-            <BoardSection query={query} set_query={set_query} filter_option={filter_option} set_filter_option={set_filter_option}/>
+            <BoardSection query={query} set_query={set_query} toggle_board_options={toggle_board_options} set_toggle_board_options={set_toggle_board_options} currentPage={currentPage}/>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </Box>
         }
     </Box>
