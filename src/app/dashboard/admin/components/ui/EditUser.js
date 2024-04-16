@@ -58,7 +58,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
     }
 
     const handle_Edit=async()=>{
-        if (!first_name || !last_name || !mobile){
+        if (!first_name || !last_name){
             toast({ title: '!Important', description: 'required fields need to be filled', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, });
             set_input_error(true);
             return ;
@@ -106,15 +106,13 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                     <Input placeholder={last_name? last_name : '-'} type='text' onChange={((e)=>{set_last_name(e.target.value)})}/>
                     {input_error && last_name.trim().length == 0 ? <FormErrorMessage>Last name is required.</FormErrorMessage> : ( null )}
                 </FormControl>
-                <FormControl mt='2' isRequired isInvalid={input_error && user_name.trim().length == 0 ? true : false}>
+                <FormControl mt='2'>
                     <FormLabel>User name</FormLabel>
                     <Input placeholder={user_name? user_name : '-'} type='text' onChange={((e)=>{set_user_name(e.target.value)})}/>
-                    {input_error && user_name.trim().length == 0 ? <FormErrorMessage>User name is required.</FormErrorMessage> : ( null )}
                 </FormControl>
-                <FormControl mt='2' isRequired isInvalid={input_error && mobile.trim().length == 0 ? true : false}>
+                <FormControl mt='2'>
                     <FormLabel>Mobile</FormLabel>
                     <Input type='tel' placeholder={mobile} onChange={((e)=>{set_mobile(e.target.value)})}/>
-                    {input_error && mobile.trim().length == 0 ? <FormErrorMessage>mobile of the company is required.</FormErrorMessage> : ( null )}
                 </FormControl>
                 <FormControl mt='2'>
                     <FormLabel>Address</FormLabel>
