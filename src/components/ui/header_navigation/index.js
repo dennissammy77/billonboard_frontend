@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {useRouter} from 'next/navigation';
 import {Flex,Text,Button, SlideFade, useDisclosure, Box, HStack, Image, Icon, Menu, MenuButton, MenuList, MenuItem, Divider} from '@chakra-ui/react'
 import { ProfileTag } from './profile_tag';
@@ -13,6 +13,12 @@ import { FaChalkboardUser } from 'react-icons/fa6';
 function Header(){
     const router = useRouter();
     const {user} = useContext(UserContext);
+    useEffect(()=>{
+        router.prefetch('/auth/signin')
+        router.prefetch('/auth/signup')
+        router.prefetch('/billboards/all')
+        router.prefetch('/agencies/all')
+    },[])
 	return(
 		<Flex boxShadow='sm' position='sticky' top='0' left='0' zIndex='2000' bg='#fff' px={{base:'4',md:'8'}} py='4' align={'center'} justify={'space-between'} gap='2' fontWeight={'bold'}>
             <Flex align={'center'} gap='4' onClick={(()=>{router.push('/')})}>

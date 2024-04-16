@@ -16,6 +16,7 @@ import { UserContext } from "@/components/providers/user.context";
 import BoardSection from "@/components/ui/billboards/boardSection";
 import AdvertisementSection from "@/components/ui/billboards/AdvertisementSection";
 import { GetAgencyData } from "@/api/auth/client/route";
+import Footer from "@/components/ui/footer";
 
 export default function Page() {
     const params = useSearchParams()
@@ -63,6 +64,7 @@ export default function Page() {
                     <AdvertisementSection owner_id={agency_id}/>
                 }
             </Box>
+            <Footer/>
         </Box>
     )
 }

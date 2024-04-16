@@ -12,12 +12,12 @@ function Dashboard_Body({children,navigation}){
     return(
         <Box as="section" bg="gray.50" _dark={{ bg: "gray.700" }} minH="100vh" >
             {/**side bar content on large screen */}
-            <SidebarContent display={{ base: "none", md: "unset", }} navigation={navigation}/> 
+            <SidebarContent display={{ base: "none", md: "unset", }} navigation={navigation} onClose={sidebar.onClose}/> 
             {/**side bar content on small screen will use drawer*/}
             <Drawer isOpen={sidebar.isOpen} onClose={sidebar.onClose} placement="left" >
                 <DrawerOverlay />
                 <DrawerContent>
-                    <SidebarContent  w="full"  borderRight="none"  navigation={navigation}/>
+                    <SidebarContent  w="full"  borderRight="none"  navigation={navigation} onClose={sidebar.onClose}/>
                 </DrawerContent>
             </Drawer>
             {/**body of the dasboard */}
@@ -62,7 +62,7 @@ const SidebarContent = (props) => {
           {props?.navigation?.map((item)=>{
             return(
               <>
-                <NavItem key={item?.id} bg={active_page == item?.title? '#3874ff' : 'gray.100'} color={active_page == item?.title? '#fff' : '#000'} borderRadius={active_page == item?.title? 'md' : '5'} icon={item?.icon} onClick={(()=>{set_page(item?.title)})}>
+                <NavItem key={item?.id} bg={active_page == item?.title? '#3874ff' : 'gray.100'} color={active_page == item?.title? '#fff' : '#000'} borderRadius={active_page == item?.title? 'md' : '5'} icon={item?.icon} onClick={(()=>{set_page(item?.title);props.onClose()})}>
                   {item.title}
                 </NavItem>
                 <Divider/>

@@ -1,9 +1,16 @@
 'use client'
+import { UserContext } from '@/components/providers/user.context';
+import Footer from '@/components/ui/footer';
 import { Box, Button, Flex, Grid, Heading, Image, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/navigation';
+import { useContext, useEffect } from 'react';
 
 export default function Home() {
-  const router = useRouter()
+  const router = useRouter();
+  const {user} = useContext(UserContext);
+  useEffect(()=>{
+    router.prefetch('/auth/signup')
+  },[])
   return (
     <Box p=''>
       <Box position={'relative'}>
@@ -16,7 +23,7 @@ export default function Home() {
             <span style={{color:'#3874FF'}}>Discover </span><br/>Billboards <br />Online
           </Heading>
           <Text w={{base:'',lg:'400px'}} p={{base:'8',lg:'0'}} mt='2'>Discover and explore billboards from around the world. Get access to a collection of billboards and filter their search based on location, type of billboard, and category. Whether you're a marketer looking for inspiration, an artist seeking to showcase your work, or simply curious about the latest trends in outdoor advertising, BillonBoard offers a unique way to discover and appreciate the art of the billboard.</Text>
-          <Button borderRadius={'full'} fontSize={'md'} bg='#3874FF' color='#fff' my='4' onClick={(()=>{router.push('/auth/signup')})}>Register</Button>
+          {!user ? <Button borderRadius={'full'} fontSize={'md'} bg='#3874FF' color='#fff' my='4' onClick={(()=>{router.push('/auth/signup')})}>Register</Button> : null}
         </Box>
       </Box>
       <Grid templateRows={{base:'repeat(4, 1fr)',lg:'repeat(2, 1fr)'}} templateColumns={{base:'repeat(2, 1fr)',lg:'repeat(4, 1fr)'}} gap={2} mt='6' px='6' >
@@ -44,6 +51,7 @@ export default function Home() {
           <Image boxSize={{base:400,lg:600}} src={'../landingpage/collection.jpg'} objectFit={'contain'}/>
         </Flex>
       </Box>
+      <Footer/>
     </Box>
   )
 }

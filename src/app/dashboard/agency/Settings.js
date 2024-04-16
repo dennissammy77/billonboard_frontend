@@ -87,6 +87,19 @@ export const Settings=()=>{
                         <Text fontSize='18px'>Security</Text>
                     </HStack>
                     <Box bg='#fff' p='4' mt='2' borderRadius='md'>
+                        {!user?.verified_email_status?
+                            <>
+                                <HStack fontSize='12px' justify='space-between' pb='2'>
+                                    <Text fontWeight='semibold'>Account Verification</Text>
+                                    <Tooltip label='click to change your password'>
+                                        <Button bg='#3874ff' color='white' onClick={(()=>{router.push(`http://localhost:5001/api/auth/verify/${user?.email}`)})}>Verify Account</Button>
+                                    </Tooltip>
+                                </HStack>
+                                <Divider/>
+                            </>
+                            : 
+                            null
+                        } 
                         <HStack fontSize='12px' justify='space-between' pb='2'>
                             <Text fontWeight='semibold'>Password</Text>
                             <Tooltip label='click to change your password'>
