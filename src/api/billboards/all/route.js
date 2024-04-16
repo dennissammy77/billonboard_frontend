@@ -16,7 +16,7 @@ export default async function GetBillBoards(payload) {
 	return result
 }
 
-export async function GetBillBoardsAdmin() {
+export async function GetBillBoardsAdmin(payload) {
 	const env = process.env.NODE_ENV;
 
 	const devbaseurl = process.env.NEXT_PUBLIC_DEV_BASEURL;
@@ -28,6 +28,6 @@ export async function GetBillBoardsAdmin() {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/api/billboards/all/admin`);
+	const result = await axios.get(`${base_url}/api/billboards/all/admin?page=${payload?.page}`);
 	return result
 }
