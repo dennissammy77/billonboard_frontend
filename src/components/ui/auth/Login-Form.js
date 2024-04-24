@@ -59,9 +59,7 @@ const LoginForm=()=>{
 		await SignIn(payload).then((response)=>{
         set_form_status_message('SignIn successfull')
         set_form_status_status('success');
-        setTimeout(()=>{
-          router.push('/')
-        },2000)
+        router.push('/');
         set_user_handler(response)
         return ;
     }).catch((err)=>{
@@ -103,7 +101,7 @@ const LoginForm=()=>{
       {isPending?
         <Button isLoading loadingText='Signing you in' variant='ghost' borderRadius={'md'} w='full'/>
         :
-        <Button variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Login</Button>
+        <Button isDisabled={form_status_status === 'success'? true:false} variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Login</Button>
       }
       <Text fontSize={'sm'} color='red' my='4' cursor={'pointer'} onClick={(()=>{router.push('/auth/password_reset')})}>Forgot password?</Text>
     </CardWrapper>

@@ -15,7 +15,6 @@ function BoardSection({query,owner_id,currentPage}) {
     }
     await GetBillBoards(payload).then((response)=>{
       const arr = response?.data;
-      console.log(arr)
       if(owner_id){
 				set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	
 			}else{

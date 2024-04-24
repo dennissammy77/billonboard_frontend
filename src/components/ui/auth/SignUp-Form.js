@@ -75,9 +75,7 @@ const SignUpForm=()=>{
 		await SignUp(payload).then((response)=>{
         set_form_status_message('Account created successfully')
         set_form_status_status('success');
-        setTimeout(()=>{
-          router.push('/')
-        },2000)
+        router.push('/')
         set_user_handler(response)
         return ;
     }).catch((err)=>{
@@ -150,7 +148,7 @@ const SignUpForm=()=>{
       {isPending?
         <Button isLoading loadingText='creating your account' variant='ghost' borderRadius={'md'} w='full'/>
         :
-        <Button variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>SignUp</Button>
+        <Button isDisabled={form_status_status === 'success'? true:false} variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>SignUp</Button>
       }
     </CardWrapper>
   )
