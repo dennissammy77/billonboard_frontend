@@ -22,7 +22,10 @@ const LoginForm=()=>{
   const [password, set_password]=useState('');
   const [input_error, set_input_error]=useState(false);
   const [isPending, startTransition] = useTransition();
-  const {set_user_handler} = useContext(UserContext)
+  const {set_user_handler} = useContext(UserContext);
+
+  const [isSumbitting, set_isSubmitting] = useState(false);
+
 
   const [show, setShow] = useState(false); //handle state to toggle password
 	const handleClick = () => setShow(!show); //handle state to toggle view of password
@@ -34,11 +37,13 @@ const LoginForm=()=>{
     password,
   }
   const Verify_Inputs=()=>{
+    set_isSubmitting(true);
 		const validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 		if (password && email){
 			if (!email.match(validRegex)){
         set_form_status_message('Use a valid email format e.g example@company.com')
         set_form_status_status('warning');
+        set_isSubmitting(false)
 				return;
 			}else{
 				handle_Sign_In()
@@ -47,6 +52,7 @@ const LoginForm=()=>{
 			set_input_error(true);
       set_form_status_message('required fields need to be filled')
       set_form_status_status('warning');
+      set_isSubmitting(false);
 			return ;
 		}
 	}
@@ -65,9 +71,11 @@ const LoginForm=()=>{
     }).catch((err)=>{
         set_form_status_message(`Error while signing into your account: ${err?.response?.data}`)
         set_form_status_status('error');
+        set_isSubmitting(true)
         return ;
     }).finally(()=>{
-      set_input_error(false)
+      set_input_error(false);
+      set_isSubmitting(false);
     })
 	}
 
@@ -98,7 +106,7 @@ const LoginForm=()=>{
         {input_error && password == '' ?  <FormErrorMessage>password is required.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormStatus message={form_status_message} status={form_status_status}/>
-      {isPending?
+      {isSumbitting?
         <Button isLoading loadingText='Signing you in' variant='ghost' borderRadius={'md'} w='full'/>
         :
         <Button isDisabled={form_status_status === 'success'? true:false} variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Login</Button>
