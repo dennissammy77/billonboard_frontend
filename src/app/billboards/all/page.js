@@ -63,7 +63,6 @@ function Page() {
           :
           <AdvertisementSection/>
         }
-        <Footer/>
     </Box>
   )
 }

@@ -17,6 +17,7 @@ import { useTransition } from 'react';
 import SignUp from '@/api/auth/signup/route';
 import { UserContext } from '@/components/providers/user.context';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const SignUpForm=()=>{
   const [first_name, set_first_name]=useState('');
@@ -37,6 +38,8 @@ const SignUpForm=()=>{
   const [show, setShow] = useState(false); //handle state to toggle password
 	const handleClick = () => setShow(!show); //handle state to toggle view of password
 
+  const [isSumbitting, set_isSubmitting] = useState(false);
+
   const [form_status_message,set_form_status_message]=useState('');
   const [form_status_status,set_form_status_status]=useState('');
 
@@ -51,15 +54,18 @@ const SignUpForm=()=>{
     company_name
   }
   const Verify_Inputs=()=>{
+    set_isSubmitting(true);
     const EmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 		if (password && first_name && last_name && email && confirm_password){
 			if (!email.match(EmailRegex)){
         set_form_status_message('Use a valid email format e.g example@company.com')
         set_form_status_status('warning');
+        set_isSubmitting(false)
 				return;
 			}else if(password !== confirm_password){
         set_form_status_message('You need to provide passwords that match.')
         set_form_status_status('warning');
+      set_isSubmitting(false);
         return ;
       }else{
 				handle_Sign_Up()
@@ -68,6 +74,7 @@ const SignUpForm=()=>{
 			set_input_error(true);
       set_form_status_message('required fields need to be filled')
       set_form_status_status('warning');
+      set_isSubmitting(false);
 			return ;
 		}
 	}
@@ -75,9 +82,7 @@ const SignUpForm=()=>{
 		await SignUp(payload).then((response)=>{
         set_form_status_message('Account created successfully')
         set_form_status_status('success');
-        setTimeout(()=>{
-          router.push('/')
-        },2000)
+        router.push('/')
         set_user_handler(response)
         return ;
     }).catch((err)=>{
@@ -85,7 +90,8 @@ const SignUpForm=()=>{
         set_form_status_status('error');
         return ;
     }).finally(()=>{
-      set_input_error(false)
+      set_input_error(false);
+      set_isSubmitting(false);
     })
 	}
 
@@ -147,11 +153,13 @@ const SignUpForm=()=>{
         {input_error && confirm_password == '' ?  <FormErrorMessage>you need to confirm your password.</FormErrorMessage> : ( null )}
       </FormControl>
       <FormStatus message={form_status_message} status={form_status_status}/>
-      {isPending?
+      {isSumbitting?
         <Button isLoading loadingText='creating your account' variant='ghost' borderRadius={'md'} w='full'/>
         :
-        <Button variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>SignUp</Button>
+        <Button isDisabled={form_status_status === 'success'? true:false} variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>SignUp</Button>
       }
+      <Text fontSize={'sm'} my='4' cursor={'pointer'} >
+        By signing up you agree to our <Link href={'/terms'}><Text color='blue' textDecoration={'1px solid underline'}>terms and conditions</Text></Link></Text>
     </CardWrapper>
   )
 }

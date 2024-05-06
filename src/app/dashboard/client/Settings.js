@@ -14,9 +14,11 @@ import UpdateUser from '@/api/auth/client/update/route';
 import {storage} from '../../../components/lib/firebase';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
+import Link from 'next/link';
 
 export const Settings=()=>{
     const {user, set_user_handler} = useContext(UserContext);
+    const prodbaseurl = process.env.NEXT_PUBLIC_PROD_BASEURL;
     const router = useRouter();
     const toast = useToast()
     const delete_account_disclosure = useDisclosure();
@@ -84,8 +86,10 @@ export const Settings=()=>{
                             <>
                                 <HStack fontSize='12px' justify='space-between' pb='2'>
                                     <Text fontWeight='semibold'>Account Verification</Text>
-                                    <Tooltip label='click to change your password'>
-                                        <Button bg='#3874ff' color='white' onClick={(()=>{router.push(`http://localhost:5001/api/auth/verify/${user?.email}`)})}>Verify Account</Button>
+                                    <Tooltip label='click to verify your account'>
+                                        <Link href={`${prodbaseurl}/api/auth/verify/${user?.email}`}>
+                                            <Button bg='#3874ff' color='white'>Verify Account</Button>
+                                        </Link>
                                     </Tooltip>
                                 </HStack>
                                 <Divider/>

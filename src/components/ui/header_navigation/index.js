@@ -8,6 +8,7 @@ import { UserContext } from '@/components/providers/user.context';
 import { MdExplore } from 'react-icons/md';
 import { FaChevronDown } from "react-icons/fa";
 import { FaChalkboardUser } from 'react-icons/fa6';
+import Link from 'next/link';
 
 
 function Header(){
@@ -40,20 +41,28 @@ function Header(){
                     </Flex>
                     :
                     <Flex align={'center'} gap='4'>
-                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/billboards/all`)})}>
-                            <Icon as={MdExplore} boxSize='4'/>
-                            <Text>Explore boards</Text>
-                        </HStack>
-                        <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/agencies/all`)})}>
-                            <Icon as={FaChalkboardUser} boxSize='4'/>
-                            <Text>Explore Agencies</Text>
-                        </HStack>
+                        <Link href={`/billboards/all`}>
+                            <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'}>
+                                <Icon as={MdExplore} boxSize='4'/>
+                                <Text>Explore boards</Text>
+                            </HStack>
+                        </Link>
+                        <Link href={`/agencies/all`}>
+                            <HStack _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} onClick={(()=>{router.push(`/agencies/all`)})}>
+                                <Icon as={FaChalkboardUser} boxSize='4'/>
+                                <Text>Explore Agencies</Text>
+                            </HStack>
+                        </Link>
                         {links?.map((i, index)=>{
                             return(
-                                <Text onClick={(()=>{router.push(`${i.link}`)})} _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} key={index}>{i.name}</Text>
+                                <Link href={`${i.link}`}>
+                                    <Text _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} key={index}>{i.name}</Text>
+                                </Link>
                             )
                         })}
-                        <Button _hover={{boxShadow:'lg'}} onClick={(()=>{router.push('/auth/signup')})} bg='#3874ff' color='#fff' size='sm'>Free Sign Up</Button>
+                        <Link href={'/auth/signup'}>
+                            <Button _hover={{boxShadow:'lg'}}  bg='#3874ff' color='#fff' size='sm'>Free Sign Up</Button>
+                        </Link>
                     </Flex>
                 }
             </Flex>

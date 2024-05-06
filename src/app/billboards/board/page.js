@@ -1,10 +1,10 @@
 'use client'
-import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, Grid, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure } from "@chakra-ui/react";
+import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, Grid, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react";
 import { useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
-import { MdEmail } from "react-icons/md";
+import { MdEmail, MdFavorite, MdFavoriteBorder } from "react-icons/md";
 import { RiUserLocationFill } from "react-icons/ri";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { GoCommentDiscussion } from "react-icons/go";
@@ -13,16 +13,24 @@ import BoardDataByUser from "@/api/billboards/billboardbyuser/route";
 import { View_side_Board } from "@/components/ui/billboards/view_side";
 import ViewBoardMapSection from "@/components/ui/MapFeature/view_Board";
 import { UserContext } from "@/components/providers/user.context";
+import { UseGetLocalStorage, UseStoreLocalStorage } from "@/components/hooks/useLocalStorage.hook";
 
 function Page() {
     const [data, set_data]=useState('');
     const {user}=useContext(UserContext)
     const params = useSearchParams()
     const board_id = params?.get('query');
+    const toast = useToast();
+
+    const [is_billboard_liked, set_is_billboard_liked]=useState(false);
+    const [saving_liked_billboard,set_saving_liked_billboard]=useState(false);
 
     useEffect(()=>{
         fetch()
-    },[board_id]);
+        Handle_Check_Liked_Billboard()
+    },[board_id,saving_liked_billboard]);
+
+
     const fetch=async()=>{
         const payload={
             boardid: board_id,
@@ -34,10 +42,44 @@ function Page() {
             console.log(err)
         })
     }
+
+
+    const Save_To_Favorite=()=>{
+        set_saving_liked_billboard(true)
+        if(!user){
+            toast({ title: 'Failed to save this billboard', description: 'Sign In or create an account to access this feature.', position: 'top-left', variant:"left-accent", status: 'warning', isClosable: true,});
+            return;
+        }
+        UseStoreLocalStorage('billboards',data).then((res)=>{
+            toast({ title: 'Billboard added to your library', description: '',position:'top-left',variant:'left-accent'})
+        }).catch((err)=>{
+            toast({ title: 'Something went wrong', description: 'Could not add this billboard to your library, seems it already exists',position:'top-left',variant:'left-accent' })
+        }).finally(()=>{
+            set_saving_liked_billboard(false)
+        })
+    }
+
+    const Handle_Check_Liked_Billboard=async()=>{
+        const billboard_data= await UseGetLocalStorage('billboards');
+        set_is_billboard_liked(billboard_data?.some(item => item?._id === board_id))
+    }
     return(
         <Box p='4' bg='#eee'>
             <Box bg='#fff' p='4' flex='1' borderRadius={5}>
-                <Text fontSize={'lg'}>{data?.name_of_billboard}</Text>
+                <Flex justify='space-between'>
+                    <Text fontSize={'lg'}>{data?.name_of_billboard}</Text>
+                    {is_billboard_liked ? 
+                        <HStack align='center' bg='gray.200' p='2' borderRadius='full' cursor='pointer' onClick={Save_To_Favorite}>
+                            <Icon as={MdFavorite} boxSize={'4'}/>
+                            <Text>Saved</Text>
+                        </HStack>
+                    :
+                        <HStack align='center' bg='gray.200' p='2' borderRadius='full' cursor='pointer' onClick={Save_To_Favorite}>
+                            <Icon as={MdFavoriteBorder} boxSize={'4'}/>
+                            <Text>Save</Text>
+                        </HStack>
+                    }
+                </Flex>
                 <HStack my='2' fontSize={'xs'}>
                     <Text fontWeight={'bold'}>Sides: </Text>
                     <Text>{data?.number_of_sides}</Text>
