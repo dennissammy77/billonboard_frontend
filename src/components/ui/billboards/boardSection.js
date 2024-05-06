@@ -32,7 +32,7 @@ function BoardSection({query,owner_id,currentPage}) {
         </Flex>
         :
         <>
-          {data.map((board)=>{
+          {data?.map((board)=>{
               return(
                   <BoardCard key={board?._id} board={board}/>
               )

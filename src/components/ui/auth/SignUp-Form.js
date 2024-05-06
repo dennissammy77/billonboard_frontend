@@ -17,6 +17,7 @@ import { useTransition } from 'react';
 import SignUp from '@/api/auth/signup/route';
 import { UserContext } from '@/components/providers/user.context';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const SignUpForm=()=>{
   const [first_name, set_first_name]=useState('');
@@ -157,6 +158,8 @@ const SignUpForm=()=>{
         :
         <Button isDisabled={form_status_status === 'success'? true:false} variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>SignUp</Button>
       }
+      <Text fontSize={'sm'} my='4' cursor={'pointer'} >
+        By signing up you agree to our <Link href={'/terms'}><Text color='blue' textDecoration={'1px solid underline'}>terms and conditions</Text></Link></Text>
     </CardWrapper>
   )
 }
