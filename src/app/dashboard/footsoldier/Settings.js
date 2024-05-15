@@ -24,6 +24,9 @@ export const Settings=()=>{
     const [profile_edit,set_profile_edit]=useState(false);
     const [profile_photo,set_profile_photo]=useState('');
 
+    const VERIFICATION_LINK = process.env.NEXT_PUBLIC_PROD_BASEURL
+
+
     const HandleImageUpload=async()=>{
         /**handles uploads profile image functions to firebase storage**/
         const profile_photo_documentRef = ref(storage, `profile_photo/${profile_photo?.name}`+ uuidv4());
@@ -84,8 +87,8 @@ export const Settings=()=>{
                             <>
                                 <HStack fontSize='12px' justify='space-between' pb='2'>
                                     <Text fontWeight='semibold'>Account Verification</Text>
-                                    <Tooltip label='click to change your password'>
-                                        <Button bg='#3874ff' color='white' onClick={(()=>{router.push(`http://localhost:5001/api/auth/verify/${user?.email}`)})}>Verify Account</Button>
+                                    <Tooltip label='click to verify your account'>
+                                        <Button bg='#3874ff' color='white' onClick={(()=>{router.push(`${VERIFICATION_LINK}/api/auth/verify/${user?.email}`)})}>Verify Account</Button>
                                     </Tooltip>
                                 </HStack>
                                 <Divider/>
