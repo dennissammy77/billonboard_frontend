@@ -70,7 +70,7 @@ const SidebarContent = (props) => {
             )
           })}
         </Box>
-        {user?.account_type === 'admin' && user?.position === 'MANAGER'?
+        {user?.account_type === 'admin' && (user?.position === 'MANAGER' || user?.position === 'SUPER ADMIN') ?
           <Flex align="center" m='2' mb='4' px="4" pl="4" py="3" cursor="pointer" _dark={{ color: "gray.400" }} _hover={{ bg: "gray.300", _dark: { bg: "gray.900" }, color: "gray.900", borderRadius:5,boxShadow:'sm' }} role="group" fontWeight="regular" fontSize={'md'} transition=".3s ease" bg={active_page == 'Admin_Panel'? '#3874ff' : 'gray.100'} color={active_page == 'Admin_Panel'? '#fff' : '#000'} borderRadius={active_page == 'Admin_Panel'? 'md' : '5'} onClick={(()=>{set_page('Admin_Panel')})}>
             <Icon mx="2" boxSize="5" _groupHover={{ color: "gray.900", }} as={MdAdminPanelSettings} />
             Admin Panel

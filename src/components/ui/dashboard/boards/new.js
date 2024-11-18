@@ -123,6 +123,11 @@ const Body=()=>{
 
     const Handle_Submit=async()=>{
         set_is_saving(true);
+        if(!ad_agency_name){
+            set_input_error(true);
+            set_is_saving(false)
+            return toast({title:'Error!',description:`${user?.account_type === 'agency'? 'You need to complete your profile before creating a new billboard': 'please select an agency with a complete profile'}`,status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
+        }
         if(!name_of_billboard || !description || !location || !ad_agency_name){
             set_input_error(true);
             set_is_saving(false)
