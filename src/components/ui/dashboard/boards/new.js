@@ -133,7 +133,8 @@ const Body=()=>{
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all inputs are filled',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }
-        if (number_of_sides !== side_info_input_fields.length){
+        console.log(parseInt(number_of_sides),parseInt(side_info_input_fields.length))
+        if (parseInt(number_of_sides) !== parseInt(side_info_input_fields.length)){
             set_is_saving(false)
             return toast({title:'Error!',description:'Ensure all sides have been described',status:'warning',position:'top-left',variant:'left-accent',isClosable:true})
         }

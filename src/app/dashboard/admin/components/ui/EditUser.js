@@ -30,7 +30,7 @@ export const EditUser=({view_drawer_disclosure,data})=>{
     const [position, set_position]=useState(data?.position);
     const [account_type, set_account_type]=useState(data?.account_type);
 
-    const [password, set_password]=useState('admin.password.co.ke');
+    const [password, set_password]=useState('');
     
     const [input_error, set_input_error]=useState(false);
     const [isPending, startTransition] = useTransition();
@@ -55,13 +55,17 @@ export const EditUser=({view_drawer_disclosure,data})=>{
         account_suspension_status,
         account_susbscription_status,
         account_susbscription_model,
-    }
+        password
+    };
 
     const handle_Edit=async()=>{
         if (!first_name || !last_name){
             toast({ title: '!Important', description: 'required fields need to be filled', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, });
             set_input_error(true);
             return ;
+        }
+        if (password !== ''){
+            payload.password = password;
         }
         if(user?.position == 'MANAGER' || user?.position == 'SUPER ADMIN'){
             await UpdateUser(payload).then((res)=>{
@@ -76,13 +80,14 @@ export const EditUser=({view_drawer_disclosure,data})=>{
             toast({ title: '!Error!', description: 'You are not authorized to update users. Contact support incase of any issues.', status: 'warning', variant:'left-accent', position:'top-left', isClosable: true, });
             return ;
         }
-    }
+    };
 
     const handleSubmit=()=>{
         startTransition(()=>{
             handle_Edit()
         })
-    }
+    };
+    
     return(
         <Drawer
             isOpen={view_drawer_disclosure?.isOpen}
@@ -200,6 +205,10 @@ export const EditUser=({view_drawer_disclosure,data})=>{
                 {data?.account_type === 'admin'?
                     null :
                     <>
+                        <FormControl mt='2'>
+                            <FormLabel>Password of the user</FormLabel>
+                            <Input placeholder={data?.password} type='password' onChange={((e)=>{set_password(e.target.value)})}/>
+                        </FormControl>
                         <Box bg='#fff' borderRadius={8} mt='4' p='4'>
                             <Text fontWeight={'bold'} fontSize={'lg'} color='#3874ff'>Verification status</Text>
                             <Divider/>
