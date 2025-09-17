@@ -2,8 +2,8 @@
 
 import Map,{ NavigationControl,Marker } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
-mapboxgl.workerClass = MapboxWorker;
+// import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+// mapboxgl.workerClass = MapboxWorker;
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useContext, useEffect, useState } from 'react';
 import { Box, Flex, Icon, Image, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text, useDisclosure } from '@chakra-ui/react';
@@ -11,6 +11,10 @@ import { FaLocationPin } from "react-icons/fa6";
 import GetBillBoards, { GetBillBoardsAdmin } from '@/api/billboards/all/route';
 import { usePathname } from 'next/navigation';
 import { BoardCard } from '../billboards/boardCard';
+mapboxgl.workerUrl = new URL(
+  "mapbox-gl/dist/mapbox-gl-csp-worker",
+  import.meta.url
+);
 
 
 export default function MapSection({query,owner_id}){
