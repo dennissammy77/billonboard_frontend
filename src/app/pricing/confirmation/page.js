@@ -3,7 +3,7 @@ import { GetTransactionStatus } from '@/api/payment/route';
 import useFetchUserData from '@/components/hooks/useFetchUserData.hook';
 import { Box, Button, Center, Flex, Image, Text } from '@chakra-ui/react'
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { FaLongArrowAltRight } from 'react-icons/fa';
 import { HiOutlineRefresh } from 'react-icons/hi';
 
@@ -29,11 +29,14 @@ function Page() {
     })
   }
   return (
-    <Center>
-      {data === 'loading'? <Loading_page/> : null}
-      {data === 'Failed'? <Error_page/> : null}
-      {data === 'Completed'? <Success_page/> : null}
-    </Center>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Center>
+        {data === 'loading'? <Loading_page/> : null}
+        {data === 'Failed'? <Error_page/> : null}
+        {data === 'Completed'? <Success_page/> : null}
+      </Center>
+    </Suspense>
+    
   )
 }
 
@@ -69,6 +72,7 @@ const Success_page=()=>{
 const Error_page=()=>{
   const router = useRouter()
   return(
+
     <Box p='6' alignItems={'center'} textAlign={'center'}>
       <Image alt='image' src='../error.jpg' boxSize={400} />
       <Text fontSize='xl' fontWeight='bold'>Something went wrong!!</Text>

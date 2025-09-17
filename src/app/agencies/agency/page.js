@@ -1,6 +1,6 @@
 'use client'
 import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, Grid, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react"
+import { Suspense, useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
@@ -39,32 +39,34 @@ export default function Page() {
     const [query,set_query]=useState('');
     const [toggle_board_options,set_toggle_board_options]=useState(false);
     return(
-        <Box p='4'>
-            <Flex gap='2' my='4' bg='#fff' borderRadius={'md'} alignItems={'center'}>
-				<Image src={data?.profile_photo_url || img_placeholder} alt='image' boxSize={100} objectFit={'cover'} borderRadius={'md'} boxShadow={'sm'}/>
-				<Flex flexDirection={'column'} flex='1' fontSize={'sm'}>
-					<Heading as={'h2'}>{data?.company_name}</Heading>
-					<Text>{data?.company_email}</Text>
-					<Text>{data?.company_mobile}</Text>
-					<Text>{data?.company_address}</Text>
-				</Flex>
-			</Flex>
-            <Divider/>
-            <Box h='300px' w='calc(100vw-20vw)' my='2' borderRadius={'md'} bg='#fff' p='2'>
-                <MapSection query={''} owner_id={agency_id}/>
-            </Box>
-            <Box borderRadius={'md'} bg='#fff'>
-                <Flex my='4'>
-                <Text cursor={'pointer'} fontWeight={'bold'} borderTopLeftRadius='5' borderBottomLeftRadius='5' bg={toggle_board_options? '#3874ff':'gray.200'} color={toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Billboards</Text>
-                <Text cursor={'pointer'} fontWeight={'bold'} borderTopRightRadius='5' borderBottomRightRadius='5' bg={!toggle_board_options? '#3874ff':'gray.200'} color={!toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Advertisements</Text>
+        <Suspense fallback={<div>Loading agency...</div>}>
+            <Box p='4'>
+                <Flex gap='2' my='4' bg='#fff' borderRadius={'md'} alignItems={'center'}>
+                    <Image src={data?.profile_photo_url || img_placeholder} alt='image' boxSize={100} objectFit={'cover'} borderRadius={'md'} boxShadow={'sm'}/>
+                    <Flex flexDirection={'column'} flex='1' fontSize={'sm'}>
+                        <Heading as={'h2'}>{data?.company_name}</Heading>
+                        <Text>{data?.company_email}</Text>
+                        <Text>{data?.company_mobile}</Text>
+                        <Text>{data?.company_address}</Text>
+                    </Flex>
                 </Flex>
-                {toggle_board_options?
-                    <BoardSection query={query} set_query={set_query} owner_id={agency_id} toggle_board_options={toggle_board_options} set_toggle_board_options={set_toggle_board_options}/>
-                    :
-                    <AdvertisementSection owner_id={agency_id}/>
-                }
+                <Divider/>
+                <Box h='300px' w='calc(100vw-20vw)' my='2' borderRadius={'md'} bg='#fff' p='2'>
+                    <MapSection query={''} owner_id={agency_id}/>
+                </Box>
+                <Box borderRadius={'md'} bg='#fff'>
+                    <Flex my='4'>
+                    <Text cursor={'pointer'} fontWeight={'bold'} borderTopLeftRadius='5' borderBottomLeftRadius='5' bg={toggle_board_options? '#3874ff':'gray.200'} color={toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Billboards</Text>
+                    <Text cursor={'pointer'} fontWeight={'bold'} borderTopRightRadius='5' borderBottomRightRadius='5' bg={!toggle_board_options? '#3874ff':'gray.200'} color={!toggle_board_options? 'white':'gray.600'} p='2' onClick={(()=>{set_toggle_board_options(!toggle_board_options)})}>Advertisements</Text>
+                    </Flex>
+                    {toggle_board_options?
+                        <BoardSection query={query} set_query={set_query} owner_id={agency_id} toggle_board_options={toggle_board_options} set_toggle_board_options={set_toggle_board_options}/>
+                        :
+                        <AdvertisementSection owner_id={agency_id}/>
+                    }
+                </Box>
+                <Footer/>
             </Box>
-            <Footer/>
-        </Box>
+        </Suspense>
     )
 }

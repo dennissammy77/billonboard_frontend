@@ -3,7 +3,7 @@ import { SEND_OTP_CODE_TO_USER } from '@/api/auth/password/route';
 import { Button, Flex, HStack, Icon, PinInput, PinInputField, Text, useToast } from '@chakra-ui/react'
 import { jwtDecode } from 'jwt-decode';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import { MdDone } from 'react-icons/md';
 import Cookies from 'universal-cookie';
@@ -137,43 +137,45 @@ function Page() {
     }
 
     return (
-        <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4' gap='2'>
-            <Text fontSize={'xl'} my='4'>Verify your Code</Text>
-            <HStack>
-                <PinInput type='number' onChange={((e)=>{set_confirmation_code(e);Clear_Input_Error()})} otp={true}>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                    <PinInputField errorBorderColor={input_error? true : false}/>
-                </PinInput>
-            </HStack>
-            {input_error && 
-                <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
-                    <Icon as={CiWarning} boxSize='4'/>
-                    <Text>{input_error_message}</Text>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4' gap='2'>
+                <Text fontSize={'xl'} my='4'>Verify your Code</Text>
+                <HStack>
+                    <PinInput type='number' onChange={((e)=>{set_confirmation_code(e);Clear_Input_Error()})} otp={true}>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                        <PinInputField errorBorderColor={input_error? true : false}/>
+                    </PinInput>
                 </HStack>
-            }
-            {input_success_message && 
-                <HStack color='green.600' bg='green.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
-                    <Icon as={MdDone} boxSize='4'/>
-                    <Text>{input_success_message}</Text>
-                </HStack>
-            }
-            <Flex gap='2' flexDirection={'column'} w={{base:'full',md:'md'}} mt='4'>
-                {timer === '00:00'?
-                    <Button bg='#05232e' color='#fff' w='full' onClick={HandleResend}>Resend Code</Button>
-                    :
-                    <Button bg='#05232e' color='#fff' w='full' isDisabled>{timer} Resend Code</Button>
+                {input_error && 
+                    <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
+                        <Icon as={CiWarning} boxSize='4'/>
+                        <Text>{input_error_message}</Text>
+                    </HStack>
                 }
-                {isSubmitting?
-                    <Button isLoading loadingText='verifying code...' variant='ghost' borderRadius={'md'}/>
-                    :
-                    <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#3874FF' color='#fff' onClick={HandleSubmit}>Verify Code</Button>
+                {input_success_message && 
+                    <HStack color='green.600' bg='green.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
+                        <Icon as={MdDone} boxSize='4'/>
+                        <Text>{input_success_message}</Text>
+                    </HStack>
                 }
+                <Flex gap='2' flexDirection={'column'} w={{base:'full',md:'md'}} mt='4'>
+                    {timer === '00:00'?
+                        <Button bg='#05232e' color='#fff' w='full' onClick={HandleResend}>Resend Code</Button>
+                        :
+                        <Button bg='#05232e' color='#fff' w='full' isDisabled>{timer} Resend Code</Button>
+                    }
+                    {isSubmitting?
+                        <Button isLoading loadingText='verifying code...' variant='ghost' borderRadius={'md'}/>
+                        :
+                        <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#3874FF' color='#fff' onClick={HandleSubmit}>Verify Code</Button>
+                    }
+                </Flex>
             </Flex>
-        </Flex>
+        </Suspense>
     )
 }
 

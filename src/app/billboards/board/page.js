@@ -1,6 +1,6 @@
 'use client'
 import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, Grid, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react"
+import { Suspense, useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
@@ -151,37 +151,40 @@ const Card=(props)=>{
     const view_side_disclosure = useDisclosure();
     const view_image_modal = useDisclosure()
     return(
-        <Flex gap='2' p='2' fontSize={'xs'} bg='#fff' boxShadow={'sm'} position={'relative'}>
-            <Modal isOpen={view_image_modal?.isOpen} onClose={view_image_modal?.onClose} isCentered>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>-</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody>
-                        <Image src={image_url} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
-                    </ModalBody>
-                </ModalContent>
-            </Modal>
-            <Image src={image_url} alt="board image" boxSize={100} backgroundSize="cover" objectFit={'cover'} borderRadius={5} onClick={(()=>{view_image_modal?.onToggle()})} cursor='pointer'/>
-            <Box>
-                <HStack my='1'>
-                    <Text fontWeight={'bold'}>Side:</Text>
-                    <Text fontWeight={'bold'}>{side_ref_Id}</Text>
-                </HStack>
-                <HStack my='1'>
-                    <Text fontWeight={'bold'}>Brand:</Text>
-                    <Text fontWeight={'bold'}>{brand}</Text>
-                </HStack>
-                <Collapse startingHeight={20} in={show}>
-                    <Text fontWeight={'bold'}>Messages:</Text>
-                    {message}
-                </Collapse>
-                <Text fontSize='xs' onClick={handleToggle} mt='1rem' bg='#eee' p='1' w='110px' borderRadius={'5'} cursor={'pointer'}>
-                    Show {show ? 'Less' : 'More'} {show ? <Icon as={IoIosArrowUp} boxSize={3}/> : <Icon as={IoIosArrowDown} boxSize={3}/>}
-                </Text>
-            </Box>
-            <IconButton icon={<BsThreeDotsVertical/>} position='absolute' top='5' right='5' size={'sm'} onClick={view_side_disclosure?.onToggle}/>
-            <View_side_Board data={props?.data} view_side_disclosure={view_side_disclosure}/>
-        </Flex>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Flex gap='2' p='2' fontSize={'xs'} bg='#fff' boxShadow={'sm'} position={'relative'}>
+                <Modal isOpen={view_image_modal?.isOpen} onClose={view_image_modal?.onClose} isCentered>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>-</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <Image src={image_url} w='full' h='full' alt='board' borderRadius={'md'} objectFit={'cover'} fallbackSrc='https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5'/>
+                        </ModalBody>
+                    </ModalContent>
+                </Modal>
+                <Image src={image_url} alt="board image" boxSize={100} backgroundSize="cover" objectFit={'cover'} borderRadius={5} onClick={(()=>{view_image_modal?.onToggle()})} cursor='pointer'/>
+                <Box>
+                    <HStack my='1'>
+                        <Text fontWeight={'bold'}>Side:</Text>
+                        <Text fontWeight={'bold'}>{side_ref_Id}</Text>
+                    </HStack>
+                    <HStack my='1'>
+                        <Text fontWeight={'bold'}>Brand:</Text>
+                        <Text fontWeight={'bold'}>{brand}</Text>
+                    </HStack>
+                    <Collapse startingHeight={20} in={show}>
+                        <Text fontWeight={'bold'}>Messages:</Text>
+                        {message}
+                    </Collapse>
+                    <Text fontSize='xs' onClick={handleToggle} mt='1rem' bg='#eee' p='1' w='110px' borderRadius={'5'} cursor={'pointer'}>
+                        Show {show ? 'Less' : 'More'} {show ? <Icon as={IoIosArrowUp} boxSize={3}/> : <Icon as={IoIosArrowDown} boxSize={3}/>}
+                    </Text>
+                </Box>
+                <IconButton icon={<BsThreeDotsVertical/>} position='absolute' top='5' right='5' size={'sm'} onClick={view_side_disclosure?.onToggle}/>
+                <View_side_Board data={props?.data} view_side_disclosure={view_side_disclosure}/>
+            </Flex>
+        </Suspense>
+        
     )
 }

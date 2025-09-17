@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, Flex, FormControl, FormLabel, HStack, Icon, Input, InputGroup, InputRightElement, Text, useToast } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { CiWarning } from 'react-icons/ci'
 import { MdVisibility, MdVisibilityOff } from 'react-icons/md'
 
@@ -61,47 +61,49 @@ function Page() {
     }
     
     return (
-        <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
-            <Text fontSize={'xl'} my='4'>Reset your password.</Text>
-            {/**Email input to send code to */}
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl my='4' isRequired>
-                    <FormLabel>New Password</FormLabel>
-                    <InputGroup size='md'>
-                        <Input pr='4.5rem' {...register('new_password')} type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required />
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
-                            {show ? <MdVisibilityOff/> : <MdVisibility/>}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    {errors.new_password && ( <Text fontSize={'sm'} color='red'>{errors.new_password.message}</Text>)}
-                </FormControl>
-                <FormControl my='4' isRequired>
-                    <FormLabel>Confirm Password</FormLabel>
-                    <InputGroup size='md'>
-                        <Input pr='4.5rem' {...register('confirm_password')} type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required />
-                        <InputRightElement width='4.5rem'>
-                            <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
-                            {show ? <MdVisibilityOff/> : <MdVisibility/>}
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
-                    {errors.confirm_password && ( <Text fontSize={'sm'} color='red'>{errors.confirm_password.message}</Text>)}
-                </FormControl>
-                {errors.root && 
-                    <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
-                        <Icon as={CiWarning} boxSize='4'/>
-                        <Text>{errors.root.message}</Text>
-                    </HStack>
-                }
-                {isSubmitting?
-                    <Button isLoading loadingText='resetting your password...' variant='ghost' borderRadius={'md'} w='full'/>
-                    :
-                    <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Reset Password</Button>
-                }
-            </form>
-        </Flex>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
+                <Text fontSize={'xl'} my='4'>Reset your password.</Text>
+                {/**Email input to send code to */}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <FormControl my='4' isRequired>
+                        <FormLabel>New Password</FormLabel>
+                        <InputGroup size='md'>
+                            <Input pr='4.5rem' {...register('new_password')} type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
+                                {show ? <MdVisibilityOff/> : <MdVisibility/>}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        {errors.new_password && ( <Text fontSize={'sm'} color='red'>{errors.new_password.message}</Text>)}
+                    </FormControl>
+                    <FormControl my='4' isRequired>
+                        <FormLabel>Confirm Password</FormLabel>
+                        <InputGroup size='md'>
+                            <Input pr='4.5rem' {...register('confirm_password')} type={show ? 'text' : 'password'} placeholder='Enter password' variant='filled' required />
+                            <InputRightElement width='4.5rem'>
+                                <Button h='1.75rem' size='sm' onClick={handleClick} bg='#fff'>
+                                {show ? <MdVisibilityOff/> : <MdVisibility/>}
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
+                        {errors.confirm_password && ( <Text fontSize={'sm'} color='red'>{errors.confirm_password.message}</Text>)}
+                    </FormControl>
+                    {errors.root && 
+                        <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
+                            <Icon as={CiWarning} boxSize='4'/>
+                            <Text>{errors.root.message}</Text>
+                        </HStack>
+                    }
+                    {isSubmitting?
+                        <Button isLoading loadingText='resetting your password...' variant='ghost' borderRadius={'md'} w='full'/>
+                        :
+                        <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Reset Password</Button>
+                    }
+                </form>
+            </Flex>
+        </Suspense>
     )
 }
 

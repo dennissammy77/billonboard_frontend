@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useContext, useState } from 'react'
+import React, { Suspense, useContext, useState } from 'react'
 import { Box, Button, Flex, FormControl, FormLabel, HStack, Heading, Icon, Input, InputGroup, InputRightElement, PinInput, PinInputField, Text, useToast } from '@chakra-ui/react'
 import { CiWarning } from 'react-icons/ci';
 
@@ -55,28 +55,31 @@ function Page() {
     }
 
     return (
-        <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
-            <Text fontSize={'xl'} my='4'>Forgot your password?</Text>
-            {/**Email input to send code to */}
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <FormControl my='4' isRequired>
-                    <FormLabel>Email</FormLabel>
-                    <Input disabled={isSubmitting} {...register('email')} type='email' placeholder='johndoe@gmail.com' variant='filled'/>
-                    {errors.email && ( <Text fontSize={'sm'} color='red'>{errors.email.message}</Text>)}
-                </FormControl>
-                {errors.root && 
-                    <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
-                        <Icon as={CiWarning} boxSize='4'/>
-                        <Text>{errors.root.message}</Text>
-                    </HStack>
-                }
-                {isSubmitting?
-                    <Button isLoading loadingText='sending code to this email...' variant='ghost' borderRadius={'md'} w='full'/>
-                    :
-                    <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Receive Code</Button>
-                }
-            </form>
-        </Flex>
+        <Suspense fallback={<div>Loading...</div>}>
+            <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
+                <Text fontSize={'xl'} my='4'>Forgot your password?</Text>
+                {/**Email input to send code to */}
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <FormControl my='4' isRequired>
+                        <FormLabel>Email</FormLabel>
+                        <Input disabled={isSubmitting} {...register('email')} type='email' placeholder='johndoe@gmail.com' variant='filled'/>
+                        {errors.email && ( <Text fontSize={'sm'} color='red'>{errors.email.message}</Text>)}
+                    </FormControl>
+                    {errors.root && 
+                        <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
+                            <Icon as={CiWarning} boxSize='4'/>
+                            <Text>{errors.root.message}</Text>
+                        </HStack>
+                    }
+                    {isSubmitting?
+                        <Button isLoading loadingText='sending code to this email...' variant='ghost' borderRadius={'md'} w='full'/>
+                        :
+                        <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Receive Code</Button>
+                    }
+                </form>
+            </Flex>
+        </Suspense>
+        
     )
 }
 
