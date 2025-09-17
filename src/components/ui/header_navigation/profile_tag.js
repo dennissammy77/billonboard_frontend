@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { VscAccount } from "react-icons/vsc";
-import useLogOut from "@/components/hooks/useLogOut.hook";
+import logOut from "@/components/hooks/useLogOut.hook";
 import { useUserDashboardroute } from "@/components/hooks/useUserDashboardroute.hook";
 
 export const ProfileTag = ()=>{
@@ -13,7 +13,7 @@ export const ProfileTag = ()=>{
     const {user,set_user_handler} = useContext(UserContext);
     const dashboard_route = useUserDashboardroute(user?.account_type,user?._id);
     const handleClick = ()=>{
-        useLogOut();
+        logOut();
         router.push('/');
         set_user_handler(`${user?._id} logged out`);
     }

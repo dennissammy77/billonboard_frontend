@@ -28,20 +28,20 @@ export default function MapSection({query,owner_id}){
 	const pathArr = pathname?.split('/');
 
 	useEffect(()=>{
+		const fetch=async()=>{
+			await GetBillBoards().then((response)=>{
+				const arr = response?.data
+				if(owner_id){
+					set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	
+				}else{
+					set_data(arr.filter((item)=>item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+				}
+			}).catch((err)=>{
+				console.log(err)
+			})
+		}
 		fetch();
-	},[query])
-	async function fetch(){
-		await GetBillBoards().then((response)=>{
-			const arr = response?.data
-			if(owner_id){
-				set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	
-			}else{
-				set_data(arr.filter((item)=>item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
-			}
-		}).catch((err)=>{
-			console.log(err)
-		})
-	}
+	},[query,owner_id])
 	return(
 		<Map
 			mapStyle="mapbox://styles/mapbox/streets-v9"

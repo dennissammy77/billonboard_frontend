@@ -59,7 +59,7 @@ export default function DeleteSideBoardUi({delete_sideboard_disclosure}) {
                 Delete Side board
               </AlertDialogHeader>
               <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
+                Are you sure? You can not undo this action afterwards.
                 By deleting this product, You will not have access to use the product.
               </AlertDialogBody>
               <AlertDialogFooter>

@@ -179,9 +179,9 @@ export const Addside=()=>{
              */}
             <Text>Select Orientation and side of the board</Text>
             <Select placeholder='eg. 1 : Faces the main road' onChange={(e)=>HandleSideDetail(e)} my='2'>
-                {board_data?.sides.map((item)=>{
+                {board_data?.sides.map((item,index)=>{
                     return(
-                        <option value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
+                        <option key={index} value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
                     )
                 })}
             </Select>
@@ -314,7 +314,7 @@ const AlertUserDialog=(props)=>{
                     </AlertDialogHeader>
 
                     <AlertDialogBody>
-                    Are you sure? You can't undo this action afterwards.
+                    Are you sure? You can not undo this action afterwards.
                     </AlertDialogBody>
 
                     <AlertDialogFooter>

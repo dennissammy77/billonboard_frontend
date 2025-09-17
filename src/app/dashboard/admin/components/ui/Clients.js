@@ -13,12 +13,12 @@ export const ClientsUser=({query})=>{
     const {page} = useContext(dashboardContext);
 
     useEffect(()=>{
+        const get_Clients_Data = async()=>{
+            let data = await GetClients();
+            set_data(data?.data?.filter((item) => item?.first_name?.toLowerCase().includes(query?.toLowerCase())));
+        }
         get_Clients_Data();
     },[query])
-    async function get_Clients_Data(){
-		let data = await GetClients();
-		set_data(data?.data?.filter((item) => item?.first_name?.toLowerCase().includes(query?.toLowerCase())));
-	}
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
             {data?.length == 0? 

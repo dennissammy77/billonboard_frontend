@@ -4,7 +4,7 @@ import BoardsByOwner from '@/api/billboards/owner/route';
 import { dashboardContext } from '@/components/providers/dashboard.context';
 import { UserContext } from '@/components/providers/user.context';
 import { Drawer, DrawerBody, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerContent, DrawerCloseButton, Button, Image, Text, Flex, Box, Icon, HStack, useDisclosure, FormControl, FormLabel, Input, FormErrorMessage, InputRightElement, Select, useFormControlStyles, Avatar, Wrap, WrapItem, Badge,} from '@chakra-ui/react';
-import { useContext, useEffect, useState, useTransition } from 'react';
+import { useContext, useEffect, useMemo, useState, useTransition } from 'react';
 import { MdMarkEmailRead, MdOutlineMailOutline } from 'react-icons/md';
 import { EditUser } from './EditUser';
 import DeleteUserAccount from './deleteAccountAdmin.ui';
@@ -13,26 +13,27 @@ export const ViewUser=({view_drawer_disclosure,data})=>{
     const {set_page,set_board_data} = useContext(dashboardContext);
     const {user} = useContext(UserContext);
     const [billboards_data, set_billboards_data]=useState([]);
+    const payload = useMemo(() => {
+        return {
+            id: data?._id,
+            acc_type: data?.account_type
+        };
+    }, [data?._id,data?.account_type]);
     useEffect(()=>{
+        const fetch=async()=>{
+            await BoardsByOwner(payload).then((response)=>{
+                const arr = response?.data;
+                set_billboards_data(arr)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
         if(data?.account_type == 'client'){
             return ;
         }else{
             fetch();
         }
-    },[data?._id]);
-    const payload = {
-        id: data?._id,
-        acc_type: data?.account_type
-    }
-    const fetch=async()=>{
-        await BoardsByOwner(payload).then((response)=>{
-            const arr = response?.data;
-            set_billboards_data(arr)
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
-
+    },[data?.account_type,payload]);
     const delete_user_account_disclosure = useDisclosure();
     const view_edit_user_drawer_disclosure = useDisclosure();
     return(

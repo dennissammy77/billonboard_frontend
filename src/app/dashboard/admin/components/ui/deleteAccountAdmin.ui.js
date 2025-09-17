@@ -49,7 +49,7 @@ export default function DeleteUserAccount({delete_account_disclosure, data}) {
               </AlertDialogHeader>
   
               <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
+                Are you sure? You can not undo this action afterwards.
                 By deleting this account, the user will not have access to use the service and/or the platform.
                 <br/>
                 Type <Badge >DELETE</Badge> to remove the user.

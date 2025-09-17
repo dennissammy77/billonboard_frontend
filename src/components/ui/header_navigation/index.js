@@ -19,7 +19,7 @@ function Header(){
         router.prefetch('/auth/signup')
         router.prefetch('/billboards/all')
         router.prefetch('/agencies/all')
-    },[])
+    },[router])
 	return(
 		<Flex boxShadow='sm' position='sticky' top='0' left='0' zIndex='2000' bg='#fff' px={{base:'4',md:'8'}} py='4' align={'center'} justify={'space-between'} gap='2' fontWeight={'bold'}>
             <Flex align={'center'} gap='4' onClick={(()=>{router.push('/')})}>
@@ -55,8 +55,8 @@ function Header(){
                         </Link>
                         {links?.map((i, index)=>{
                             return(
-                                <Link href={`${i.link}`}>
-                                    <Text _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} key={index}>{i.name}</Text>
+                                <Link key={index} href={`${i.link}`}>
+                                    <Text _hover={{bg:'#343838', color: '#fff', p:'1', borderRadius:'sm',transition:'ease-out .5s', boxShadow:'sm'}} cursor={'pointer'} >{i.name}</Text>
                                 </Link>
                             )
                         })}

@@ -11,16 +11,16 @@ import BoardsByOwner from "@/api/billboards/owner/route";
 export const AgenciesUser=({query})=>{
     const [data, set_data] = useState([]);
     useEffect(()=>{
-      fetch()
+        const fetch=async()=>{
+            await GetAgencies().then((response)=>{
+            const arr = response?.data
+            set_data(arr.filter((item) => item.company_name?.toLowerCase().includes(query.toLowerCase())))
+            }).catch((err)=>{
+            console.log(err)
+            })
+        }
+        fetch();
     },[query])
-    async function fetch(){
-      await GetAgencies().then((response)=>{
-        const arr = response?.data
-        set_data(arr.filter((item) => item.company_name?.toLowerCase().includes(query.toLowerCase())))
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
 
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
@@ -60,20 +60,20 @@ const User_Card=(props)=>{
 
     const [boards_data, set_boards_data]=useState([]);
     useEffect(()=>{
+        const payload = {
+            id: user?._id,
+            acc_type: user?.account_type
+        }
+        const fetch=async()=>{
+            await BoardsByOwner(payload).then((response)=>{
+                const arr = response?.data;
+                set_boards_data(arr)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
         fetch()
-    },[user?._id]);
-    const payload = {
-        id: user?._id,
-        acc_type: user?.account_type
-    }
-    const fetch=async()=>{
-        await BoardsByOwner(payload).then((response)=>{
-            const arr = response?.data;
-            set_boards_data(arr)
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
+    },[user?._id,user?.account_type]);
 
     return(
         <Tr onClick={(()=>{view_drawer_disclosure.onToggle()})}>

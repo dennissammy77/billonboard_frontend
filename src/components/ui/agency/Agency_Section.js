@@ -10,16 +10,16 @@ import { TbExternalLink } from 'react-icons/tb';
 function AgencySection({query}) {
   const [data, set_data] = useState([]);
   useEffect(()=>{
+    const fetch=async()=>{
+      await GetAgencies().then((response)=>{
+        const arr = response?.data
+        set_data(arr.filter((item) => item.company_name?.toLowerCase().includes(query.toLowerCase())))
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
     fetch()
   },[query])
-  async function fetch(){
-    await GetAgencies().then((response)=>{
-      const arr = response?.data
-      set_data(arr.filter((item) => item.company_name?.toLowerCase().includes(query.toLowerCase())))
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
   return (
     <Grid templateColumns={{base:'repeat(1, 1fr)',md:'repeat(2, 1fr)',lg:'repeat(5, 1fr)'}} gap={6} my='4'>
         {data.map((agency)=>{

@@ -23,7 +23,7 @@ export function DashboardProvider({children}) {
             router.back('/');
             return ;
         }
-    },[page]);
+    },[page,signed_in,router,toast]);
 
     return (
       <dashboardContext.Provider value={{active_page,page,set_page,set_board_data,board_data,side_board_data,set_side_board_data}}>

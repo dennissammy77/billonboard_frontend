@@ -22,7 +22,9 @@ export const Search_Input = ({query,set_query,placeholder})=>{
         <>
             <InputGroup flex='1' borderRadius={'full'} ml={{md:'0',base:'2'}} position={'relative'}>
                 <Input type='text' onChange={handleInput} value={query} bg='#e1e6e6' variant='outline' borderRadius={'full'} placeholder={placeholder} outline={'none'}/>
-                <InputRightElement cursor={'pointer'} onClick={clearInput} bg='#3874ff' color='#fff' borderLeft='1px solid #eee' borderRadius={'full'} mt='1' mx='2' boxSize={8} children={icon} />
+                <InputRightElement cursor={'pointer'} onClick={clearInput} bg='#3874ff' color='#fff' borderLeft='1px solid #eee' borderRadius={'full'} mt='1' mx='2' boxSize={8}>
+                    {icon}
+                </InputRightElement>
             </InputGroup>	
         </>
     )

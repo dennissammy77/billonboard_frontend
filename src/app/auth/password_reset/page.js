@@ -11,7 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SEND_OTP_CODE_TO_USER } from '@/api/auth/password/route';
 
 
-function Page() {
+function PageContent() {
     const EmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
     const searchParams = useSearchParams()
@@ -55,32 +55,35 @@ function Page() {
     }
 
     return (
-        <Suspense fallback={<div>Loading...</div>}>
-            <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
-                <Text fontSize={'xl'} my='4'>Forgot your password?</Text>
-                {/**Email input to send code to */}
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <FormControl my='4' isRequired>
-                        <FormLabel>Email</FormLabel>
-                        <Input disabled={isSubmitting} {...register('email')} type='email' placeholder='johndoe@gmail.com' variant='filled'/>
-                        {errors.email && ( <Text fontSize={'sm'} color='red'>{errors.email.message}</Text>)}
-                    </FormControl>
-                    {errors.root && 
-                        <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
-                            <Icon as={CiWarning} boxSize='4'/>
-                            <Text>{errors.root.message}</Text>
-                        </HStack>
-                    }
-                    {isSubmitting?
-                        <Button isLoading loadingText='sending code to this email...' variant='ghost' borderRadius={'md'} w='full'/>
-                        :
-                        <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Receive Code</Button>
-                    }
-                </form>
-            </Flex>
-        </Suspense>
-        
+        <Flex direction='column' alignItems={'center'} justify={'center'} w='full' boxShadow={'sm'} p='4'>
+            <Text fontSize={'xl'} my='4'>Forgot your password?</Text>
+            {/**Email input to send code to */}
+            <form onSubmit={handleSubmit(onSubmit)}>
+                <FormControl my='4' isRequired>
+                    <FormLabel>Email</FormLabel>
+                    <Input disabled={isSubmitting} {...register('email')} type='email' placeholder='johndoe@gmail.com' variant='filled'/>
+                    {errors.email && ( <Text fontSize={'sm'} color='red'>{errors.email.message}</Text>)}
+                </FormControl>
+                {errors.root && 
+                    <HStack color='#fff' bg='red.200' borderRadius={'md'} p='2' mt='2' align={'center'}>
+                        <Icon as={CiWarning} boxSize='4'/>
+                        <Text>{errors.root.message}</Text>
+                    </HStack>
+                }
+                {isSubmitting?
+                    <Button isLoading loadingText='sending code to this email...' variant='ghost' borderRadius={'md'} w='full'/>
+                    :
+                    <Button type='submit' variant={'filled'} borderRadius={'md'} bg='#05232e' mt='2' w='full' color='#fff' onClick={handleSubmit}>Receive Code</Button>
+                }
+            </form>
+        </Flex>        
     )
 }
 
-export default Page;
+export default function Page(){
+    return(
+        <Suspense fallback={<div>Loading ...</div>}>
+            <PageContent/>
+        </Suspense>
+    )
+}

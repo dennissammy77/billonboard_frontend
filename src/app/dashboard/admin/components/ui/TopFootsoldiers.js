@@ -3,7 +3,7 @@
 import { Avatar, Center, Icon, IconButton, Table, TableContainer, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from "@chakra-ui/react";
 import { FaFolderOpen } from "react-icons/fa";
 import { HiOutlineExternalLink } from "react-icons/hi";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import GetFootsolidier from "@/api/auth/client/footsoldier/all/route";
 import { ViewUser } from "./ViewUser";
 import { dashboardContext } from "@/components/providers/dashboard.context";
@@ -14,16 +14,16 @@ export const TopFootSoldiers=({query})=>{
     const {page} = useContext(dashboardContext);
 
     useEffect(()=>{
-        get_FootSoldiers_Data();
-    },[query])
-    async function get_FootSoldiers_Data(){
-		let data = await GetFootsolidier();
-        if (page === 'FootSoldiers'){
-            set_data(data?.data?.filter((item) => item?.first_name?.toLowerCase().includes(query?.toLowerCase())))
-        }else{
-            set_data(data?.data)
+        const get_FootSoldiers_Data=async()=>{
+            let data = await GetFootsolidier();
+            if (page === 'FootSoldiers'){
+                set_data(data?.data?.filter((item) => item?.first_name?.toLowerCase().includes(query?.toLowerCase())))
+            }else{
+                set_data(data?.data)
+            }
         }
-	}
+        get_FootSoldiers_Data();
+    },[query,page])
     return(
         <TableContainer bg='#fff' borderRadius={10} w='full' mt='2' boxShadow={'md'}>
             {page === 'FootSoldiers' ? null : <Text p='4' fontSize={'md'} fontWeight={'bold'}> Best FootSoldiers</Text> }
@@ -61,21 +61,23 @@ const User_Card=(props)=>{
     const view_drawer_disclosure = useDisclosure();
 
     const [boards_data, set_boards_data]=useState([]);
-    useEffect(()=>{
-        fetch()
-    },[user?._id]);
-    const payload = {
+    const payload = useMemo(() => {
+      return {
         id: user?._id,
         acc_type: user?.account_type
-    }
-    const fetch=async()=>{
-        await BoardsByOwner(payload).then((response)=>{
-            const arr = response?.data;
-            set_boards_data(arr)
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
+      };
+    }, [user?._id,user?.account_type]);
+    useEffect(()=>{
+        const fetch=async()=>{
+            await BoardsByOwner(payload).then((response)=>{
+                const arr = response?.data;
+                set_boards_data(arr)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
+        fetch()
+    },[user?._id,payload]);
     return(
         <Tr onClick={(()=>{view_drawer_disclosure.onToggle()})}>
             <Td>

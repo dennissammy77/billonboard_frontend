@@ -10,7 +10,7 @@ export default function Home() {
   const {user} = useContext(UserContext);
   useEffect(()=>{
     router.prefetch('/auth/signup')
-  },[])
+  },[router])
   return (
     <Box p=''>
       <Box position={'relative'}>
@@ -22,20 +22,20 @@ export default function Home() {
           <Heading as='h2' fontSize={'60px'} p={{base:'8',lg:'0'}}>
             <span style={{color:'#3874FF'}}>Discover </span><br/>Billboards <br />Online
           </Heading>
-          <Text w={{base:'',lg:'400px'}} p={{base:'8',lg:'0'}} mt='2'>Discover and explore billboards from around the world. Get access to a collection of billboards and filter their search based on location, type of billboard, and category. Whether you're a marketer looking for inspiration, an artist seeking to showcase your work, or simply curious about the latest trends in outdoor advertising, BillonBoard offers a unique way to discover and appreciate the art of the billboard.</Text>
+          <Text w={{base:'',lg:'400px'}} p={{base:'8',lg:'0'}} mt='2'>Discover and explore billboards from around the world. Get access to a collection of billboards and filter their search based on location, type of billboard, and category. Whether you are a marketer looking for inspiration, an artist seeking to showcase your work, or simply curious about the latest trends in outdoor advertising, BillonBoard offers a unique way to discover and appreciate the art of the billboard.</Text>
           {!user ? <Button borderRadius={'full'} fontSize={'md'} bg='#3874FF' color='#fff' my='4' onClick={(()=>{router.push('/auth/signup')})}>Register</Button> : null}
         </Box>
       </Box>
       <Grid templateRows={{base:'repeat(4, 1fr)',lg:'repeat(2, 1fr)'}} templateColumns={{base:'repeat(2, 1fr)',lg:'repeat(4, 1fr)'}} gap={2} mt='6' px='6' >
         {partners?.map((item)=>{
           return(
-            <Image boxSize={'full'} src={item?.imagepath} key={item?.id} objectFit={'contain'} border={'2px dotted #eee'} p='2'/>
+            <Image boxSize={'full'} alt='partners image' src={item?.imagepath} key={item?.id} objectFit={'contain'} border={'2px dotted #eee'} p='2'/>
             )
           })}
       </Grid>
       <Box bg='#eee' mt='6'>
         <Flex align='center' px='8' justify={'space-around'} gap={{base:'4',lg:'8'}} flexDirection={{base:'column',lg:'row'}}>
-          <Image boxSize={400} src={'../landingpage/interactivemap.png'} objectFit={'contain'}/>
+          <Image boxSize={400} alt='partners image' src={'../landingpage/interactivemap.png'} objectFit={'contain'}/>
           <Box>
             <Text color='#2874FF' fontSize={'lg'}>Interactive Map view</Text>
             <Text fontWeight={'bold'} fontSize={'xl'}>Get Access to Realtime Billboard locations</Text>
@@ -48,7 +48,7 @@ export default function Home() {
             <Text fontWeight={'bold'} fontSize={'xl'}>See various billboards</Text>
             <Text>Diverse collection of billboards from various locations,industries, and categories Browse, search, and discover billboards based on interests</Text>
           </Box>
-          <Image boxSize={{base:400,lg:600}} src={'../landingpage/collection.jpg'} objectFit={'contain'}/>
+          <Image boxSize={{base:400,lg:600}} alt='partners image' src={'../landingpage/collection.jpg'} objectFit={'contain'}/>
         </Flex>
       </Box>
       <Footer/>

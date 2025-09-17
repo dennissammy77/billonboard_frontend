@@ -15,82 +15,82 @@ function BoardSection({query,filter_option,currentPage}) {
   const pathArr = pathname?.split('/');
 
   useEffect(()=>{
-    fetch()
-  },[query,filter_option,currentPage])
-  const payload = {
-      id: user?._id,
-      acc_type: user?.account_type,
-      page: currentPage
-  }
-  async function fetch(){
-    if (pathArr[2] === 'admin'){
-      await GetBillBoardsAdmin(payload).then((response)=>{
-        const arr = response?.data.reverse()
-        let filtered_data;
-        switch(filter_option){
-          case 'all':
-            filtered_data = arr
-            break;
-          case 'available':
-            filtered_data = arr.filter((item) => item.availability_status)
-            break;
-          case 'draft':
-            filtered_data = arr.filter((item) => !item.publish_status)
-            break;
-          case 'published':
-            filtered_data = arr.filter((item) => item.publish_status)
-            break;
-          case 'suspended':
-            filtered_data = arr.filter((item) => item.suspension_status)
-            break;
-          case 'verified':
-            filtered_data = arr.filter((item) => item.verification_status)
-            break;
-          case 'unverified':
-            filtered_data = arr.filter((item) => !item.verification_status)
-            break;
-          default:
-            filtered_data = arr
-        }
-        set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }else{
-      await BoardsByOwner(payload).then((response)=>{
-        const arr = response?.data.reverse();
-        let filtered_data;
-        switch(filter_option){
-          case 'all':
-            filtered_data = arr
-            break;
-          case 'available':
-            filtered_data = arr.filter((item) => item.availability_status)
-            break;
-          case 'draft':
-            filtered_data = arr.filter((item) => !item.publish_status)
-            break;
-          case 'published':
-            filtered_data = arr.filter((item) => item.publish_status)
-            break;
-          case 'suspended':
-            filtered_data = arr.filter((item) => item.suspension_status)
-            break;
-          case 'verified':
-            filtered_data = arr.filter((item) => item.verification_status)
-            break;
-          case 'unverified':
-            filtered_data = arr.filter((item) => !item.verification_status)
-            break;
-          default:
-            filtered_data = arr
-        }
-        set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())).reverse())
-      }).catch((err)=>{
-        console.log(err)
-      })
+    const payload = {
+        id: user?._id,
+        acc_type: user?.account_type,
+        page: currentPage
     }
-  }
+    const fetch=async()=>{
+      if (pathArr[2] === 'admin'){
+        await GetBillBoardsAdmin(payload).then((response)=>{
+          const arr = response?.data.reverse()
+          let filtered_data;
+          switch(filter_option){
+            case 'all':
+              filtered_data = arr
+              break;
+            case 'available':
+              filtered_data = arr.filter((item) => item.availability_status)
+              break;
+            case 'draft':
+              filtered_data = arr.filter((item) => !item.publish_status)
+              break;
+            case 'published':
+              filtered_data = arr.filter((item) => item.publish_status)
+              break;
+            case 'suspended':
+              filtered_data = arr.filter((item) => item.suspension_status)
+              break;
+            case 'verified':
+              filtered_data = arr.filter((item) => item.verification_status)
+              break;
+            case 'unverified':
+              filtered_data = arr.filter((item) => !item.verification_status)
+              break;
+            default:
+              filtered_data = arr
+          }
+          set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }else{
+        await BoardsByOwner(payload).then((response)=>{
+          const arr = response?.data.reverse();
+          let filtered_data;
+          switch(filter_option){
+            case 'all':
+              filtered_data = arr
+              break;
+            case 'available':
+              filtered_data = arr.filter((item) => item.availability_status)
+              break;
+            case 'draft':
+              filtered_data = arr.filter((item) => !item.publish_status)
+              break;
+            case 'published':
+              filtered_data = arr.filter((item) => item.publish_status)
+              break;
+            case 'suspended':
+              filtered_data = arr.filter((item) => item.suspension_status)
+              break;
+            case 'verified':
+              filtered_data = arr.filter((item) => item.verification_status)
+              break;
+            case 'unverified':
+              filtered_data = arr.filter((item) => !item.verification_status)
+              break;
+            default:
+              filtered_data = arr
+          }
+          set_data(filtered_data.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())).reverse())
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+    }
+    fetch()
+  },[query,filter_option,currentPage,pathArr,user?._id,user?.account_type])
   return (
     <Box p='1'>
       {data?.length === 0?

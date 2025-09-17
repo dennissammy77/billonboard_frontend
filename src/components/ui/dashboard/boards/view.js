@@ -33,18 +33,18 @@ export const ViewBoard=()=>{
 
     useEffect(()=>{
         fetch()
-    },[board_data?._id,filter_option,query]);
-    const fetch=async()=>{
-        const payload={
-            boardid: board_data?._id,
-            acc_type: user?.account_type
+        const fetch=async()=>{
+            const payload={
+                boardid: board_data?._id,
+                acc_type: user?.account_type
+            }
+            await BoardDataByUser(payload).then((response)=>{
+                set_data(response.data);
+            }).catch((err)=>{
+                console.log(err)
+            })
         }
-        await BoardDataByUser(payload).then((response)=>{
-            set_data(response.data);
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
+    },[board_data?._id,filter_option,query,user?.account_type]);
     
     return(
         <Box>

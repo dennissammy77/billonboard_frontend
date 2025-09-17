@@ -16,37 +16,37 @@ function AdvertisementSection({owner_id}) {
   const [fromDate,set_fromDate]=useState('');
   const [toDate,set_toDate]=useState(moment(new Date()).format("YYYY-MM-DD"));
   
-  useEffect(()=>{
-    fetch()
-  },[query,toDate,fromDate]);
-
-  async function fetch(){
-    await GetAllSideBoard().then((response)=>{
-        const arr = response?.data;
-        let intial_arr = arr;
-
-        if(fromDate){
-            intial_arr = arr?.filter((item)=>{
-                return new Date(item?.from_date).getTime() >= new Date(fromDate).getTime() && new Date(item?.to_date).getTime() <= new Date(toDate).getTime()
+    useEffect(()=>{
+      const fetch=async()=>{
+        await GetAllSideBoard().then((response)=>{
+            const arr = response?.data;
+            let intial_arr = arr;
+    
+            if(fromDate){
+                intial_arr = arr?.filter((item)=>{
+                    return new Date(item?.from_date).getTime() >= new Date(fromDate).getTime() && new Date(item?.to_date).getTime() <= new Date(toDate).getTime()
+                });
+            }
+    
+            if(owner_id){
+                set_data(intial_arr.filter((item)=>item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id)))	
+            }else{
+                set_data(intial_arr);
+            };
+          
+            const agencies = arr.map((item)=>item?.billboard_id?.ad_agency_name);
+            const uniqueArr = [...new Set(agencies)]
+            const tempArr = uniqueArr.filter(function( element ) {
+                return element !== undefined;
             });
-        }
+            set_agenciesArr(tempArr);
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+        fetch()
+    },[query,toDate,fromDate,owner_id]);
 
-        if(owner_id){
-            set_data(intial_arr.filter((item)=>item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id)))	
-        }else{
-            set_data(intial_arr);
-        };
-      
-        const agencies = arr.map((item)=>item?.billboard_id?.ad_agency_name);
-        const uniqueArr = [...new Set(agencies)]
-        const tempArr = uniqueArr.filter(function( element ) {
-            return element !== undefined;
-        });
-        set_agenciesArr(tempArr);
-    }).catch((err)=>{
-      console.log(err)
-    })
-  }
 
   const ClearFilter=()=>{
     set_filter_option('');
@@ -94,9 +94,9 @@ const Filter=({set_filter_option,agenciesdata,set_toDate,set_fromDate})=>{
             </MenuButton>
             <MenuList>
                 <Select placeholder='Agencies' variant='Unstyled' cursor='pointer' onChange={((e)=>{set_filter_option(e.target.value)})}>
-                    {agenciesdata?.map((item)=>{
+                    {agenciesdata?.map((item,index)=>{
                         return(
-                            <option value={item}>{item}</option>
+                            <option key={index} value={item}>{item}</option>
                         )
                     })}
                 </Select>

@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 // import DeleteAccount from '../../../pages/api/auth/delete_account';
 import { UserContext } from '@/components/providers/user.context';
-import useLogOut from '@/components/hooks/useLogOut.hook';
+import logOut from '@/components/hooks/useLogOut.hook';
 import DeleteUser from '@/api/auth/client/delete/route';
 
 export default function DeleteUserAccount({delete_account_disclosure}) {
@@ -21,7 +21,7 @@ export default function DeleteUserAccount({delete_account_disclosure}) {
       await DeleteUser(payload).then((response)=>{
         toast({ title: 'Account deleted successfully', description: '', status: 'success', variant:'left-accent', position:'top-left', isClosable: true, });
         setTimeout(()=>{
-          useLogOut();
+          logOut();
           router.push('/');
         },2000)
         set_user_handler(`${user?.first_name} deleted`)
@@ -46,7 +46,7 @@ export default function DeleteUserAccount({delete_account_disclosure}) {
               </AlertDialogHeader>
   
               <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
+                Are you sure? You can not undo this action afterwards.
                 By deleting this account, You will not have access to use the service and/or the platform.
               </AlertDialogBody>
               <AlertDialogFooter>

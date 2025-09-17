@@ -61,7 +61,7 @@ export default function DeleteBillboardUi({delete_billboard_disclosure}) {
                 Delete BillBoard
               </AlertDialogHeader>
               <AlertDialogBody>
-                Are you sure? You can't undo this action afterwards.
+                Are you sure? You can not undo this action afterwards.
                 By deleting this product, You will not have access to use the product.
               </AlertDialogBody>
               <AlertDialogFooter>

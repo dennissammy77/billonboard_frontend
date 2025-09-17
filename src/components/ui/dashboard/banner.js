@@ -10,7 +10,7 @@ export const Banner=({msg,msg2,img})=>{
                 <Text fontSize={'2xl'} my='2'> Welcome back 👋 {user?.first_name} </Text>
                 <Text my='3'>{msg}<br/>{msg2}</Text>
             </Box>
-            <Image src={img} boxSize='200' display={{sm:'block',md:'none',lg:'block'}}/>
+            <Image src={img} alt={"img banner"} boxSize='200' display={{sm:'block',md:'none',lg:'block'}}/>
         </Flex>
     )
 }

@@ -59,7 +59,7 @@ const LoginForm=()=>{
 
   useEffect(()=>{
     router.prefetch('/dashboard')
-  },[]);
+  },[router]);
 
 	const handle_Sign_In=async()=>{
 		await SignIn(payload).then((response)=>{

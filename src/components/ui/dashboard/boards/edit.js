@@ -68,28 +68,28 @@ const Body=()=>{
     const [agencies,set_agencies]=useState([]);
     const viewAgencies = useDisclosure();
     useEffect(()=>{
+        const HandleSelectAgency=(agency)=>{
+            set_ad_agency_name(agency?.company_name)
+            set_ad_agency_email(agency?.company_email)
+            set_ad_agency_address(agency?.company_address)
+            set_ad_agency_mobile(agency?.company_mobile)
+            set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+        }
+        const fetch=async()=>{
+            await GetAgencies().then((response)=>{
+              const arr = response?.data;
+              set_agencies(arr)
+            }).catch((err)=>{
+              console.log(err)
+            })
+          }
         if(user?.account_type === 'agency'){
             HandleSelectAgency(user)   
         }else{
             fetch()
         }
-    },[]);
+    },[user,user?.account_type]);
 
-    async function fetch(){
-        await GetAgencies().then((response)=>{
-          const arr = response?.data;
-          set_agencies(arr)
-        }).catch((err)=>{
-          console.log(err)
-        })
-      }
-    const HandleSelectAgency=(agency)=>{
-        set_ad_agency_name(agency?.company_name)
-        set_ad_agency_email(agency?.company_email)
-        set_ad_agency_address(agency?.company_address)
-        set_ad_agency_mobile(agency?.company_mobile)
-        set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
-    }
 
     // const payload = {
     //     id: board_data?._id,
@@ -375,9 +375,9 @@ const Body=()=>{
                     <Button onClick={viewAgencies.onToggle} leftIcon={<IoSearch/>} rightIcon={viewAgencies.isOpen ? <FaChevronUp /> : <FaChevronDown/>} w='full' my='3'>Find existing agency</Button>
                     <Collapse in={viewAgencies.isOpen} animateOpacity>
                         <Box p='10px'>
-                            {agencies?.map((agency)=>{
+                            {agencies?.map((agency,index)=>{
                                 return(
-                                    <Text onClick={(()=>{HandleSelectAgency(agency);viewAgencies.onToggle()})} p='2' bg='#eee' my='1' cursor={'pointer'}>{agency?.company_name}</Text>
+                                    <Text key={index} onClick={(()=>{HandleSelectAgency(agency);viewAgencies.onToggle()})} p='2' bg='#eee' my='1' cursor={'pointer'}>{agency?.company_name}</Text>
                                 )
                             })}
                         </Box>

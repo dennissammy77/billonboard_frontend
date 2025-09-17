@@ -24,36 +24,36 @@ export default function MapSection(){
 	const pathArr = pathname?.split('/');
 
 	useEffect(()=>{
-		fetch()
-	},[])
-	const payload = {
-		id: user?._id,
-		acc_type: user?.account_type
-	}
-	async function fetch(){
-		if (pathArr[2] === 'admin'){
-			await GetBillBoardsAdmin().then((response)=>{
-				const arr = response?.data
-				set_data(arr)
-			}).catch((err)=>{
-				console.log(err)
-			})
-		}else if(pathArr[2] === 'agency' || pathArr[2] === 'footsoldier'){
-			await BoardsByOwner(payload).then((response)=>{
-				const arr = response?.data
-				set_data(arr)
-			}).catch((err)=>{
-				console.log(err)
-			})
-		}else{
-			await GetBillBoards().then((response)=>{
-				const arr = response?.data
-				set_data(arr)
-			}).catch((err)=>{
-				console.log(err)
-			})
+		const fetch=async()=>{
+			const payload = {
+				id: user?._id,
+				acc_type: user?.account_type
+			}
+			if (pathArr[2] === 'admin'){
+				await GetBillBoardsAdmin().then((response)=>{
+					const arr = response?.data
+					set_data(arr)
+				}).catch((err)=>{
+					console.log(err)
+				})
+			}else if(pathArr[2] === 'agency' || pathArr[2] === 'footsoldier'){
+				await BoardsByOwner(payload).then((response)=>{
+					const arr = response?.data
+					set_data(arr)
+				}).catch((err)=>{
+					console.log(err)
+				})
+			}else{
+				await GetBillBoards().then((response)=>{
+					const arr = response?.data
+					set_data(arr)
+				}).catch((err)=>{
+					console.log(err)
+				})
+			}
 		}
-	}
+		fetch()
+	},[user?._id,user?.account_type,pathArr])
 	return(
 		<>
 			{(!user?.verification_status || !user?.verified_email_status || user?.account_suspension_status) && user?.account_type !== 'admin'? 

@@ -41,9 +41,9 @@ function Home() {
           </Flex>
           :
           <>
-            {data?.map((board)=>{
+            {data?.map((board,index)=>{
                 return(
-                    <Box m='2'>
+                    <Box m='2' key={board?._id}>
                       <BoardCard key={board?._id} board={board}/>
                       <Text p='1' bg='#FFF' boxShadow={'md'} borderRadius={'sm'} cursor='pointer' onClick={(()=>{handle_remove(board?._id)})}>remove</Text>
                     </Box>

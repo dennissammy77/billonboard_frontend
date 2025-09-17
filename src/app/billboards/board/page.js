@@ -1,6 +1,6 @@
 'use client'
 import { Badge, Box, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Button, Collapse, Divider, Flex, Grid, HStack, Heading, Icon, IconButton, Image, Menu, MenuButton, MenuItem, MenuList, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, Wrap, WrapItem, useDisclosure, useToast } from "@chakra-ui/react";
-import { Suspense, useContext, useEffect, useState } from "react"
+import { Suspense, useCallback, useContext, useEffect, useState } from "react"
 import { FaChalkboardUser } from "react-icons/fa6";
 import { BsFillPinMapFill, BsThreeDotsVertical } from "react-icons/bs";
 import { FaPhone, FaStar } from "react-icons/fa";
@@ -15,7 +15,7 @@ import ViewBoardMapSection from "@/components/ui/MapFeature/view_Board";
 import { UserContext } from "@/components/providers/user.context";
 import { UseGetLocalStorage, UseStoreLocalStorage } from "@/components/hooks/useLocalStorage.hook";
 
-function Page() {
+function PageContent() {
     const [data, set_data]=useState('');
     const {user}=useContext(UserContext)
     const params = useSearchParams()
@@ -26,22 +26,22 @@ function Page() {
     const [saving_liked_billboard,set_saving_liked_billboard]=useState(false);
 
     useEffect(()=>{
+        const fetch=async()=>{
+            const payload={
+                boardid: board_id,
+                acc_type: user?.account_type
+            }
+            await BoardDataByUser(payload).then((response)=>{
+                set_data(response.data)
+            }).catch((err)=>{
+                console.log(err)
+            })
+        }
         fetch()
         Handle_Check_Liked_Billboard()
-    },[board_id,saving_liked_billboard]);
+    },[board_id,saving_liked_billboard,user?.account_type,Handle_Check_Liked_Billboard]);
 
 
-    const fetch=async()=>{
-        const payload={
-            boardid: board_id,
-            acc_type: user?.account_type
-        }
-        await BoardDataByUser(payload).then((response)=>{
-            set_data(response.data)
-        }).catch((err)=>{
-            console.log(err)
-        })
-    }
 
 
     const Save_To_Favorite=()=>{
@@ -59,10 +59,10 @@ function Page() {
         })
     }
 
-    const Handle_Check_Liked_Billboard=async()=>{
+    const Handle_Check_Liked_Billboard=useCallback(async()=>{
         const billboard_data= await UseGetLocalStorage('billboards');
         set_is_billboard_liked(billboard_data?.some(item => item?._id === board_id))
-    }
+    },[board_id])
     return(
         <Box p='4' bg='#eee'>
             <Box bg='#fff' p='4' flex='1' borderRadius={5}>
@@ -141,7 +141,13 @@ function Page() {
     )
 }
 
-export default Page
+export default function Page(){
+    return(
+        <Suspense fallback={<div>Loading ...</div>}>
+            <PageContent/>
+        </Suspense>
+    )
+}
 
 const Card=(props)=>{
     const {side_ref_Id, brand, message, from_date, to_date, image_url} = props.data;

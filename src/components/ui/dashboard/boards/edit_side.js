@@ -198,7 +198,7 @@ export const Editside=()=>{
             <Select placeholder='eg. 1 : Faces the main road' onChange={(e)=>HandleSideDetail(e)} my='2'>
                 {board_data?.sides.map((item)=>{
                     return(
-                        <option value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
+                        <option key={item?.ref_id} value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
                     )
                 })}
             </Select>
