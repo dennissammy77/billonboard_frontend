@@ -70,7 +70,7 @@ function AdvertisementSection({owner_id}) {
                 </Flex>
                 :
                 <>
-                    {data?.filter((item)=>item?.brand.toLowerCase().includes(query.toLowerCase())||item?.message?.toLowerCase().includes(query.toLowerCase())).filter((item)=>item?.category.toLowerCase().includes(filter_option.toLowerCase())||item?.season.toLowerCase().includes(filter_option.toLowerCase())||item?.billboard_id?.ad_agency_name.toLowerCase().includes(filter_option.toLowerCase())).map((board)=>{
+                    {data?.filter((item) => item.billboard_id !== null).filter((item)=>item?.brand.toLowerCase().includes(query.toLowerCase())||item?.message?.toLowerCase().includes(query.toLowerCase())).filter((item)=>item?.category.toLowerCase().includes(filter_option.toLowerCase())||item?.season.toLowerCase().includes(filter_option.toLowerCase())||item?.billboard_id?.ad_agency_name.toLowerCase().includes(filter_option.toLowerCase())).map((board)=>{
                         return(
                             <AdvertisementCard key={board?._id} data={board}/>
                         )
