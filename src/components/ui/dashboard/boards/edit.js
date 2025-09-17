@@ -67,14 +67,14 @@ const Body=()=>{
 
     const [agencies,set_agencies]=useState([]);
     const viewAgencies = useDisclosure();
+    const HandleSelectAgency=(agency)=>{
+        set_ad_agency_name(agency?.company_name)
+        set_ad_agency_email(agency?.company_email)
+        set_ad_agency_address(agency?.company_address)
+        set_ad_agency_mobile(agency?.company_mobile)
+        set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+    }
     useEffect(()=>{
-        const HandleSelectAgency=(agency)=>{
-            set_ad_agency_name(agency?.company_name)
-            set_ad_agency_email(agency?.company_email)
-            set_ad_agency_address(agency?.company_address)
-            set_ad_agency_mobile(agency?.company_mobile)
-            set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
-        }
         const fetch=async()=>{
             await GetAgencies().then((response)=>{
               const arr = response?.data;

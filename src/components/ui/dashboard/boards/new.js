@@ -83,19 +83,19 @@ const Body=()=>{
               console.log(err)
             })
           }
-        const HandleSelectAgency=(agency)=>{
-            set_ad_agency_name(agency?.company_name)
-            set_ad_agency_email(agency?.company_email)
-            set_ad_agency_address(agency?.company_address)
-            set_ad_agency_mobile(agency?.company_mobile)
-            set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
-        }
-        if(user?.account_type === 'agency'){
-            HandleSelectAgency(user)   
-        }else{
-            fetch()
-        }
+          if(user?.account_type === 'agency'){
+              HandleSelectAgency(user)   
+            }else{
+                fetch()
+            }
     },[user,])
+    const HandleSelectAgency=(agency)=>{
+        set_ad_agency_name(agency?.company_name)
+        set_ad_agency_email(agency?.company_email)
+        set_ad_agency_address(agency?.company_address)
+        set_ad_agency_mobile(agency?.company_mobile)
+        set_currently_owned_by({ Name: agency?.company_name, owner_id: agency?._id, account_type: 'agency' });
+    }
     const payload = {
         name_of_billboard,
         description,
