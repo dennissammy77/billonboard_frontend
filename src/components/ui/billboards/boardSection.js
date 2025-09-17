@@ -1,11 +1,14 @@
 'use client'
 import { Flex, Grid, GridItem, Text,  Box} from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { BoardCard } from './boardCard';
 import GetBillBoards from '@/api/billboards/all/route';
+import { UserContext } from '@/components/providers/user.context';
 
 function BoardSection({query,owner_id,currentPage}) {
   const [data, set_data] = useState([]);
+  const {user} = useContext(UserContext);
+  
   useEffect(()=>{
     fetch()
   },[query,currentPage])
@@ -17,8 +20,10 @@ function BoardSection({query,owner_id,currentPage}) {
       const arr = response?.data;
       if(owner_id){
 				set_data(arr.filter((item)=>item.currently_owned_by?.owner_id.includes(owner_id)))	
-			}else{
+			}else if(user?.account_type == 'admin'){
 				set_data(arr.filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
+      }else{
+				set_data(arr.filter((item) => item.publish_status ).filter((item) => item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
 			};
     }).catch((err)=>{
       console.log(err)
