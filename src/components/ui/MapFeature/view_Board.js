@@ -2,14 +2,17 @@
 
 import Map,{ NavigationControl,Marker } from 'react-map-gl';
 import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
-import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
-mapboxgl.workerClass = MapboxWorker;
+// import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
+// mapboxgl.workerClass = MapboxWorker;
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useState } from 'react';
 import { Box, Icon, Image, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react';
 import { FaLocationPin } from "react-icons/fa6";
 import { BoardCard } from '../billboards/boardCard';
-
+mapboxgl.workerUrl = new URL(
+	"mapbox-gl/dist/mapbox-gl-csp-worker",
+	import.meta.url
+);
 
 export default function ViewBoardMapSection({board_data}){
 	return(

@@ -24,7 +24,11 @@ function PageContent() {
 
     const [is_billboard_liked, set_is_billboard_liked]=useState(false);
     const [saving_liked_billboard,set_saving_liked_billboard]=useState(false);
-
+    
+    const Handle_Check_Liked_Billboard=useCallback(async()=>{
+        const billboard_data= await UseGetLocalStorage('billboards');
+        set_is_billboard_liked(billboard_data?.some(item => item?._id === board_id))
+    },[board_id]);
     useEffect(()=>{
         const fetch=async()=>{
             const payload={
@@ -59,10 +63,7 @@ function PageContent() {
         })
     }
 
-    const Handle_Check_Liked_Billboard=useCallback(async()=>{
-        const billboard_data= await UseGetLocalStorage('billboards');
-        set_is_billboard_liked(billboard_data?.some(item => item?._id === board_id))
-    },[board_id])
+
     return(
         <Box p='4' bg='#eee'>
             <Box bg='#fff' p='4' flex='1' borderRadius={5}>

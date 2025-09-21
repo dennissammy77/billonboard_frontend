@@ -25,10 +25,6 @@ function PageContent() {
     const [data,set_user_data]=useState('');
     const img_placeholder = 'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5';
 
-    useEffect(()=>{
-        fetchData();
-    },[agency_id,fetchData]);
-
     const fetchData=useCallback(async()=>{
         await GetAgencyData(agency_id).then((res)=>{
             set_user_data(res?.data);
@@ -38,6 +34,10 @@ function PageContent() {
     },[agency_id])
     const [query,set_query]=useState('');
     const [toggle_board_options,set_toggle_board_options]=useState(false);
+    useEffect(()=>{
+        fetchData();
+    },[agency_id,fetchData]);
+
     return(
     <Box p='4'>
         <Flex gap='2' my='4' bg='#fff' borderRadius={'md'} alignItems={'center'}>
