@@ -32,7 +32,6 @@ export const ViewBoard=()=>{
     }
 
     useEffect(()=>{
-        fetch()
         const fetch=async()=>{
             const payload={
                 boardid: board_data?._id,
@@ -44,6 +43,7 @@ export const ViewBoard=()=>{
                 console.log(err)
             })
         }
+        fetch()
     },[board_data?._id,filter_option,query,user?.account_type]);
     
     return(
