@@ -61,12 +61,12 @@ const SidebarContent = (props) => {
         <Box>
           {props?.navigation?.map((item)=>{
             return(
-              <>
-                <NavItem key={item?.id} bg={active_page == item?.title? '#3874ff' : 'gray.100'} color={active_page == item?.title? '#fff' : '#000'} borderRadius={active_page == item?.title? 'md' : '5'} icon={item?.icon} onClick={(()=>{set_page(item?.title);props.onClose()})}>
+              <Flex key={item?.id} direction={'column'}>
+                <NavItem bg={active_page == item?.title? '#3874ff' : 'gray.100'} color={active_page == item?.title? '#fff' : '#000'} borderRadius={active_page == item?.title? 'md' : '5'} icon={item?.icon} onClick={(()=>{set_page(item?.title);props.onClose()})}>
                   {item.title}
                 </NavItem>
                 <Divider/>
-              </>
+              </Flex>
             )
           })}
         </Box>

@@ -2,7 +2,7 @@
 
 import { Grid } from "@chakra-ui/react";
 // utils
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 // components
 import { StatCard} from './stat_card'
 // api
@@ -15,8 +15,10 @@ import { RiAccountPinCircleFill } from "react-icons/ri"
 import { MdOutlineSwitchAccount } from "react-icons/md";
 import { FaPersonWalking } from "react-icons/fa6";
 import { SiBillboard } from "react-icons/si";
+import { UserContext } from "@/components/providers/user.context";
 
 export const Stat_Section=()=>{
+    const {user, set_user_handler} = useContext(UserContext);
     const [agencies,set_agencies]=useState([]);
     const [clients,set_clients]=useState([]);
     const [footsoldiers,set_footsoldiers]=useState([]);
@@ -47,24 +49,28 @@ export const Stat_Section=()=>{
 	}
     return(
         <Grid templateRows={{base:'repeat(4, 1fr)',md:'repeat(1, 1fr)'}} templateColumns={{base:'repeat(1, 1fr)',md:'repeat(2, 1fr)',lg:'repeat(4, 1fr)'}} gap={2} mt='6'>
-            <StatCard 
-                icon={RiAccountPinCircleFill} 
-                Title='Clients' 
-                Stat={clients?.length ? clients.length : '-'}
-                bg='green.100'
-                colorTt='green.800'
-                colorSt='green.500'
-                page_link='Clients'
-            />
-            <StatCard 
-                icon={MdOutlineSwitchAccount} 
-                Title='Agencies' 
-                Stat={agencies?.length ? agencies.length : '-'}
-                bg='orange.100'
-                colorTt='orange.800'
-                colorSt='orange.500'
-                page_link='Agencies'
-            />
+            {user?.account_type === 'admin' && (
+                <>
+                    <StatCard 
+                        icon={RiAccountPinCircleFill} 
+                        Title='Clients' 
+                        Stat={clients?.length ? clients.length : '-'}
+                        bg='green.100'
+                        colorTt='green.800'
+                        colorSt='green.500'
+                        page_link='Clients'
+                    />
+                    <StatCard 
+                        icon={MdOutlineSwitchAccount} 
+                        Title='Agencies' 
+                        Stat={agencies?.length ? agencies.length : '-'}
+                        bg='orange.100'
+                        colorTt='orange.800'
+                        colorSt='orange.500'
+                        page_link='Agencies'
+                    />
+                </>
+            )}
             <StatCard 
                 icon={FaPersonWalking} 
                 Title='FootSoldiers' 
