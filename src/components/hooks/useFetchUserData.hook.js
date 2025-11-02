@@ -1,50 +1,43 @@
-// import useFetchToken from "./useFetchToken.hook";
-// import FetchUser from "@/api/auth/client/user/route";
 
-// const useFetchUserData = async() =>{
-//     const retrived_token = useFetchToken();
-//     let data = null;
-//     if (retrived_token === null || !retrived_token){
-//         return null;
-//     }
-//     const email = retrived_token?.email;
-//     const result = await FetchUser(email);
-//     return result.data;
-// }
-// export default useFetchUserData;
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import useFetchToken from "./useFetchToken.hook";
 import FetchUser from "@/api/auth/client/user/route";
+import Cookies from 'universal-cookie';
+import { jwtDecode } from "jwt-decode";
 
 const useFetchUserData = (user_handler) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const retrievedToken = useFetchToken();
+  let retrievedToken = null;
+  const cookies = new Cookies();
+  const token = cookies.get('user_token1');
+  if (token){
+    const decoded_token = jwtDecode(token);
+    retrievedToken = decoded_token;
+  }
 
+  const fetchData = useCallback(async () => {
+    if (!retrievedToken) {
+      setUserData(null);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const email = retrievedToken.email;
+      const result = await FetchUser(email);
+      setUserData(result.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  },[token]);
   useEffect(() => {
-    const fetchData = async () => {
-      if (!retrievedToken) {
-        setUserData(null);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const email = retrievedToken.email;
-        const result = await FetchUser(email);
-        setUserData(result.data);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchData();
-  }, [retrievedToken,user_handler]);
+  }, [fetchData]);
 
   return userData;
 };
