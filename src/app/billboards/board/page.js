@@ -132,7 +132,7 @@ function PageContent() {
                 <Text fontSize={'xs'} color='#3874ff'>all advertisements made on this board</Text>
             </Box>
             <Flex flexDirection={'column'} gap='2' mt='2'>
-                {data?.advertisement_data?.map((data, data_id)=>{
+                {data?.advertisement_data?.filter((item) => item?.billboard_id?.publish_status && item?.billboard_id?.verification_status && !item?.billboard_id?.suspension_status)?.map((data, data_id)=>{
                     return(
                         <Card data={data} key={data_id}/>
                     )

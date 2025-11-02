@@ -20,7 +20,7 @@ function BoardSection({query,owner_id,currentPage}) {
       }else if(user?.account_type == 'admin'){
         set_data(arr?.filter((item) => item?.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
       }else{
-        set_data(arr?.filter((item) => item?.publish_status && item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())));
+        set_data(arr?.filter((item) => item?.publish_status && item?.verification_status && !item?.suspension_status && item.name_of_billboard?.toLowerCase().includes(query.toLowerCase())));
       };
     }).catch((err)=>{
       console.log(err)

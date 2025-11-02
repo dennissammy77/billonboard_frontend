@@ -58,7 +58,13 @@ function Boards() {
           </Box>  
           :
           <Box>
-            <BoardSection query={query} set_query={set_query} toggle_board_options={toggle_board_options} set_toggle_board_options={set_toggle_board_options} currentPage={currentPage}/>
+            <BoardSection 
+              query={query} 
+              set_query={set_query} 
+              toggle_board_options={toggle_board_options} 
+              set_toggle_board_options={set_toggle_board_options} 
+              currentPage={currentPage}
+            />
             <Pagination
               currentPage={currentPage}
               totalPages={totalPages}

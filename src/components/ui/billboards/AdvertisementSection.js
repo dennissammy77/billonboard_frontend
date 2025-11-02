@@ -1,20 +1,22 @@
 'use client'
 import { Button, Center, Divider, Flex, Grid, GridItem, HStack, IconButton, Input, Menu, MenuButton, MenuList, Select, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import GetAllSideBoard from '@/api/billboards/board/all/route';
 import { CiFilter } from 'react-icons/ci';
 import { AdvertisementCard } from './AdvertisementCard';
 import moment from 'moment';
 import { IoCloseSharp } from 'react-icons/io5';
+import { UserContext } from '@/components/providers/user.context';
 
 function AdvertisementSection({owner_id}) {
-  const [data, set_data] = useState([]);
-  const [agenciesArr,set_agenciesArr]=useState([]);
-  const [query,set_query]=useState('');
-  const [filter_option,set_filter_option]=useState('');
+    const {user} = useContext(UserContext);
+    const [data, set_data] = useState([]);
+    const [agenciesArr,set_agenciesArr]=useState([]);
+    const [query,set_query]=useState('');
+    const [filter_option,set_filter_option]=useState('');
 
-  const [fromDate,set_fromDate]=useState('');
-  const [toDate,set_toDate]=useState(moment(new Date()).format("YYYY-MM-DD"));
+    const [fromDate,set_fromDate]=useState('');
+    const [toDate,set_toDate]=useState(moment(new Date()).format("YYYY-MM-DD"));
   
     useEffect(()=>{
       const fetch=async()=>{
@@ -30,8 +32,10 @@ function AdvertisementSection({owner_id}) {
     
             if(owner_id){
                 set_data(intial_arr.filter((item)=>item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id)))	
+            }else if(user?.account_type == 'admin'){
+                set_data(intial_arr)
             }else{
-                set_data(intial_arr);
+                set_data(intial_arr?.filter((item) => item?.billboard_id?.publish_status && item?.billboard_id?.verification_status && !item?.billboard_id?.suspension_status));
             };
           
             const agencies = arr.map((item)=>item?.billboard_id?.ad_agency_name);

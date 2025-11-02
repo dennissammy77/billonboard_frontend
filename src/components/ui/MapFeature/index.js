@@ -5,7 +5,7 @@ import mapboxgl from 'mapbox-gl/dist/mapbox-gl-csp';
 import MapboxWorker from 'worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker';
 mapboxgl.workerClass = MapboxWorker;
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { Flex, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Text } from '@chakra-ui/react';
 import { FaLocationPin } from "react-icons/fa6";
 import GetBillBoards, { GetBillBoardsAdmin } from '@/api/billboards/all/route';
@@ -21,39 +21,39 @@ export default function MapSection(){
 	const {user} = useContext(UserContext);
 
 	const pathname = usePathname();
-	const pathArr = pathname?.split('/');
+	const pathArr = pathname?.split('/')?.[2];
 
-	useEffect(()=>{
-		const fetch=async()=>{
-			const payload = {
-				id: user?._id,
-				acc_type: user?.account_type
-			}
-			if (pathArr[2] === 'admin'){
-				await GetBillBoardsAdmin().then((response)=>{
-					const arr = response?.data
-					set_data(arr)
-				}).catch((err)=>{
-					console.log(err)
-				})
-			}else if(pathArr[2] === 'agency' || pathArr[2] === 'footsoldier'){
-				await BoardsByOwner(payload).then((response)=>{
-					const arr = response?.data
-					set_data(arr)
-				}).catch((err)=>{
-					console.log(err)
-				})
-			}else{
-				await GetBillBoards().then((response)=>{
-					const arr = response?.data
-					set_data(arr)
-				}).catch((err)=>{
-					console.log(err)
-				})
-			}
+	const fetch=useCallback(async()=>{
+		const payload = {
+			id: user?._id,
+			acc_type: user?.account_type
 		}
-		fetch()
+		if (pathArr === 'admin'){
+			await GetBillBoardsAdmin().then((response)=>{
+				const arr = response?.data
+				set_data(arr)
+			}).catch((err)=>{
+				console.log(err)
+			})
+		}else if(pathArr === 'agency' || pathArr === 'footsoldier'){
+			await BoardsByOwner(payload).then((response)=>{
+				const arr = response?.data
+				set_data(arr)
+			}).catch((err)=>{
+				console.log(err)
+			})
+		}else{
+			await GetBillBoards().then((response)=>{
+				const arr = response?.data
+				set_data(arr)
+			}).catch((err)=>{
+				console.log(err)
+			})
+		}
 	},[user?._id,user?.account_type,pathArr])
+	useEffect(()=>{
+		fetch()
+	},[fetch])
 	return(
 		<>
 			{(!user?.verification_status || !user?.verified_email_status || user?.account_suspension_status) && user?.account_type !== 'admin'? 

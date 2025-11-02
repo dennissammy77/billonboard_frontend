@@ -12,7 +12,7 @@ export default async function BoardsByOwner(payload) {
 	}else if(env == "production"){
 		base_url = prodbaseurl;
 	}
-	const result = await axios.get(`${base_url}/api/billboards/owner?query=${payload?.id}&&acc_type=${payload?.acc_type}`);
+	const result = await axios.get(`${base_url}/api/billboards/owner?query=${payload?.id}&page=${payload?.page}&acc_type=${payload?.acc_type}`);
 
 	return result
 }
