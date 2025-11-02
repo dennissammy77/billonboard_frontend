@@ -302,7 +302,7 @@ const Body=()=>{
                         })}
                     </form>
                     <Button onClick={HandleAddNewSideInputField} my='2'>Add field</Button>
-                    <Select placeholder='Select type of billboard' onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
+                    <Select placeholder='Select type of billboard' value={billboard_type} onChange={((e)=>{set_billboard_type(e.target.value)})} my='4'>
                         <option value='digital'>Digital</option>
                         <option value='2D'>2D</option>
                     </Select>
