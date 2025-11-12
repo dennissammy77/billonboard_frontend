@@ -59,7 +59,8 @@ function Boards() {
           :
           <Box>
             <BoardSection 
-              query={query} 
+              query={query}
+              filter_option={filter_option} 
               set_query={set_query} 
               toggle_board_options={toggle_board_options} 
               set_toggle_board_options={set_toggle_board_options} 
