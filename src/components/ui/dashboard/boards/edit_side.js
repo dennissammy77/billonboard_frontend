@@ -1,6 +1,6 @@
 import { dashboardContext } from '@/components/providers/dashboard.context'
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {storage} from '../../../lib/firebase.js';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -18,15 +18,15 @@ export const Editside=()=>{
     const [catch_phrase, set_catch_phrase]=useState(side_board_data?.catch_phrase);
     const [call_to_action, set_call_to_action]=useState(side_board_data?.call_to_action);
     const [side_ref_Id,set_side_ref_Id]=useState(side_board_data?.side_ref_Id)
-    const [season,set_season]=useState(side_board_data?.seaason);
+    const [season,set_season]=useState(side_board_data?.season);
     const [category,set_category]=useState(side_board_data?.category)
     const [orientation,set_orientation]=useState(side_board_data?.orientation)
     const [email_contact,set_email_contact]=useState(side_board_data?.email_contact)
     const [mobile_contact,set_mobile_contact]=useState(side_board_data?.mobile_contact)
     const [address,set_address]=useState(side_board_data?.address)
     const [website,set_website]=useState(side_board_data?.website)
-    const [from_date,set_from_date]=useState(side_board_data?.from_date)
-    const [to_date,set_to_date]=useState(side_board_data?.to_date)
+    const [from_date,set_from_date]=useState('')
+    const [to_date,set_to_date]=useState('')
     const [image_file,set_image_file]=useState('');
     const [image_url,set_image_url]=useState(side_board_data?.image_url);
 
@@ -34,6 +34,44 @@ export const Editside=()=>{
     const [is_saving,set_is_saving]=useState(false);
 
     const [is_data_saved,set_is_data_saved]=useState(false);
+
+    // Format date to YYYY-MM-DD for date input
+    const formatDateForInput = (date) => {
+        if (!date) return '';
+        // If it's already a string in YYYY-MM-DD format, return it
+        if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) {
+            return date;
+        }
+        // If it's a Date object or ISO string, convert it
+        const dateObj = new Date(date);
+        if (isNaN(dateObj.getTime())) return '';
+        // Get YYYY-MM-DD format
+        const year = dateObj.getFullYear();
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+    // Populate form fields when side_board_data is available
+    useEffect(() => {
+        if (side_board_data) {
+            if (side_board_data.brand) set_brand(side_board_data.brand);
+            if (side_board_data.message) set_message(side_board_data.message);
+            if (side_board_data.catch_phrase) set_catch_phrase(side_board_data.catch_phrase);
+            if (side_board_data.call_to_action) set_call_to_action(side_board_data.call_to_action);
+            if (side_board_data.side_ref_Id) set_side_ref_Id(side_board_data.side_ref_Id);
+            if (side_board_data.season) set_season(side_board_data.season);
+            if (side_board_data.category) set_category(side_board_data.category);
+            if (side_board_data.orientation) set_orientation(side_board_data.orientation);
+            if (side_board_data.email_contact) set_email_contact(side_board_data.email_contact);
+            if (side_board_data.mobile_contact) set_mobile_contact(side_board_data.mobile_contact);
+            if (side_board_data.address) set_address(side_board_data.address);
+            if (side_board_data.website) set_website(side_board_data.website);
+            if (side_board_data.from_date) set_from_date(formatDateForInput(side_board_data.from_date));
+            if (side_board_data.to_date) set_to_date(formatDateForInput(side_board_data.to_date));
+            if (side_board_data.image_url) set_image_url(side_board_data.image_url);
+        }
+    }, [side_board_data]);
 
 
     const HandleImageUpload=async(board_id)=>{
@@ -195,7 +233,7 @@ export const Editside=()=>{
             </FormControl>
             **/}
             <Text>Select Orientation and side of the board</Text>
-            <Select placeholder='eg. 1 : Faces the main road' onChange={(e)=>HandleSideDetail(e)} my='2'>
+            <Select placeholder='eg. 1 : Faces the main road' value={side_ref_Id && orientation ? `${side_ref_Id}-${orientation}` : ''} onChange={(e)=>HandleSideDetail(e)} my='2'>
                 {board_data?.sides.map((item)=>{
                     return(
                         <option key={item?.ref_id} value={`${item?.ref_id}` + '-' + `${item?.orientation}`}>{item?.ref_id} : {item?.orientation}</option>
@@ -238,7 +276,7 @@ export const Editside=()=>{
                     null
                 )}
             </FormControl>
-            <Select placeholder='Select season' onChange={((e)=>{set_season(e.target.value)})} my='4'>
+            <Select placeholder='Select season' value={season} onChange={((e)=>{set_season(e.target.value)})} my='4'>
                 <option value='End of Year'>End of Year</option>
                 <option value='New Year'>New Year</option>
                 <option value='Easter'>Easter</option>
@@ -247,7 +285,7 @@ export const Editside=()=>{
                 <option value='Christmas'>Christmas</option>
                 <option value='otherseason'>Other</option>
             </Select>
-            <Select placeholder='Select category of message' onChange={((e)=>{set_category(e.target.value)})} my='4'>
+            <Select placeholder='Select category of message' value={category} onChange={((e)=>{set_category(e.target.value)})} my='4'>
                 <option value='education'>Education</option>
                 <option value='finance'>Finance</option>
                 <option value='agriculture'>Agriculture</option>

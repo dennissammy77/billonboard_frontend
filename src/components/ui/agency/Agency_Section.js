@@ -13,7 +13,7 @@ function AgencySection({query}) {
     const fetch=async()=>{
       await GetAgencies().then((response)=>{
         const arr = response?.data
-        set_data(arr.filter((item) => item.company_name?.toLowerCase().includes(query.toLowerCase())))
+        set_data(arr.filter((item) => item.verification_status && !item?.account_suspension_status && item.company_name?.toLowerCase().includes(query.toLowerCase())))
       }).catch((err)=>{
         console.log(err)
       })

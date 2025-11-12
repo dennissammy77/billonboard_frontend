@@ -31,7 +31,7 @@ function AdvertisementSection({owner_id}) {
             }
     
             if(owner_id){
-                set_data(intial_arr.filter((item)=>item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id)))	
+                set_data(intial_arr.filter((item)=> item.billboard_id?.currently_owned_by?.owner_id.includes(owner_id) && item?.billboard_id?.publish_status && item?.billboard_id?.verification_status && !item?.billboard_id?.suspension_status))	
             }else if(user?.account_type == 'admin'){
                 set_data(intial_arr)
             }else{

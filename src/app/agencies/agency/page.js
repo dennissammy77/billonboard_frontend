@@ -21,13 +21,19 @@ import Footer from "@/components/ui/footer";
 function PageContent() {
     const params = useSearchParams()
     const agency_id = params?.get('query');
+    const router = useRouter();
 
     const [data,set_user_data]=useState('');
     const img_placeholder = 'https://firebasestorage.googleapis.com/v0/b/billonoard.appspot.com/o/profile_photo%2Fandroid-chrome-192x192.pngf512460f-12f4-4579-970a-8afb032bb687?alt=media&token=dcc45251-1db7-4a53-b0e3-feb5b43c30c5';
 
     const fetchData=useCallback(async()=>{
         await GetAgencyData(agency_id).then((res)=>{
-            set_user_data(res?.data);
+            console.log("d",res?.data?.verification_status && !res?.data?.account_suspension_status)
+            if(res?.data?.verification_status && !res?.data?.account_suspension_status){
+                set_user_data(res?.data);
+            }else{
+                router.push("/agencies/all")
+            }
         }).catch((err)=>{
             console.log(err);
         });

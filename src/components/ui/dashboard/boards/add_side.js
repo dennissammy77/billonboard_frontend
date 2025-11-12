@@ -1,6 +1,6 @@
 import { dashboardContext } from '@/components/providers/dashboard.context'
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Flex, FormControl, FormErrorMessage, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Select, Text, Textarea, Tooltip, useDisclosure, useToast } from '@chakra-ui/react'
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {storage} from '../../../lib/firebase.js';
 import {ref,uploadBytes,getDownloadURL} from 'firebase/storage';
 import { v4 as uuidv4 } from 'uuid';
@@ -35,6 +35,13 @@ export const Addside=()=>{
     const [is_saving,set_is_saving]=useState(false);
 
     const [is_data_saved,set_is_data_saved]=useState(false);
+
+    useEffect(() => {
+        // Set default from_date to today when component mounts
+        const today = new Date();
+        const formattedDate = today.toISOString().split('T')[0]; // Gets YYYY-MM-DD format
+        set_from_date(formattedDate);
+    }, []);
 
 
     const HandleImageUpload=async(board_id)=>{

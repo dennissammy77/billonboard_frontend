@@ -16,7 +16,7 @@ function BoardSection({query,owner_id,currentPage}) {
     await GetBillBoards(payload).then((response)=>{
       const arr = response?.data;
       if(owner_id){
-        set_data(arr?.filter((item)=>item?.currently_owned_by?.owner_id.includes(owner_id)))	
+        set_data(arr?.filter((item)=> item?.currently_owned_by?.owner_id.includes(owner_id) && item?.publish_status && item?.verification_status && !item?.suspension_status))	
       }else if(user?.account_type == 'admin'){
         set_data(arr?.filter((item) => item?.name_of_billboard?.toLowerCase().includes(query.toLowerCase())))
       }else{
